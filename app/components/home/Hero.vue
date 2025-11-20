@@ -144,7 +144,7 @@
       </div>
 
       <!-- Trust Badges -->
-      <div class="mt-12 sm:mt-20 border-t border-border/50 pt-8 sm:pt-12 px-4">
+      <div class="max-w-2xl mx-auto mt-12 sm:mt-20 border-t border-border/50 pt-8 sm:pt-12 px-4">
         <p class="text-xs sm:text-sm text-muted-foreground font-medium mb-6 sm:mb-8 uppercase tracking-widest">Trusted by organized people everywhere</p>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
           <div class="flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-base sm:text-xl"><Icon name="i-simple-icons-github" class="w-5 h-5 sm:w-6 sm:h-6"/> GitHub</div>
