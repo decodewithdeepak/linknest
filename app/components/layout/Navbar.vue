@@ -8,7 +8,7 @@
         to="/"
         class="flex items-center gap-2 hover:opacity-80 transition-opacity"
       >
-        <Logo size="md" />
+        <Logo size="lg" />
         <span class="font-bold text-lg tracking-tight hidden sm:block">LinkNest</span>
       </NuxtLink>
 
