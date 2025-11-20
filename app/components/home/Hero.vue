@@ -38,7 +38,7 @@
           to="#features"
           size="xl"
           variant="ghost"
-          class="gap-2 border border-border/50 rounded-full text-foreground hover:text-primary"
+          class="gap-2 border border-primary/20 rounded-full text-foreground hover:text-primary"
         >
           <Icon name="i-heroicons-play-circle" class="h-5 w-5" />
           Watch Demo
