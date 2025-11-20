@@ -1,10 +1,10 @@
 <template>
-  <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-12 sm:py-20">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+    <div class="max-w-7xl mx-auto px-6 sm:px-6 text-center w-full">
       
       <!-- Main Heading -->
-      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+      <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 leading-tight">
         Your Digital <br />
         <span class="relative inline-block">
           <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">
@@ -18,40 +18,40 @@
       </h1>
 
       <!-- Description -->
-      <p class="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+      <p class="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-2">
         Stop drowning in tabs. LinkNest automatically categorizes, tags, and organizes your links with AI-powered precision.
       </p>
 
       <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-8 sm:mb-16 max-w-md sm:max-w-none mx-auto">
         <UButton
           to="/dashboard"
-          size="xl"
+          size="lg"
           color="primary"
-          class="group gap-2 rounded-full"
+          class="group gap-2 rounded-full w-full sm:w-auto justify-center text-sm sm:text-base"
         >
           Start Organizing
-          <Icon name="i-heroicons-arrow-right" class="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          <Icon name="i-heroicons-arrow-right" class="h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
         </UButton>
         
         <UButton
           to="#features"
-          size="xl"
+          size="lg"
           variant="ghost"
-          class="gap-2 border border-primary/20 rounded-full text-foreground hover:text-primary"
+          class="gap-2 border border-primary/20 rounded-full text-foreground hover:text-primary w-full sm:w-auto justify-center text-sm sm:text-base"
         >
-          <Icon name="i-heroicons-play-circle" class="h-5 w-5" />
+          <Icon name="i-heroicons-play-circle" class="h-4 w-4 sm:h-5 sm:w-5" />
           Watch Demo
         </UButton>
       </div>
 
       <!-- Glass Mockup with 3D Parallax -->
       <div class="relative max-w-4xl mx-auto group perspective-[1000px]">
-        <div class="relative rounded-xl border border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-2xl overflow-hidden transition-transform duration-700 transform-3d group-hover:transform-[perspective(1000px)_rotateY(-2deg)_rotateX(2deg)]">
+        <div class="relative rounded-lg sm:rounded-xl border border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-2xl overflow-hidden transition-transform duration-700 transform-3d group-hover:transform-[perspective(1000px)_rotateY(-2deg)_rotateX(2deg)]">
           
           <!-- Browser Header -->
           <div class="flex items-center gap-4 px-6 py-4 border-b border-white/10 bg-white/50 dark:bg-black/50">
-            <div class="flex gap-2">
+            <div class="hidden sm:flex gap-2">
               <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
               <div class="w-3 h-3 rounded-full bg-amber-500/20 border border-amber-500/50"></div>
               <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
@@ -66,8 +66,8 @@
           </div>
 
           <!-- App Mockup -->
-          <div class="p-8 bg-linear-to-br from-white/40 to-white/10 dark:from-black/40 dark:to-black/10 min-h-[400px] text-left">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="p-4 sm:p-8 bg-linear-to-br from-white/40 to-white/10 dark:from-black/40 dark:to-black/10 min-h-[300px] sm:min-h-[400px] text-left">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               
               <!-- Card 1 -->
               <div class="group/card p-4 rounded-xl border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
@@ -144,13 +144,13 @@
       </div>
 
       <!-- Trust Badges -->
-      <div class="mt-20 border-t border-border/50 pt-12">
-        <p class="text-sm text-muted-foreground font-medium mb-8 uppercase tracking-widest">Trusted by organized people everywhere</p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-          <div class="flex items-center justify-center gap-2 font-bold text-xl"><Icon name="i-simple-icons-github" class="w-6 h-6"/> GitHub</div>
-          <div class="flex items-center justify-center gap-2 font-bold text-xl"><Icon name="i-simple-icons-vercel" class="w-6 h-6"/> Vercel</div>
-          <div class="flex items-center justify-center gap-2 font-bold text-xl"><Icon name="i-simple-icons-notion" class="w-6 h-6"/> Notion</div>
-          <div class="flex items-center justify-center gap-2 font-bold text-xl"><Icon name="i-simple-icons-linear" class="w-6 h-6"/> Linear</div>
+      <div class="mt-12 sm:mt-20 border-t border-border/50 pt-8 sm:pt-12 px-4">
+        <p class="text-xs sm:text-sm text-muted-foreground font-medium mb-6 sm:mb-8 uppercase tracking-widest">Trusted by organized people everywhere</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-base sm:text-xl"><Icon name="i-simple-icons-github" class="w-5 h-5 sm:w-6 sm:h-6"/> GitHub</div>
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-base sm:text-xl"><Icon name="i-simple-icons-vercel" class="w-5 h-5 sm:w-6 sm:h-6"/> Vercel</div>
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-base sm:text-xl"><Icon name="i-simple-icons-notion" class="w-5 h-5 sm:w-6 sm:h-6"/> Notion</div>
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-base sm:text-xl"><Icon name="i-simple-icons-linear" class="w-5 h-5 sm:w-6 sm:h-6"/> Linear</div>
         </div>
       </div>
 
