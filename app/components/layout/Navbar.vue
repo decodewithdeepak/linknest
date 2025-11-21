@@ -8,7 +8,7 @@
 
       <div class="flex-1" />
 
-      <div class="hidden md:flex items-center gap-1">
+      <div class="hidden md:flex items-center gap-2">
         <UButton
           v-for="item in navItems"
           :key="item.path"
@@ -23,7 +23,7 @@
         </UButton>
       </div>
 
-      <div class="h-4 w-px bg-border/50 hidden md:block mx-2"></div>
+      <div class="h-4 w-px bg-border hidden md:block mx-2"></div>
 
       <div class="flex items-center gap-2">
         <UButton
@@ -46,5 +46,6 @@ const route = useRoute()
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Dashboard', path: '/dashboard' },
+  { label: 'Favorites', path: '/favorites' },
 ]
 </script>

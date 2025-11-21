@@ -25,7 +25,7 @@
           v-model="urlInput"
           type="url"
           placeholder="Paste your link here (or drag & drop)..."
-          class="flex-1 bg-transparent border-none outline-none text-base h-10 placeholder:text-muted-foreground/60"
+          class="flex-1 bg-transparent border-none outline-none text-base h-10"
           :disabled="loading"
         />
 
@@ -48,9 +48,6 @@
       v-if="isDragging" 
       class="absolute inset-0 z-0 bg-primary/5 rounded-xl backdrop-blur-sm border-2 border-primary border-dashed animate-pulse pointer-events-none"
     >
-      <div class="absolute inset-0 flex items-center justify-center text-primary font-medium">
-        Drop link to add
-      </div>
     </div>
   </div>
 </template>

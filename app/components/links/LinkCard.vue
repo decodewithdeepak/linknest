@@ -63,11 +63,12 @@
       <div class="pt-3 border-t border-border flex items-center justify-between mt-auto">
         <div class="flex gap-1">
            <UButton 
-            icon="i-heroicons-clipboard"
-            color="neutral"
+            :icon="copied ? 'i-heroicons-check' : 'i-heroicons-clipboard'"
+            :color="copied ? 'success' : 'neutral'"
             variant="ghost"
             size="xs"
             @click="copyToClipboard(link.url)"
+            :title="copied ? 'Copied!' : 'Copy URL'"
           />
         </div>
         <UButton 
@@ -96,6 +97,8 @@ defineEmits<{
   (e: 'delete', id: string): void
 }>()
 
+const copied = ref(false)
+
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement
   target.style.display = 'none' // Or replace with fallback
@@ -108,9 +111,16 @@ const formatDate = (dateString: string) => {
   })
 }
 
-const copyToClipboard = (text: string) => {
-  navigator.clipboard.writeText(text)
-  // Could add a toast notification here
+const copyToClipboard = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text)
+    copied.value = true
+    setTimeout(() => {
+      copied.value = false
+    }, 2000)
+  } catch (err) {
+    console.error('Failed to copy:', err)
+  }
 }
 
 // Map categories to supported badge colors: "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral"
