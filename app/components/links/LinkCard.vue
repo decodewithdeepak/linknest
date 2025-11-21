@@ -24,7 +24,7 @@
       <div class="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity">
         <UButton 
           icon="i-heroicons-trash" 
-          color="red" 
+          color="error" 
           variant="soft" 
           size="xs"
           @click.prevent="$emit('delete', link.id)"
@@ -64,7 +64,7 @@
         <div class="flex gap-1">
            <UButton 
             icon="i-heroicons-clipboard"
-            color="gray"
+            color="neutral"
             variant="ghost"
             size="xs"
             @click="copyToClipboard(link.url)"
@@ -73,7 +73,7 @@
         <UButton 
           :to="link.url"
           target="_blank"
-          color="gray"
+          color="neutral"
           variant="ghost"
           size="xs"
           trailing-icon="i-heroicons-arrow-top-right-on-square"
@@ -113,18 +113,18 @@ const copyToClipboard = (text: string) => {
   // Could add a toast notification here
 }
 
-const getCategoryColor = (category: string) => {
-  const colors: Record<string, string> = {
-    'Open Source': 'green',
-    'Portfolio': 'purple',
-    'Blog': 'blue',
-    'Tool': 'orange',
-    'Learning': 'yellow',
-    'Video': 'red',
-    'Design': 'pink',
-    'Other': 'gray'
+// Map categories to supported badge colors: "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral"
+const getCategoryColor = (category: string): "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral" => {
+  const colors: Record<string, "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral"> = {
+    'Open Source': 'success',
+    'Portfolio': 'primary',
+    'Blog': 'info',
+    'Tool': 'warning',
+    'Learning': 'success',
+    'Video': 'error',
+    'Design': 'primary',
+    'Other': 'neutral'
   }
-  return colors[category] || 'gray'
+  return colors[category] || 'neutral'
 }
 </script>
-

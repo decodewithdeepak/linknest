@@ -6,16 +6,16 @@
     @drop.prevent="handleDrop"
   >
     <div 
-      class="relative z-10 p-1 rounded-xl transition-all duration-300"
+      class="relative z-10 py-2 px-4 rounded-xl transition-all duration-300"
       :class="[
         isDragging ? 'bg-primary/10 ring-2 ring-primary border-primary border-dashed' : 'bg-background border border-border shadow-sm hover:border-primary/50'
       ]"
     >
-      <form @submit.prevent="handleSubmit" class="flex items-center gap-2 p-2">
-        <div class="flex-shrink-0 pl-2">
+      <form @submit.prevent="handleSubmit" class="flex items-center gap-2">
+        <div class="flex-shrink-0 flex items-center justify-center">
           <Icon 
             :name="isDragging ? 'i-heroicons-arrow-down-tray' : 'i-heroicons-link'" 
-            class="w-6 h-6 text-muted-foreground transition-colors"
+            class="w-5 h-5 text-muted-foreground transition-colors"
             :class="{ 'text-primary': isDragging }"
           />
         </div>
