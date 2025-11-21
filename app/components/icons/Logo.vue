@@ -1,32 +1,95 @@
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    enable-background="new 0 0 24 24"
     :class="[sizeClasses[props.size || 'md'], variantClasses[props.variant || 'auto'], props.class]"
     viewBox="0 0 24 24"
+    fill="none"
   >
-    <!-- Folder -->
-    <path 0-1
-      fill="currentColor" 
-      fill-opacity="0.3" 
-      d="M11.25 6c-.19-.381-.286-.572-.408-.728a2 2 0 0 0-1.186-.733C9.462 4.5 9.25 4.5 8.823 4.5H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 6.02 3 6.58 3 7.7v8.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874c.428.218.988.218 2.108.218h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 17.98 21 17.42 21 16.3v-5.6c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 7.5 18.92 7.5 17.8 7.5h-4.123c-.426 0-.64 0-.833-.039a2 2 0 0 1-1.186-.733c-.122-.156-.217-.347-.408-.728" 
-      opacity="0.5" 
+    <!-- Center Hub Circle -->
+    <circle
+      cx="12"
+      cy="12"
+      r="3"
+      fill="currentColor"
+      opacity="0.9"
     />
-    <path 
-      fill="currentColor" 
-      fill-opacity="0.3" 
-      fill-rule="evenodd" 
-      d="M9.396 3.757c-.154-.007-.32-.007-.509-.007H6.17c-.535 0-.98 0-1.345.03c-.38.03-.736.098-1.073.27A2.75 2.75 0 0 0 2.55 5.252c-.172.337-.24.693-.27 1.073c-.03.365-.03.81-.03 1.345v8.66c0 .535 0 .98.03 1.345c.03.38.098.736.27 1.073a2.75 2.75 0 0 0 1.202 1.202c.337.172.693.24 1.073.27c.365.03.81.03 1.344.03h11.662c.534 0 .98 0 1.344-.03c.38-.03.736-.098 1.073-.27a2.75 2.75 0 0 0 1.202-1.202c.172-.337.24-.694.27-1.073c.03-.365.03-.81.03-1.345v-5.66c0-.535 0-.98-.03-1.345c-.03-.38-.098-.736-.27-1.074a2.75 2.75 0 0 0-.7-.872c0-.402-.002-.742-.02-1.024a2.8 2.8 0 0 0-.19-.907a2.75 2.75 0 0 0-1.488-1.489c-.29-.12-.59-.167-.907-.188c-.304-.021-.675-.021-1.12-.021H9.5a1 1 0 0 0-.104.007M8.823 5.25c.458 0 .582.003.686.024c.294.06.557.222.742.458c.065.084.123.194.328.603l.029.058c.162.325.29.58.457.796c.406.52.985.878 1.632 1.008c.268.053.552.053.916.053H17.8c.572 0 .957 0 1.252.025c.288.023.425.065.515.111c.236.12.427.311.547.546c.046.091.088.228.111.515c.024.296.025.68.025 1.253v5.6c0 .572 0 .957-.025 1.252c-.023.288-.065.425-.111.515a1.25 1.25 0 0 1-.547.547c-.09.046-.227.088-.515.111c-.295.024-.68.025-1.252.025H6.2c-.572 0-.957 0-1.253-.025c-.287-.023-.424-.065-.514-.111a1.25 1.25 0 0 1-.547-.547c-.046-.09-.088-.227-.111-.515c-.024-.295-.025-.68-.025-1.252V7.7c0-.572 0-.957.025-1.253c.023-.287.065-.424.111-.515a1.25 1.25 0 0 1 .547-.546c.09-.046.227-.088.514-.111c.296-.024.68-.025 1.253-.025zm2.887 0q.086.164.182.357l.029.058c.205.409.263.519.328.602c.185.237.448.4.742.459c.104.02.228.024.686.024h4.153c.535 0 .98 0 1.345.03l.07.006a7 7 0 0 0-.012-.33c-.017-.24-.046-.357-.078-.434a1.25 1.25 0 0 0-.677-.677c-.077-.032-.194-.061-.435-.078A17 17 0 0 0 17 5.25z" 
-      clip-rule="evenodd" 
+    
+    <!-- Connection Lines -->
+    <path
+      d="M12 9V4M12 20v-5M15 12h5M4 12h5"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      opacity="0.4"
+    />
+    
+    <path
+      d="M14.5 9.5l3.5-3.5M6 6l3.5 3.5M14.5 14.5l3.5 3.5M6 18l3.5-3.5"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      opacity="0.4"
     />
 
-    <!-- Link Icon -->
-    <g transform="translate(10.5, 9) scale(0.42)">
-        <path 
-            fill="currentColor" 
-            d="M10.59 13.41c.41.39.41 1.03 0 1.42c-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0a5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.982 2.982 0 0 0 0-4.24a2.982 2.982 0 0 0-4.24 0l-3.53 3.53a2.982 2.982 0 0 0 0 4.24m2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0a5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.43l-.47.47a2.982 2.982 0 0 0 0 4.24a2.982 2.982 0 0 0 4.24 0l3.53-3.53a2.982 2.982 0 0 0 0-4.24.973.973 0 0 1 0-1.42z"
-        />
+    <!-- Outer Nodes (Link Symbols) -->
+    <!-- Top -->
+    <g transform="translate(12, 3)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
     </g>
+    
+    <!-- Right -->
+    <g transform="translate(21, 12)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Bottom -->
+    <g transform="translate(12, 21)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Left -->
+    <g transform="translate(3, 12)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Top Right -->
+    <g transform="translate(18.5, 5.5)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Top Left -->
+    <g transform="translate(5.5, 5.5)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Bottom Right -->
+    <g transform="translate(18.5, 18.5)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Bottom Left -->
+    <g transform="translate(5.5, 18.5)">
+      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Outer Ring -->
+    <circle
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      stroke-width="1"
+      fill="none"
+      opacity="0.15"
+    />
   </svg>
 </template>
 
@@ -52,6 +115,6 @@ const sizeClasses = {
 const variantClasses = {
   light: 'text-white',
   dark: 'text-black',
-  auto: 'text-foreground'
+  auto: 'text-primary'
 }
 </script>

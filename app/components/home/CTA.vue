@@ -51,15 +51,15 @@
             <!-- Trust Indicators -->
             <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm text-muted-foreground px-4">
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <Icon name="i-heroicons-check-circle" class="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                <Icon name="i-heroicons-check-circle" class="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
                 <span class="whitespace-nowrap">No credit card</span>
               </div>
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <Icon name="i-heroicons-check-circle" class="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                <Icon name="i-heroicons-check-circle" class="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
                 <span class="whitespace-nowrap">Free forever</span>
               </div>
               <div class="flex items-center gap-1.5 sm:gap-2">
-                <Icon name="i-heroicons-check-circle" class="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+                <Icon name="i-heroicons-check-circle" class="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
                 <span class="whitespace-nowrap">Open Source</span>
               </div>
             </div>

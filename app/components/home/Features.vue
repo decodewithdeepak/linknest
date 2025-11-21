@@ -1,37 +1,37 @@
 <template>
-  <section id="features" class="py-20 relative overflow-hidden">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+  <section id="features" class="py-12 sm:py-20 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 sm:px-6 relative z-10">
       <!-- Section Header -->
-      <div class="text-center mb-16 max-w-3xl mx-auto">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-6 hover:bg-primary/10 transition-colors">
-          <Icon name="i-heroicons-sparkles" class="h-4 w-4 text-primary" />
-          <span class="text-sm font-medium">Features</span>
+      <div class="text-center mb-12 sm:mb-16 max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-4 sm:mb-6 hover:bg-primary/10 transition-colors">
+          <Icon name="i-heroicons-sparkles" class="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+          <span class="text-xs sm:text-sm font-medium">Features</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4">
+        <h2 class="text-xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4 px-4">
           Everything you need to <br />
           <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">organize effortlessly</span>
         </h2>
-        <p class="text-base max-w-xl mx-auto text-muted-foreground">
+        <p class="text-sm sm:text-base max-w-xl mx-auto text-muted-foreground px-4">
           LinkNest combines powerful automation with beautiful design, doing the heavy lifting so you can focus on what matters.
         </p>
       </div>
 
       <!-- Features Grid -->
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <div
           v-for="(feature, index) in features"
           :key="index"
-          class="group relative p-6 rounded-2xl border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
+          class="group relative p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
         >
-          <div class="absolute inset-0 rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 rounded-xl sm:rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
           <div class="relative z-10">
-            <div class="w-12 h-12 rounded-xl border border-border/50 bg-white dark:bg-white/10 flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-              <Icon :name="feature.icon" class="h-6 w-6 text-primary" />
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl border border-border/50 bg-white dark:bg-white/10 flex items-center justify-center mb-3 sm:mb-4 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+              <Icon :name="feature.icon" class="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
             </div>
             
-            <h3 class="text-lg font-semibold mb-2">{{ feature.title }}</h3>
-            <p class="text-sm text-muted-foreground leading-relaxed">
+            <h3 class="text-base sm:text-lg font-semibold mb-1.5 sm:mb-2">{{ feature.title }}</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {{ feature.description }}
             </p>
           </div>
