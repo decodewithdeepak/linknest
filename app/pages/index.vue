@@ -1,16 +1,22 @@
 <template>
-  <main class="max-w-full flex flex-col min-h-full">
-    <div class="flex-1 border border-border">
-      <Hero />
-      <div class="h-8 bg-dashed"></div>
-      <Features />
-      <div class="h-8 bg-dashed"></div>
-      <FAQ />
-      <div class="h-8 bg-dashed"></div>
-      <CTA />
-      <div class="h-8 bg-dashed"></div>
-    </div>
-  </main>
+  <div class="flex flex-col min-h-screen">
+    <Navbar />
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+      <div class="max-w-full flex flex-col min-h-full">
+        <div class="flex-1 border border-border">
+          <Hero />
+          <div class="h-8 bg-dashed"></div>
+          <Features />
+          <div class="h-8 bg-dashed"></div>
+          <FAQ />
+          <div class="h-8 bg-dashed"></div>
+          <CTA />
+          <div class="h-8 bg-dashed"></div>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </div>
 </template>
 
 <script setup lang="ts">

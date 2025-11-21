@@ -1,115 +1,127 @@
 <template>
-  <main class="max-w-full flex flex-col gap-8 min-h-[80vh] py-8 px-4 sm:px-6 lg:px-8">
-    <div class="flex-1 flex flex-col max-w-7xl mx-auto w-full">
-      <!-- Header Section -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <!-- Left: Title -->
-        <div class="shrink-0">
-          <h1 class="text-3xl sm:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60">
-            Smart Link Organizer
-          </h1>
-          <p class="text-muted-foreground text-lg">
-            Manage your digital resources with AI-powered categorization
-          </p>
-        </div>
-
-        <!-- Right: Add Link Section -->
-        <div class="w-full sm:w-[600px] max-w-3xl">
-          <LinkInput 
-            :loading="isLoading" 
-            @add="handleAddLink"
-          />
-          <p v-if="error" class="mt-2 text-sm text-red-500 flex items-center gap-1">
-            <Icon name="i-heroicons-exclamation-circle" />
-            {{ error }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Content Area -->
-      <div v-if="links.length > 0" class="flex flex-col gap-6">
-        <!-- Search and Filters -->
-        <div class="flex flex-col gap-4">
-           <!-- Search Input -->
-           <div class="relative">
-              <Icon name="i-heroicons-magnifying-glass" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input 
-                v-model="searchQuery" 
-                type="text" 
-                placeholder="Search links by title, description or URL..." 
-                class="w-full pl-10 pr-4 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              />
-           </div>
-
-           <!-- Category Filters -->
-           <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            <UButton 
-              variant="soft" 
-              size="sm" 
-              :color="selectedCategory === null ? 'primary' : 'neutral'"
-              class="whitespace-nowrap"
-              @click="selectedCategory = null"
-            >
-              All Links ({{ links.length }})
-            </UButton>
-            
-            <UButton
-              v-for="category in categories"
-              :key="category"
-              variant="soft"
-              size="sm"
-              :color="selectedCategory === category ? 'primary' : 'neutral'"
-              class="whitespace-nowrap"
-              @click="selectedCategory = category"
-            >
-              {{ category }} ({{ getCategoryCount(category) }})
-            </UButton>
-          </div>
-        </div>
-
-        <!-- Grid -->
-        <div v-if="filteredLinks.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <div v-for="link in filteredLinks" :key="link.id">
-            <LinkCard 
-              :link="link" 
-              @delete="removeLink"
-            />
-          </div>
-        </div>
-
-        <!-- No Results State -->
-        <div v-else class="flex flex-col items-center justify-center py-12 text-center border border-dashed border-border rounded-xl bg-muted/5">
-           <Icon name="i-heroicons-magnifying-glass" class="h-8 w-8 text-muted-foreground mb-2" />
-           <p class="text-muted-foreground">No links found matching your criteria</p>
-           <UButton 
-             variant="link" 
-             color="primary" 
-             @click="clearFilters"
-             class="mt-2"
-           >
-             Clear filters
-           </UButton>
-        </div>
-      </div>
-
-      <!-- Empty State (No links at all) -->
-      <div v-else class="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border rounded-xl bg-muted/10">
-        <div class="w-20 h-20 mb-6 rounded-full bg-muted flex items-center justify-center">
-          <Icon name="i-heroicons-link" class="h-10 w-10 text-muted-foreground" />
-        </div>
-        <h3 class="text-xl font-semibold mb-2">No links yet</h3>
-        <p class="text-muted-foreground max-w-md mx-auto mb-6">
-          Paste a URL above to get started. We'll automatically fetch details and categorize it for you.
-        </p>
+  <div class="flex min-h-screen">
+    <!-- Fixed Sidebar -->
+    <div class="hidden lg:block w-64 fixed left-0 top-0 h-screen border-r border-border bg-background z-40">
+      <div class="h-full overflow-y-auto px-4 py-6">
+        <Sidebar
+          :selected-category="selectedCategory"
+          :total-count="links.length"
+          :recent-count="Math.min(recentLinks.length, 20)"
+          :categories="categoriesWithMeta"
+          @select="handleCategorySelect"
+        />
       </div>
     </div>
-  </main>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 min-h-screen lg:ml-64">
+        <div class="max-w-7xl mx-auto w-full py-8 px-4 sm:px-6 lg:px-8">
+          <!-- Header Section -->
+          <div class="flex flex-col gap-6 mb-8">
+            <!-- Title -->
+            <div>
+              <h1 class="text-3xl sm:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60">
+                Smart Link Organizer
+              </h1>
+              <p class="text-muted-foreground text-lg">
+                Manage your digital resources with AI-powered categorization
+              </p>
+            </div>
+
+            <!-- Add Link Section -->
+            <div class="w-full max-w-3xl">
+              <LinkInput 
+                :loading="isLoading" 
+                @add="handleAddLink"
+              />
+              <p v-if="error" class="mt-2 text-sm text-red-500 flex items-center gap-1">
+                <Icon name="i-heroicons-exclamation-circle" />
+                {{ error }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Mobile Sidebar (Collapsible) -->
+          <div class="lg:hidden mb-6">
+            <Sidebar
+              :selected-category="selectedCategory"
+              :total-count="links.length"
+              :recent-count="Math.min(recentLinks.length, 20)"
+              :categories="categoriesWithMeta"
+              @select="handleCategorySelect"
+            />
+          </div>
+
+          <!-- Content Area -->
+          <div v-if="links.length > 0">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h2 class="text-2xl font-bold">
+                  {{ selectedCategory === null ? 'All Links' : selectedCategory === 'recent' ? 'Recently Added' : selectedCategory }}
+                </h2>
+                <p class="text-sm text-muted-foreground mt-1">
+                  {{ displayedLinks.length }} {{ displayedLinks.length === 1 ? 'link' : 'links' }}
+                </p>
+              </div>
+
+              <!-- Search -->
+              <div class="relative w-full max-w-xs">
+                <Icon name="i-heroicons-magnifying-glass" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <input 
+                  v-model="searchQuery" 
+                  type="text" 
+                  placeholder="Search..." 
+                  class="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
+                />
+              </div>
+            </div>
+
+            <!-- Links Grid -->
+            <div v-if="filteredLinks.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <LinkCard 
+                v-for="link in filteredLinks" 
+                :key="link.id"
+                :link="link" 
+                @delete="removeLink"
+              />
+            </div>
+
+            <!-- No Results -->
+            <div v-else class="flex flex-col items-center justify-center py-20 text-center border border-dashed border-border rounded-xl bg-muted/5">
+              <Icon name="i-heroicons-magnifying-glass" class="h-12 w-12 text-muted-foreground/50 mb-3" />
+              <p class="text-muted-foreground">No links found</p>
+              <button
+                v-if="searchQuery"
+                @click="searchQuery = ''"
+                class="mt-2 text-primary hover:underline text-sm"
+              >
+                Clear search
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty State (No links at all) -->
+          <div v-else class="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border rounded-xl bg-muted/10">
+            <div class="w-20 h-20 mb-6 rounded-full bg-muted flex items-center justify-center">
+              <Icon name="i-heroicons-link" class="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h3 class="text-xl font-semibold mb-2">No links yet</h3>
+            <p class="text-muted-foreground max-w-md mx-auto mb-6">
+              Paste a URL above to get started. We'll automatically fetch details and categorize it for you.
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { useLinkManager } from '../../composables/useLinkManager'
 import LinkInput from '~/components/links/LinkInput.vue'
 import LinkCard from '~/components/links/LinkCard.vue'
+import Sidebar from '~/components/dashboard/Sidebar.vue'
 
 useSeoMeta({
   title: 'Smart Link Organizer - LinkNest',
@@ -118,8 +130,8 @@ useSeoMeta({
 
 const { links, isLoading, error, addLink, removeLink } = useLinkManager()
 
-const searchQuery = ref('')
 const selectedCategory = ref<string | null>(null)
+const searchQuery = ref('')
 
 // Derived state for unique categories
 const categories = computed(() => {
@@ -127,41 +139,88 @@ const categories = computed(() => {
   return Array.from(cats).sort()
 })
 
-// Filter logic
-const filteredLinks = computed(() => {
-  return links.value.filter(link => {
-    // Filter by Category
-    if (selectedCategory.value && link.category !== selectedCategory.value) {
-      return false
-    }
-
-    // Filter by Search Query
-    if (searchQuery.value) {
-      const query = searchQuery.value.toLowerCase()
-      return (
-        link.title.toLowerCase().includes(query) ||
-        link.description.toLowerCase().includes(query) ||
-        link.url.toLowerCase().includes(query) ||
-        link.siteName.toLowerCase().includes(query)
-      )
-    }
-
-    return true
-  })
+// Categories with metadata for sidebar
+const categoriesWithMeta = computed(() => {
+  return categories.value.map(cat => ({
+    name: cat,
+    count: getCategoryCount(cat),
+    icon: getCategoryIcon(cat),
+    gradient: getCategoryGradient(cat)
+  }))
 })
 
+// Recent links (last 20 added)
+const recentLinks = computed(() => {
+  return [...links.value]
+    .sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime())
+    .slice(0, 20)
+})
+
+// Get links based on selected category
+const displayedLinks = computed(() => {
+  if (selectedCategory.value === null) {
+    return links.value
+  } else if (selectedCategory.value === 'recent') {
+    return recentLinks.value
+  } else {
+    return links.value.filter(l => l.category === selectedCategory.value)
+  }
+})
+
+// Filter links by search query
+const filteredLinks = computed(() => {
+  if (!searchQuery.value) return displayedLinks.value
+  
+  const query = searchQuery.value.toLowerCase()
+  return displayedLinks.value.filter(link =>
+    link.title.toLowerCase().includes(query) ||
+    link.description.toLowerCase().includes(query) ||
+    link.url.toLowerCase().includes(query) ||
+    link.siteName.toLowerCase().includes(query)
+  )
+})
+
+// Get count for a category
 const getCategoryCount = (category: string) => {
   return links.value.filter(l => l.category === category).length
 }
 
-const clearFilters = () => {
-  searchQuery.value = ''
+const handleAddLink = async (url: string) => {
+  await addLink(url)
+  // Optionally switch to "All Links" view to see the new link
   selectedCategory.value = null
 }
 
-const handleAddLink = async (url: string) => {
-  await addLink(url)
-  // Clear search/filters so the new link is visible if desired
-  // clearFilters() 
+const handleCategorySelect = (category: string | null) => {
+  selectedCategory.value = category
+}
+
+// Category icons and gradients
+const getCategoryIcon = (category: string): string => {
+  const icons: Record<string, string> = {
+    'Open Source': 'i-heroicons-code-bracket',
+    'Portfolio': 'i-heroicons-user-circle',
+    'Blog': 'i-heroicons-document-text',
+    'Tool': 'i-heroicons-wrench-screwdriver',
+    'Learning': 'i-heroicons-academic-cap',
+    'Video': 'i-heroicons-play-circle',
+    'Design': 'i-heroicons-paint-brush',
+    'Other': 'i-heroicons-folder'
+  }
+  return icons[category] || 'i-heroicons-folder'
+}
+
+const getCategoryGradient = (category: string): string => {
+  const gradients: Record<string, string> = {
+    'Open Source': '#8b5cf6, #6366f1',
+    'Portfolio': '#3b82f6, #06b6d4',
+    'Blog': '#10b981, #14b8a6',
+    'Tool': '#f59e0b, #f97316',
+    'Learning': '#ec4899, #8b5cf6',
+    'Video': '#ef4444, #dc2626',
+    'Design': '#a855f7, #ec4899',
+    'Other': '#6b7280, #4b5563'
+  }
+  return gradients[category] || '#6b7280, #4b5563'
 }
 </script>
