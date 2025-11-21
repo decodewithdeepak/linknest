@@ -24,11 +24,6 @@
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/links" class="hover:text-foreground transition-colors">
-                All Links
-              </NuxtLink>
-            </li>
-            <li>
               <NuxtLink to="/favorites" class="hover:text-foreground transition-colors">
                 Favorites
               </NuxtLink>
@@ -42,11 +37,6 @@
             <li>
               <a href="#features" class="hover:text-foreground transition-colors">
                 Features
-              </a>
-            </li>
-            <li>
-              <a href="#faq" class="hover:text-foreground transition-colors">
-                FAQ
               </a>
             </li>
             <li>

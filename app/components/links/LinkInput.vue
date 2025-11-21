@@ -12,7 +12,7 @@
       ]"
     >
       <form @submit.prevent="handleSubmit" class="flex items-center gap-2">
-        <div class="flex-shrink-0 flex items-center justify-center">
+        <div class="shrink-0 flex items-center justify-center">
           <Icon 
             :name="isDragging ? 'i-heroicons-arrow-down-tray' : 'i-heroicons-link'" 
             class="w-5 h-5 text-muted-foreground transition-colors"

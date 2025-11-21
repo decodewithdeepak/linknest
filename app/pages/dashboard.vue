@@ -4,7 +4,7 @@
       <!-- Header Section -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <!-- Left: Title -->
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
           <h1 class="text-3xl sm:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60">
             Smart Link Organizer
           </h1>

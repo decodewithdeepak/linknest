@@ -27,7 +27,7 @@
 
       <div class="flex items-center gap-2">
         <UButton
-          to="/links"
+          to="/dashboard"
           size="sm"
           color="primary"
           variant="solid"
@@ -45,6 +45,6 @@ const route = useRoute()
 
 const navItems = [
   { label: 'Home', path: '/' },
-  { label: 'Links', path: '/links' },
+  { label: 'Dashboard', path: '/dashboard' },
 ]
 </script>
