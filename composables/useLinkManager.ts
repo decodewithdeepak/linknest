@@ -93,7 +93,8 @@ export const useLinkManager = () => {
         favicon: metadata.logo?.url || null,
         siteName: metadata.publisher || new URL(url).hostname,
         category,
-        dateAdded: new Date().toISOString()
+        dateAdded: new Date().toISOString(),
+        isFavorite: false
       }
 
       links.value.unshift(newLink)
@@ -108,11 +109,19 @@ export const useLinkManager = () => {
     links.value = links.value.filter(l => l.id !== id)
   }
 
+  const toggleFavorite = (id: string) => {
+    const link = links.value.find(l => l.id === id)
+    if (link) {
+      link.isFavorite = !link.isFavorite
+    }
+  }
+
   return {
     links,
     isLoading,
     error,
     addLink,
-    removeLink
+    removeLink,
+    toggleFavorite
   }
 }

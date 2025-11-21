@@ -20,16 +20,6 @@
         </UBadge>
       </div>
       
-      <!-- Delete Action (visible on hover) -->
-      <div class="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity">
-        <UButton 
-          icon="i-heroicons-trash" 
-          color="error" 
-          variant="soft" 
-          size="xs"
-          @click.prevent="$emit('delete', link.id)"
-        />
-      </div>
     </div>
 
     <!-- Content Section -->
@@ -62,7 +52,26 @@
       
       <div class="pt-3 border-t border-border flex items-center justify-between mt-auto">
         <div class="flex gap-1">
-           <UButton 
+          <!-- Favorite Button -->
+          <UButton 
+            :icon="link.isFavorite ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'" 
+            :color="link.isFavorite ? 'error' : 'neutral'" 
+            variant="ghost"
+            size="xs"
+            @click.prevent="$emit('toggleFavorite', link.id)"
+            :title="link.isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+          />
+          <!-- Delete Button -->
+          <UButton 
+            icon="i-heroicons-trash" 
+            color="neutral" 
+            variant="ghost"
+            size="xs"
+            @click.prevent="$emit('delete', link.id)"
+            title="Delete link"
+          />
+          <!-- Copy Button -->
+          <UButton 
             :icon="copied ? 'i-heroicons-check' : 'i-heroicons-clipboard'"
             :color="copied ? 'success' : 'neutral'"
             variant="ghost"
@@ -95,6 +104,7 @@ const props = defineProps<{
 
 defineEmits<{
   (e: 'delete', id: string): void
+  (e: 'toggleFavorite', id: string): void
 }>()
 
 const copied = ref(false)

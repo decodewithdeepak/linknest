@@ -8,5 +8,6 @@ export interface Link {
   siteName: string
   category: string
   dateAdded: string
+  isFavorite: boolean
 }
 

@@ -7,6 +7,7 @@
           :selected-category="selectedCategory"
           :total-count="links.length"
           :recent-count="Math.min(recentLinks.length, 20)"
+          :favorites-count="favoriteLinks.length"
           :categories="categoriesWithMeta"
           @select="handleCategorySelect"
         />
@@ -56,6 +57,7 @@
               :selected-category="selectedCategory"
               :total-count="links.length"
               :recent-count="Math.min(recentLinks.length, 20)"
+              :favorites-count="favoriteLinks.length"
               :categories="categoriesWithMeta"
               @select="handleMobileCategorySelect"
             />
@@ -75,7 +77,7 @@
             >
               <Icon name="i-heroicons-bars-3" class="w-5 h-5" />
               <span class="font-medium">
-                {{ selectedCategory === null ? 'All Links' : selectedCategory === 'recent' ? 'Recent' : selectedCategory }}
+                {{ selectedCategory === null ? 'All Links' : selectedCategory === 'recent' ? 'Recent' : selectedCategory === 'favorites' ? 'Favorites' : selectedCategory }}
               </span>
               <Icon name="i-heroicons-chevron-down" class="w-4 h-4 ml-auto" />
             </button>
@@ -129,6 +131,7 @@
                 :key="link.id"
                 :link="link" 
                 @delete="removeLink"
+                @toggle-favorite="toggleFavorite"
               />
             </div>
 
@@ -172,7 +175,7 @@ useSeoMeta({
   description: 'Manage and categorize your links automatically',
 })
 
-const { links, isLoading, error, addLink, removeLink } = useLinkManager()
+const { links, isLoading, error, addLink, removeLink, toggleFavorite } = useLinkManager()
 
 const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
@@ -201,12 +204,18 @@ const recentLinks = computed(() => {
     .slice(0, 20)
 })
 
+const favoriteLinks = computed(() => {
+  return links.value.filter(l => l.isFavorite)
+})
+
 // Get links based on selected category
 const displayedLinks = computed(() => {
   if (selectedCategory.value === null) {
     return links.value
   } else if (selectedCategory.value === 'recent') {
     return recentLinks.value
+  } else if (selectedCategory.value === 'favorites') {
+    return favoriteLinks.value
   } else {
     return links.value.filter(l => l.category === selectedCategory.value)
   }

@@ -44,6 +44,23 @@
       <span class="text-xs opacity-70">{{ recentCount }}</span>
     </button>
 
+    <!-- Favorites -->
+    <button
+      @click="$emit('select', 'favorites')"
+      :class="[
+        'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm',
+        selectedCategory === 'favorites'
+          ? 'bg-primary text-black'
+          : 'text-foreground hover:bg-muted'
+      ]"
+    >
+      <div class="flex items-center gap-2.5">
+        <Icon name="i-heroicons-heart-solid" class="w-4 h-4" />
+        <span class="font-medium">Favorites</span>
+      </div>
+      <span class="text-xs opacity-70">{{ favoritesCount }}</span>
+    </button>
+
     <!-- Divider -->
     <div class="h-px bg-border my-3"></div>
 
@@ -91,6 +108,7 @@ defineProps<{
   selectedCategory: string | null
   totalCount: number
   recentCount: number
+  favoritesCount: number
   categories: Array<{
     name: string
     count: number
@@ -103,4 +121,6 @@ defineEmits<{
   select: [category: string | null]
 }>()
 </script>
+
+
 
