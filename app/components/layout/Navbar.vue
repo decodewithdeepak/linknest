@@ -9,7 +9,7 @@
         class="flex items-center gap-2 hover:opacity-80 transition-opacity"
       >
         <Logo size="lg" />
-        <span class="font-bold text-lg tracking-tight hidden sm:block">LinkNest</span>
+        <span class="font-bold text-lg tracking-tight">LinkNest</span>
       </NuxtLink>
 
       <div class="flex-1" />
@@ -35,34 +35,11 @@
       <!-- Actions -->
       <div class="flex items-center gap-2">
         <UButton
-          to="https://github.com/yourusername/linknest"
-          target="_blank"
-          variant="ghost"
-          color="neutral"
-          size="sm"
-          icon="i-simple-icons-github"
-          class="rounded-full hover:bg-primary/10 hover:text-primary active:bg-primary/20 transition-colors"
-          aria-label="GitHub"
-        />
-
-        <ClientOnly>
-          <UButton
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            :icon="isDark ? 'i-heroicons-moon' : 'i-heroicons-sun'"
-            class="rounded-full hover:bg-primary/10 hover:text-primary active:bg-primary/20 transition-colors"
-            @click="toggleTheme"
-            aria-label="Toggle Theme"
-          />
-        </ClientOnly>
-        
-        <UButton
           to="/dashboard"
           size="sm"
           color="primary"
           variant="solid"
-          class="rounded-full px-4 ml-2 hidden sm:flex"
+          class="rounded-full px-4"
         >
           Get Started
         </UButton>
@@ -73,24 +50,10 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const colorMode = useColorMode()
-
-const isDark = computed({
-  get() {
-    return colorMode.value === 'dark'
-  },
-  set() {
-    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-  }
-})
 
 const navItems = [
   { label: 'Dashboard', path: '/dashboard' },
   { label: 'Links', path: '/links' },
   { label: 'Favorites', path: '/favorites' }
 ]
-
-const toggleTheme = () => {
-  isDark.value = !isDark.value
-}
 </script>
