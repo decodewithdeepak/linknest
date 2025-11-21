@@ -1,20 +1,13 @@
 <template>
   <header class="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
-    <nav
-      class="flex items-center gap-4 py-3 px-6 rounded-full border border-border/40 bg-background/60 backdrop-blur-xl shadow-lg shadow-primary/5 transition-all duration-300 hover:border-primary/20 max-w-4xl w-full"
-    >
-      <!-- Logo -->
-      <NuxtLink
-        to="/"
-        class="flex items-center gap-2 hover:opacity-80 transition-opacity"
-      >
+    <nav class="flex items-center gap-4 py-3 px-6 rounded-full border border-border/40 bg-background/60 backdrop-blur-xl shadow-lg shadow-primary/5 transition-all duration-300 hover:border-primary/20 max-w-4xl w-full">
+      <NuxtLink to="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
         <Logo size="lg" />
         <span class="font-bold text-lg tracking-tight">LinkNest</span>
       </NuxtLink>
 
       <div class="flex-1" />
 
-      <!-- Navigation Links (Desktop) -->
       <div class="hidden md:flex items-center gap-1">
         <UButton
           v-for="item in navItems"
@@ -32,7 +25,6 @@
 
       <div class="h-4 w-px bg-border/50 hidden md:block mx-2"></div>
 
-      <!-- Actions -->
       <div class="flex items-center gap-2">
         <UButton
           to="/dashboard"

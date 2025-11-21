@@ -2,7 +2,6 @@
   <footer class="border-t border-border bg-background py-8 mt-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- Brand Section -->
         <div class="col-span-1 md:col-span-2">
           <div class="flex items-center gap-2.5 mb-4">
             <Logo size="lg" />
@@ -16,7 +15,6 @@
           </p>
         </div>
 
-        <!-- Quick Links -->
         <div>
           <h3 class="font-semibold mb-4">Quick Links</h3>
           <ul class="space-y-2 text-sm text-muted-foreground">
@@ -38,7 +36,6 @@
           </ul>
         </div>
 
-        <!-- Resources -->
         <div>
           <h3 class="font-semibold mb-4">Resources</h3>
           <ul class="space-y-2 text-sm text-muted-foreground">
@@ -67,7 +64,6 @@
         </p>
         
         <div class="flex items-center gap-6">
-          <!-- Theme Toggle -->
           <ClientOnly>
             <div class="flex items-center gap-3">
               <span class="text-sm text-muted-foreground">Theme</span>
@@ -90,7 +86,6 @@
             </div>
           </ClientOnly>
 
-          <!-- Social Links -->
           <div class="flex items-center gap-4">
             <a
               href="https://github.com/yourusername/linknest"
@@ -117,11 +112,7 @@
 
 <script setup lang="ts">
 const colorMode = useColorMode()
-
 const isDark = computed(() => colorMode.value === 'dark')
-
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
+const toggleTheme = () => colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 </script>
 

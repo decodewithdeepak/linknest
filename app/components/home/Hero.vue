@@ -1,28 +1,22 @@
 <template>
   <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-12 sm:py-20">
-
     <div class="max-w-7xl mx-auto px-6 sm:px-6 text-center w-full">
-      
-      <!-- Main Heading -->
       <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 leading-tight">
         Your Digital <br />
         <span class="relative inline-block">
           <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">
             Second Brain
           </span>
-          <!-- Underline decoration -->
           <svg class="absolute w-full h-3 -bottom-2 left-0 text-primary/30" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2.00025 6.99997C25.8086 6.99995 42.7596 2.99996 71.0002 2.99996C99.2409 2.99997 119.519 7.00002 146 7.00004C172.481 7.00006 184.687 3.00005 198.001 3.00005" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
           </svg>
         </span>
       </h1>
 
-      <!-- Description -->
       <p class="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-8 px-2">
         Stop drowning in tabs. LinkNest automatically categorizes, tags, and organizes your links with AI-powered precision.
       </p>
 
-      <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-8 sm:mb-16 max-w-md sm:max-w-none mx-auto">
         <UButton
           to="/dashboard"
@@ -45,11 +39,8 @@
         </UButton>
       </div>
 
-      <!-- Glass Mockup with 3D Parallax -->
       <div class="relative max-w-4xl mx-auto group perspective-[1000px]">
         <div class="relative rounded-lg sm:rounded-xl border border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-2xl overflow-hidden transition-transform duration-700 transform-3d group-hover:transform-[perspective(1000px)_rotateY(-2deg)_rotateX(2deg)]">
-          
-          <!-- Browser Header -->
           <div class="flex items-center gap-4 px-6 py-4 border-b border-white/10 bg-white/50 dark:bg-black/50">
             <div class="hidden sm:flex gap-2">
               <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
@@ -65,11 +56,8 @@
             <div class="w-16"></div>
           </div>
 
-          <!-- App Mockup -->
           <div class="p-4 sm:p-8 bg-linear-to-br from-white/40 to-white/10 dark:from-black/40 dark:to-black/10 min-h-[300px] sm:min-h-[400px] text-left">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              
-              <!-- Card 1 -->
               <div class="group/card p-4 rounded-xl border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
                 <div class="flex items-center justify-between mb-4">
                   <div class="flex items-center gap-3">
@@ -92,7 +80,6 @@
                 </div>
               </div>
 
-              <!-- Card 2 -->
               <div class="group/card p-4 rounded-xl border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
                 <div class="flex items-center justify-between mb-4">
                   <div class="flex items-center gap-3">
@@ -115,7 +102,6 @@
                 </div>
               </div>
 
-              <!-- Card 3 -->
               <div class="group/card p-4 rounded-xl border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
                 <div class="flex items-center justify-between mb-4">
                   <div class="flex items-center gap-3">
@@ -137,13 +123,11 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Trust Badges -->
       <div class="max-w-2xl mx-auto mt-12 sm:mt-20 border-t border-border/50 pt-8 sm:pt-12 px-4">
         <p class="text-xs sm:text-sm text-muted-foreground font-medium mb-6 sm:mb-8 uppercase tracking-widest">Trusted by organized people everywhere</p>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
@@ -153,11 +137,9 @@
           <div class="flex items-center justify-center gap-1.5 sm:gap-2 font-bold text-base sm:text-xl"><Icon name="i-simple-icons-linear" class="w-5 h-5 sm:w-6 sm:h-6"/> Linear</div>
         </div>
       </div>
-
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-// Hero section component
 </script>

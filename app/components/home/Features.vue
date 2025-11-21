@@ -1,7 +1,6 @@
 <template>
   <section id="features" class="py-12 sm:py-20 relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-6 sm:px-6 relative z-10">
-      <!-- Section Header -->
       <div class="text-center mb-12 sm:mb-16 max-w-3xl mx-auto">
         <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-4 sm:mb-6 hover:bg-primary/10 transition-colors">
           <Icon name="i-heroicons-sparkles" class="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
@@ -16,7 +15,6 @@
         </p>
       </div>
 
-      <!-- Features Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <div
           v-for="(feature, index) in features"

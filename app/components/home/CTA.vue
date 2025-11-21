@@ -1,11 +1,8 @@
 <template>
   <section class="py-12 sm:py-20 relative overflow-hidden">
     <div class="max-w-5xl mx-auto px-6 sm:px-6">
-      <!-- Gradient Border Container -->
       <div class="relative rounded-2xl sm:rounded-3xl p-1 bg-linear-to-br from-primary/20 via-teal-500/10 to-cyan-500/20">
         <div class="relative rounded-[calc(1rem-4px)] sm:rounded-[calc(1.5rem-4px)] bg-background backdrop-blur-2xl p-8 sm:p-12 md:p-16 text-center border border-border/50">
-          
-          <!-- Background Effects -->
           <div class="absolute inset-0 overflow-hidden rounded-[calc(1rem-4px)] sm:rounded-[calc(1.5rem-4px)] pointer-events-none">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px] animate-pulse"></div>
             <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse"></div>
@@ -48,7 +45,6 @@
               </UButton>
             </div>
 
-            <!-- Trust Indicators -->
             <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm text-muted-foreground px-4">
               <div class="flex items-center gap-1.5 sm:gap-2">
                 <Icon name="i-heroicons-check-circle" class="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
