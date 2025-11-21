@@ -24,7 +24,7 @@
           color="primary"
           class="group gap-2 rounded-full w-full sm:w-auto justify-center text-sm sm:text-base"
         >
-          Start Organizing
+          <span class="">Start Organizing</span>
           <Icon name="i-heroicons-arrow-right" class="h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
         </UButton>
         

@@ -36,7 +36,7 @@
             <UButton to="/" variant="outline">
               Back to Home
             </UButton>
-            <UButton to="https://github.com/yourusername/linknest" target="_blank" variant="ghost">
+            <UButton to="https://github.com/decodewithdeepak/linknest" target="_blank" variant="ghost">
               <Icon name="i-simple-icons-github" class="h-4 w-4 mr-2" />
               Follow Progress
             </UButton>

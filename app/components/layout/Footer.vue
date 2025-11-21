@@ -50,7 +50,7 @@
               </a>
             </li>
             <li>
-              <a href="https://github.com/yourusername/linknest" target="_blank" class="hover:text-foreground transition-colors">
+              <a href="https://github.com/decodewithdeepak/linknest" target="_blank" class="hover:text-foreground transition-colors">
                 GitHub
               </a>
             </li>
@@ -88,7 +88,7 @@
 
           <div class="flex items-center gap-4">
             <a
-              href="https://github.com/yourusername/linknest"
+              href="https://github.com/decodewithdeepak/linknest"
               target="_blank"
               class="text-muted-foreground hover:text-foreground transition-colors"
               aria-label="GitHub"
@@ -96,7 +96,7 @@
               <Icon name="i-simple-icons-github" class="h-5 w-5" />
             </a>
             <a
-              href="https://twitter.com/yourusername"
+              href="https://twitter.com/decodewithdeepak"
               target="_blank"
               class="text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Twitter"

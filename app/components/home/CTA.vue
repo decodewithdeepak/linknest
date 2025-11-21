@@ -2,8 +2,8 @@
   <section class="py-12 sm:py-20 relative overflow-hidden">
     <div class="max-w-5xl mx-auto px-6 sm:px-6">
       <div class="relative rounded-2xl sm:rounded-3xl p-1 bg-linear-to-br from-primary/20 via-teal-500/10 to-cyan-500/20">
-        <div class="relative rounded-[calc(1rem-4px)] sm:rounded-[calc(1.5rem-4px)] bg-background backdrop-blur-2xl p-8 sm:p-12 md:p-16 text-center border border-border/50">
-          <div class="absolute inset-0 overflow-hidden rounded-[calc(1rem-4px)] sm:rounded-[calc(1.5rem-4px)] pointer-events-none">
+        <div class="relative rounded-xl sm:rounded-[calc(1.5rem-4px)] bg-background backdrop-blur-2xl p-8 sm:p-12 md:p-16 text-center border border-border/50">
+          <div class="absolute inset-0 overflow-hidden rounded-xl sm:rounded-[calc(1.5rem-4px)] pointer-events-none">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px] animate-pulse"></div>
             <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse"></div>
           </div>
@@ -34,7 +34,7 @@
               </UButton>
               
               <UButton
-                to="https://github.com/yourusername/linknest"
+                to="https://github.com/decodewithdeepak/linknest"
                 target="_blank"
                 size="lg"
                 variant="ghost"
