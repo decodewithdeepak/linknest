@@ -99,7 +99,45 @@
         <span class="text-xs opacity-70 shrink-0 ml-2">{{ category.count }}</span>
       </button>
     </div>
-  </div>
+    </div>
+
+    <!-- User Profile Section - Bottom -->
+    <div class="mt-auto pt-4 border-t border-border">
+      <div class="flex items-center gap-3 mb-3">
+        <img 
+          src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" 
+          alt="User Avatar"
+          class="w-10 h-10 rounded-full border-2 border-primary/20"
+        />
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold truncate">Deepak Modi</p>
+          <p class="text-xs text-muted-foreground truncate">deepak@example.com</p>
+        </div>
+      </div>
+      
+      <!-- Actions Row -->
+      <div class="flex items-center gap-2">
+        <!-- Theme Toggle -->
+        <button
+          @click="toggleTheme"
+          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm"
+          title="Toggle theme"
+        >
+          <Icon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'" class="w-4 h-4" />
+          <span class="text-xs">{{ isDark ? 'Light' : 'Dark' }}</span>
+        </button>
+        
+        <!-- Logout Button -->
+        <button
+          @click="handleLogout"
+          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors text-sm"
+          title="Logout"
+        >
+          <Icon name="i-heroicons-arrow-right-on-rectangle" class="w-4 h-4" />
+          <span class="text-xs">Logout</span>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -120,6 +158,20 @@ defineProps<{
 defineEmits<{
   select: [category: string | null]
 }>()
+
+const colorMode = useColorMode()
+const isDark = computed(() => colorMode.value === 'dark')
+
+const toggleTheme = () => {
+  colorMode.preference = isDark.value ? 'light' : 'dark'
+}
+
+const handleLogout = () => {
+  // Add logout logic here
+  console.log('Logout clicked')
+  // For now, just show an alert
+  alert('Logout functionality - to be implemented')
+}
 </script>
 
 

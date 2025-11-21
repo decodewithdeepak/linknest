@@ -1,16 +1,21 @@
 <template>
   <div class="group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full">
     <!-- Image Section -->
-    <div class="aspect-video w-full overflow-hidden relative">
+    <div class="aspect-video w-full overflow-hidden relative p-2">
       <img 
-        v-if="link.image" 
+        v-if="link.image && !imageError" 
         :src="link.image" 
         :alt="link.title"
-        class="w-full h-full object-cover p-2 rounded-2xl"
+        class="w-full h-full object-cover rounded-xl"
         @error="handleImageError"
       />
-      <div v-else class="w-full h-full flex items-center justify-center bg-muted/50">
-        <Icon name="i-heroicons-photo" class="w-12 h-12 text-muted-foreground/30" />
+      <div v-else class="w-full h-full flex flex-col items-center justify-center bg-linear-to-br from-primary/10 via-primary/5 to-transparent rounded-xl">
+        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+          <Icon name="i-heroicons-link" class="w-8 h-8 text-primary" />
+        </div>
+        <p class="text-xs text-muted-foreground font-medium px-4 text-center line-clamp-2">
+          {{ link.siteName }}
+        </p>
       </div>
       
       <!-- Category Badge -->
@@ -67,7 +72,7 @@
             color="warning" 
             variant="ghost"
             size="xs"
-            @click.prevent="$emit('delete', link.id)"
+            @click.prevent="handleDelete"
             title="Delete link"
           />
           <!-- Copy Button -->
@@ -101,16 +106,16 @@ const props = defineProps<{
   link: Link
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'delete', id: string): void
   (e: 'toggleFavorite', id: string): void
 }>()
 
 const copied = ref(false)
+const imageError = ref(false)
 
 const handleImageError = (e: Event) => {
-  const target = e.target as HTMLImageElement
-  target.style.display = 'none' // Or replace with fallback
+  imageError.value = true
 }
 
 const formatDate = (dateString: string) => {
@@ -118,6 +123,12 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric'
   })
+}
+
+const handleDelete = () => {
+  if (confirm(`Are you sure you want to delete "${props.link.title}"?`)) {
+    emit('delete', props.link.id)
+  }
 }
 
 const copyToClipboard = async (text: string) => {
