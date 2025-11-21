@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen">
-    <!-- Fixed Sidebar -->
+    <!-- Desktop Sidebar -->
     <div class="hidden lg:block w-64 fixed left-0 top-0 h-screen border-r border-border bg-background z-40">
       <div class="h-full overflow-y-auto px-4 py-6">
         <Sidebar
@@ -13,23 +13,88 @@
       </div>
     </div>
 
+    <!-- Mobile Sidebar Overlay -->
+    <Transition
+      enter-active-class="transition-opacity duration-300"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition-opacity duration-300"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="mobileMenuOpen"
+        class="lg:hidden fixed inset-0 bg-black/50 z-40"
+        @click="mobileMenuOpen = false"
+      />
+    </Transition>
+
+    <Transition
+      enter-active-class="transition-transform duration-300"
+      enter-from-class="-translate-x-full"
+      enter-to-class="translate-x-0"
+      leave-active-class="transition-transform duration-300"
+      leave-from-class="translate-x-0"
+      leave-to-class="-translate-x-full"
+    >
+      <div
+        v-if="mobileMenuOpen"
+        class="lg:hidden fixed left-0 top-0 h-screen w-64 border-r border-border bg-background z-50 overflow-y-auto"
+      >
+        <div class="relative h-full">
+          <!-- Close Button - Absolute positioned -->
+          <button
+            @click="mobileMenuOpen = false"
+            class="absolute top-4 right-4 z-10 p-2 hover:bg-muted rounded-lg transition-colors"
+          >
+            <Icon name="i-heroicons-x-mark" class="w-5 h-5" />
+          </button>
+          
+          <!-- Sidebar with Logo -->
+          <div class="px-4 py-6 h-full">
+            <Sidebar
+              :selected-category="selectedCategory"
+              :total-count="links.length"
+              :recent-count="Math.min(recentLinks.length, 20)"
+              :categories="categoriesWithMeta"
+              @select="handleMobileCategorySelect"
+            />
+          </div>
+        </div>
+      </div>
+    </Transition>
+
     <!-- Main Content Area -->
     <main class="flex-1 min-h-screen lg:ml-64">
-        <div class="max-w-7xl mx-auto w-full py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto w-full py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
+          <!-- Mobile Menu Button -->
+          <div class="lg:hidden mb-4">
+            <button
+              @click="mobileMenuOpen = true"
+              class="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background hover:bg-muted transition-colors w-full"
+            >
+              <Icon name="i-heroicons-bars-3" class="w-5 h-5" />
+              <span class="font-medium">
+                {{ selectedCategory === null ? 'All Links' : selectedCategory === 'recent' ? 'Recent' : selectedCategory }}
+              </span>
+              <Icon name="i-heroicons-chevron-down" class="w-4 h-4 ml-auto" />
+            </button>
+          </div>
+
           <!-- Header Section -->
-          <div class="flex flex-col gap-6 mb-8">
+          <div class="flex flex-col gap-4 sm:gap-6 mb-6 sm:mb-8">
             <!-- Title -->
-            <div>
-              <h1 class="text-3xl sm:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60">
+            <div class="shrink-0">
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2 bg-clip-text text-transparent bg-linear-to-r from-primary to-primary/60">
                 Smart Link Organizer
               </h1>
-              <p class="text-muted-foreground text-lg">
+              <p class="text-muted-foreground text-sm sm:text-base lg:text-lg">
                 Manage your digital resources with AI-powered categorization
               </p>
             </div>
 
             <!-- Add Link Section -->
-            <div class="w-full max-w-3xl">
+            <div class="w-full">
               <LinkInput 
                 :loading="isLoading" 
                 @add="handleAddLink"
@@ -41,45 +106,24 @@
             </div>
           </div>
 
-          <!-- Mobile Sidebar (Collapsible) -->
-          <div class="lg:hidden mb-6">
-            <Sidebar
-              :selected-category="selectedCategory"
-              :total-count="links.length"
-              :recent-count="Math.min(recentLinks.length, 20)"
-              :categories="categoriesWithMeta"
-              @select="handleCategorySelect"
-            />
-          </div>
-
           <!-- Content Area -->
           <div v-if="links.length > 0">
 
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-              <div>
-                <h2 class="text-2xl font-bold">
-                  {{ selectedCategory === null ? 'All Links' : selectedCategory === 'recent' ? 'Recently Added' : selectedCategory }}
-                </h2>
-                <p class="text-sm text-muted-foreground mt-1">
-                  {{ displayedLinks.length }} {{ displayedLinks.length === 1 ? 'link' : 'links' }}
-                </p>
-              </div>
-
-              <!-- Search -->
-              <div class="relative w-full max-w-xs">
-                <Icon name="i-heroicons-magnifying-glass" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <!-- Search Bar -->
+            <div class="mb-6">
+              <div class="relative w-full">
+                <Icon name="i-heroicons-magnifying-glass" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input 
                   v-model="searchQuery" 
                   type="text" 
-                  placeholder="Search..." 
-                  class="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
+                  placeholder="Search links by title, description or URL..." 
+                  class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                 />
               </div>
             </div>
 
             <!-- Links Grid -->
-            <div v-if="filteredLinks.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div v-if="filteredLinks.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               <LinkCard 
                 v-for="link in filteredLinks" 
                 :key="link.id"
@@ -132,6 +176,7 @@ const { links, isLoading, error, addLink, removeLink } = useLinkManager()
 
 const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
+const mobileMenuOpen = ref(false)
 
 // Derived state for unique categories
 const categories = computed(() => {
@@ -193,6 +238,11 @@ const handleAddLink = async (url: string) => {
 
 const handleCategorySelect = (category: string | null) => {
   selectedCategory.value = category
+}
+
+const handleMobileCategorySelect = (category: string | null) => {
+  selectedCategory.value = category
+  mobileMenuOpen.value = false
 }
 
 // Category icons and gradients

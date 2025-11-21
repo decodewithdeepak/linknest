@@ -11,7 +11,7 @@
         isDragging ? 'bg-primary/10 ring-2 ring-primary border-primary border-dashed' : 'bg-background border border-border shadow-sm hover:border-primary/50'
       ]"
     >
-      <form @submit.prevent="handleSubmit" class="flex items-center gap-2">
+      <form @submit.prevent="handleSubmit" class="flex items-center gap-2 sm:gap-3">
         <div class="shrink-0 flex items-center justify-center">
           <Icon 
             :name="isDragging ? 'i-heroicons-arrow-down-tray' : 'i-heroicons-link'" 
@@ -24,8 +24,8 @@
           ref="inputRef"
           v-model="urlInput"
           type="url"
-          placeholder="Paste your link here (or drag & drop)..."
-          class="flex-1 bg-transparent border-none outline-none text-base h-10"
+          :placeholder="isMobile ? 'Paste your link here...' : 'Paste your link here (or drag & drop)...'"
+          class="flex-1 bg-transparent border-none outline-none text-base h-10 min-w-0"
           :disabled="loading"
         />
 
@@ -36,7 +36,7 @@
           color="primary"
           variant="solid"
           size="md"
-          class="px-6 transition-all duration-300"
+          class="px-6 transition-all duration-300 shrink-0"
         >
           {{ loading ? 'Adding...' : 'Add Link' }}
         </UButton>
@@ -64,6 +64,15 @@ const emit = defineEmits<{
 const urlInput = ref('')
 const isDragging = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
+
+// Detect mobile screen
+const isMobile = ref(false)
+onMounted(() => {
+  isMobile.value = window.innerWidth < 640
+  window.addEventListener('resize', () => {
+    isMobile.value = window.innerWidth < 640
+  })
+})
 
 const handleSubmit = () => {
   if (!urlInput.value) return
