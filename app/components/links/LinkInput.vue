@@ -24,8 +24,8 @@
           ref="inputRef"
           v-model="urlInput"
           type="url"
-          :placeholder="isMobile ? 'Paste your link here...' : 'Paste your link here (or drag & drop)...'"
-          class="flex-1 bg-transparent border-none outline-none text-base h-10 min-w-0"
+          placeholder="Paste your link here (or drag & drop)..."
+          class="flex-1 bg-transparent border-none outline-none text-base h-10 min-w-0 placeholder:truncate"
           :disabled="loading"
         />
 
@@ -64,15 +64,6 @@ const emit = defineEmits<{
 const urlInput = ref('')
 const isDragging = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
-
-// Detect mobile screen
-const isMobile = ref(false)
-onMounted(() => {
-  isMobile.value = window.innerWidth < 640
-  window.addEventListener('resize', () => {
-    isMobile.value = window.innerWidth < 640
-  })
-})
 
 const handleSubmit = () => {
   if (!urlInput.value) return
