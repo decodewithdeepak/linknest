@@ -1,12 +1,12 @@
 <template>
   <div class="group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full">
     <!-- Image Section -->
-    <div class="aspect-video w-full overflow-hidden bg-muted relative">
+    <div class="aspect-video w-full overflow-hidden relative">
       <img 
         v-if="link.image" 
         :src="link.image" 
         :alt="link.title"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        class="w-full h-full object-cover p-2 rounded-2xl"
         @error="handleImageError"
       />
       <div v-else class="w-full h-full flex items-center justify-center bg-muted/50">
@@ -14,8 +14,8 @@
       </div>
       
       <!-- Category Badge -->
-      <div class="absolute top-3 right-3">
-        <UBadge :color="getCategoryColor(link.category)" variant="soft" class="backdrop-blur-md bg-white/90 dark:bg-black/80">
+      <div class="absolute top-0 left-0">
+        <UBadge :color="getCategoryColor(link.category)" variant="soft" class="bg-background">
           {{ link.category }}
         </UBadge>
       </div>
@@ -55,7 +55,7 @@
           <!-- Favorite Button -->
           <UButton 
             :icon="link.isFavorite ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'" 
-            :color="link.isFavorite ? 'error' : 'neutral'" 
+            :color="link.isFavorite ? 'error' : 'error'" 
             variant="ghost"
             size="xs"
             @click.prevent="$emit('toggleFavorite', link.id)"
@@ -64,7 +64,7 @@
           <!-- Delete Button -->
           <UButton 
             icon="i-heroicons-trash" 
-            color="neutral" 
+            color="warning" 
             variant="ghost"
             size="xs"
             @click.prevent="$emit('delete', link.id)"
@@ -73,7 +73,7 @@
           <!-- Copy Button -->
           <UButton 
             :icon="copied ? 'i-heroicons-check' : 'i-heroicons-clipboard'"
-            :color="copied ? 'success' : 'neutral'"
+            :color="copied ? 'success' : 'success'"
             variant="ghost"
             size="xs"
             @click="copyToClipboard(link.url)"
@@ -83,7 +83,6 @@
         <UButton 
           :to="link.url"
           target="_blank"
-          color="neutral"
           variant="ghost"
           size="xs"
           trailing-icon="i-heroicons-arrow-top-right-on-square"
