@@ -19,7 +19,7 @@
 
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-8 sm:mb-16 max-w-md sm:max-w-none mx-auto">
         <UButton
-          to="/dashboard"
+          to="/links"
           size="lg"
           color="primary"
           class="group gap-2 rounded-full w-full sm:w-auto justify-center text-sm sm:text-base"
@@ -50,7 +50,7 @@
             <div class="flex-1 flex justify-center">
               <div class="flex items-center gap-2 px-4 py-1.5 rounded-md bg-white/40 dark:bg-white/5 border border-white/10 text-xs text-muted-foreground w-64 justify-center font-mono shadow-sm">
                 <Icon name="i-heroicons-lock-closed" class="w-3 h-3" />
-                linknest.app/dashboard
+                linknest.app/links
               </div>
             </div>
             <div class="w-16"></div>

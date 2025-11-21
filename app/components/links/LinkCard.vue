@@ -1,0 +1,130 @@
+<template>
+  <div class="group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full">
+    <!-- Image Section -->
+    <div class="aspect-video w-full overflow-hidden bg-muted relative">
+      <img 
+        v-if="link.image" 
+        :src="link.image" 
+        :alt="link.title"
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        @error="handleImageError"
+      />
+      <div v-else class="w-full h-full flex items-center justify-center bg-muted/50">
+        <Icon name="i-heroicons-photo" class="w-12 h-12 text-muted-foreground/30" />
+      </div>
+      
+      <!-- Category Badge -->
+      <div class="absolute top-3 right-3">
+        <UBadge :color="getCategoryColor(link.category)" variant="soft" class="backdrop-blur-md bg-white/90 dark:bg-black/80">
+          {{ link.category }}
+        </UBadge>
+      </div>
+      
+      <!-- Delete Action (visible on hover) -->
+      <div class="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity">
+        <UButton 
+          icon="i-heroicons-trash" 
+          color="red" 
+          variant="soft" 
+          size="xs"
+          @click.prevent="$emit('delete', link.id)"
+        />
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="p-4 flex flex-col flex-1">
+      <div class="flex items-center gap-2 mb-2">
+        <img 
+          v-if="link.favicon" 
+          :src="link.favicon" 
+          class="w-4 h-4 rounded-full"
+          alt=""
+        />
+        <span class="text-xs text-muted-foreground font-medium truncate">
+          {{ link.siteName }}
+        </span>
+        <span class="text-xs text-muted-foreground/50">•</span>
+        <span class="text-xs text-muted-foreground/50">
+          {{ formatDate(link.dateAdded) }}
+        </span>
+      </div>
+
+      <a :href="link.url" target="_blank" rel="noopener noreferrer" class="block group-hover:text-primary transition-colors mb-2">
+        <h3 class="font-semibold leading-tight line-clamp-2" :title="link.title">
+          {{ link.title }}
+        </h3>
+      </a>
+
+      <p class="text-sm text-muted-foreground line-clamp-2 mb-4 flex-1" :title="link.description">
+        {{ link.description || 'No description available' }}
+      </p>
+      
+      <div class="pt-3 border-t border-border flex items-center justify-between mt-auto">
+        <div class="flex gap-1">
+           <UButton 
+            icon="i-heroicons-clipboard"
+            color="gray"
+            variant="ghost"
+            size="xs"
+            @click="copyToClipboard(link.url)"
+          />
+        </div>
+        <UButton 
+          :to="link.url"
+          target="_blank"
+          color="gray"
+          variant="ghost"
+          size="xs"
+          trailing-icon="i-heroicons-arrow-top-right-on-square"
+        >
+          Visit
+        </UButton>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { Link } from '../../../types/link'
+
+const props = defineProps<{
+  link: Link
+}>()
+
+defineEmits<{
+  (e: 'delete', id: string): void
+}>()
+
+const handleImageError = (e: Event) => {
+  const target = e.target as HTMLImageElement
+  target.style.display = 'none' // Or replace with fallback
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric'
+  })
+}
+
+const copyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text)
+  // Could add a toast notification here
+}
+
+const getCategoryColor = (category: string) => {
+  const colors: Record<string, string> = {
+    'Open Source': 'green',
+    'Portfolio': 'purple',
+    'Blog': 'blue',
+    'Tool': 'orange',
+    'Learning': 'yellow',
+    'Video': 'red',
+    'Design': 'pink',
+    'Other': 'gray'
+  }
+  return colors[category] || 'gray'
+}
+</script>
+
