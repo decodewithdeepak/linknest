@@ -55,7 +55,7 @@
       ]"
     >
       <div class="flex items-center gap-2.5">
-        <Icon name="i-heroicons-heart-solid" class="w-4 h-4" />
+        <Icon name="i-heroicons-heart" class="w-4 h-4" />
         <span class="font-medium">Favorites</span>
       </div>
       <span class="text-xs opacity-70">{{ favoritesCount }}</span>
