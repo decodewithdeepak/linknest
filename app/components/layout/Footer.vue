@@ -54,27 +54,10 @@
         </p>
         
         <div class="flex items-center gap-6">
-          <ClientOnly>
-            <div class="flex items-center gap-3">
-              <span class="text-sm text-muted-foreground">Theme</span>
-              <button
-                @click="toggleTheme"
-                class="bg-primary/20 relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-                role="switch"
-                :aria-checked="isDark"
-              >
-                <span
-                  class="inline-block h-4 w-4 transform rounded-full bg-white shadow-lg transition-transform"
-                  :class="isDark ? 'translate-x-6' : 'translate-x-1'"
-                />
-                <Icon
-                  :name="isDark ? 'i-heroicons-moon-solid' : 'i-heroicons-sun-solid'"
-                  class="absolute h-3 w-3 transition-all"
-                  :class="isDark ? 'left-1.5 text-white' : 'right-1.5 text-muted-foreground'"
-                />
-              </button>
-            </div>
-          </ClientOnly>
+          <div class="flex items-center gap-3">
+            <span class="text-sm text-muted-foreground">Theme</span>
+            <ThemeToggle />
+          </div>
 
           <div class="flex items-center gap-4">
             <a
@@ -101,8 +84,5 @@
 </template>
 
 <script setup lang="ts">
-const colorMode = useColorMode()
-const isDark = computed(() => colorMode.value === 'dark')
-const toggleTheme = () => colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 </script>
 

@@ -1,15 +1,16 @@
 <template>
   <div class="h-full flex flex-col">
     <!-- Logo/Brand -->
-    <div class="mb-6 pb-6 border-b border-border shrink-0">
+    <div class="pb-4 flex items-center justify-between">
       <NuxtLink to="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
         <Logo size="lg" />
         <span class="font-bold text-2xl">LinkNest</span>
       </NuxtLink>
+      <ThemeToggle />
     </div>
 
     <!-- Navigation -->
-    <div class="space-y-2 shrink-0">
+    <div class="space-y-2 mt-auto pt-4 border-t border-border shrink-0">
       <!-- All Links -->
       <button
         @click="$emit('select', null)"
@@ -159,24 +160,27 @@
               </div>
               <span class="font-medium truncate">{{ category.name }}</span>
             </div>
-            <div class="flex items-center gap-2 shrink-0 ml-2">
+            <div class="flex items-center gap-1 shrink-0 ml-2">
               <!-- Edit & Delete Icons (shown on hover, only for custom categories) -->
               <template v-if="category.isCustom">
-                <button
+                <UButton
+                  icon="i-heroicons-pencil"
+                  color="warning"
+                  variant="ghost"
+                  size="xs"
                   @click.stop="handleEditCategory(category.name)"
-                  class="opacity-0 group-hover/item:opacity-100 p-1 hover:bg-primary/20 rounded transition-all"
-                  :class="selectedCategory === category.name ? 'hover:bg-black/10' : ''"
+                  class="opacity-0 group-hover/item:opacity-100"
                   title="Edit category"
-                >
-                  <Icon name="i-heroicons-pencil" class="w-3 h-3" />
-                </button>
-                <button
+                />
+                <UButton
+                  icon="i-heroicons-trash"
+                  color="error"
+                  variant="ghost"
+                  size="xs"
                   @click.stop="handleDeleteCategory(category.name)"
-                  class="opacity-0 group-hover/item:opacity-100 p-1 hover:bg-red-500/20 rounded transition-all"
+                  class="opacity-0 group-hover/item:opacity-100"
                   title="Delete category"
-                >
-                  <Icon name="i-heroicons-trash" class="w-3 h-3 text-red-500" />
-                </button>
+                />
               </template>
               <!-- Count (always visible) -->
               <span class="text-xs opacity-70">{{ category.count }}</span>
@@ -188,7 +192,7 @@
 
     <!-- User Profile Section - Bottom -->
     <div class="mt-auto pt-4 border-t border-border shrink-0">
-      <div class="flex items-center gap-3 mb-3">
+      <div class="flex items-center gap-3">
         <img 
           src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" 
           alt="User Avatar"
@@ -198,29 +202,15 @@
           <p class="text-sm font-semibold truncate">Deepak Modi</p>
           <p class="text-xs text-muted-foreground truncate">deepak@example.com</p>
         </div>
-      </div>
-      
-      <!-- Actions Row -->
-      <div class="flex items-center gap-2">
-        <!-- Theme Toggle -->
-        <button
-          @click="toggleTheme"
-          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-primary/10 hover:border-primary/20 border border-transparent hover:text-primary transition-all text-sm"
-          title="Toggle theme"
-        >
-          <Icon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'" class="w-4 h-4" />
-          <span class="text-xs">{{ isDark ? 'Light' : 'Dark' }}</span>
-        </button>
-        
-        <!-- Logout Button -->
-        <button
+        <!-- Logout Icon Button -->
+        <UButton
+          icon="i-heroicons-arrow-right-on-rectangle"
+          color="error"
+          variant="ghost"
+          size="md"
           @click="handleLogout"
-          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-500/15 hover:border-red-500/30 border border-transparent hover:text-red-600 transition-all text-sm"
           title="Logout"
-        >
-          <Icon name="i-heroicons-arrow-right-on-rectangle" class="w-4 h-4" />
-          <span class="text-xs">Logout</span>
-        </button>
+        />
       </div>
     </div>
   </div>
@@ -343,13 +333,6 @@ const cancelEdit = () => {
   editingCategoryData.value = null
   newCategoryName.value = ''
   selectedColor.value = '#8b5cf6'
-}
-
-const colorMode = useColorMode()
-const isDark = computed(() => colorMode.value === 'dark')
-
-const toggleTheme = () => {
-  colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 
 const handleLogout = () => {

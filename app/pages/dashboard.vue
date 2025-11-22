@@ -2,7 +2,7 @@
   <div class="flex min-h-screen overflow-x-hidden">
     <!-- Desktop Sidebar -->
     <div class="hidden lg:block w-64 fixed left-0 top-0 h-screen border-r border-border bg-background z-40">
-      <div class="h-full overflow-y-auto px-4 py-6">
+      <div class="h-full overflow-y-auto p-4">
         <Sidebar
           :selected-category="selectedCategory"
           :total-count="links.length"
