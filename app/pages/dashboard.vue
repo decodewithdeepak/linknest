@@ -11,6 +11,8 @@
           :categories="categoriesWithMeta"
           @select="handleCategorySelect"
           @create-category="handleCreateCategory"
+          @edit-category="handleEditCategory"
+          @delete-category="handleDeleteCategory"
         />
       </div>
     </div>
@@ -62,6 +64,8 @@
               :categories="categoriesWithMeta"
               @select="handleMobileCategorySelect"
               @create-category="handleCreateCategory"
+              @edit-category="handleEditCategory"
+              @delete-category="handleDeleteCategory"
             />
           </div>
         </div>
@@ -170,8 +174,8 @@
 
 <script setup lang="ts">
 import { useLinkManager } from '../../composables/useLinkManager'
-import LinkInput from '~/components/links/LinkInput.vue'
-import LinkCard from '~/components/links/LinkCard.vue'
+import LinkInput from '~/components/dashboard/LinkInput.vue'
+import LinkCard from '~/components/dashboard/LinkCard.vue'
 import Sidebar from '~/components/dashboard/Sidebar.vue'
 
 useSeoMeta({
@@ -179,7 +183,7 @@ useSeoMeta({
   description: 'Manage and categorize your links automatically',
 })
 
-const { links, customCategories, isLoading, error, addLink, removeLink, toggleFavorite, createCategory, updateLinkCategory } = useLinkManager()
+const { links, customCategories, isLoading, error, addLink, removeLink, toggleFavorite, createCategory, updateCategory, deleteCategory, updateLinkCategory } = useLinkManager()
 
 const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
@@ -215,7 +219,8 @@ const categoriesWithMeta = computed(() => {
     name: cat.name,
     count: getCategoryCount(cat.name),
     icon: getCategoryIcon(cat.name),
-    gradient: cat.color ? `${cat.color}, ${cat.color}` : getCategoryGradient(cat.name)
+    color: cat.color || getCategoryColor(cat.name),
+    isCustom: !!cat.color // Only custom categories have a color property
   }))
 })
 
@@ -282,6 +287,22 @@ const handleCreateCategory = (data: { name: string, color: string }) => {
   selectedCategory.value = data.name
 }
 
+const handleEditCategory = (data: { oldName: string, newName: string, newColor: string }) => {
+  updateCategory(data.oldName, data.newName, data.newColor)
+  // Update selected category if it was the one being edited
+  if (selectedCategory.value === data.oldName) {
+    selectedCategory.value = data.newName
+  }
+}
+
+const handleDeleteCategory = (categoryName: string) => {
+  deleteCategory(categoryName)
+  // Clear selection if the deleted category was selected
+  if (selectedCategory.value === categoryName) {
+    selectedCategory.value = null
+  }
+}
+
 const handleChangeCategory = (linkId: string, category: string) => {
   updateLinkCategory(linkId, category)
 }
@@ -301,17 +322,17 @@ const getCategoryIcon = (category: string): string => {
   return icons[category] || 'i-heroicons-folder'
 }
 
-const getCategoryGradient = (category: string): string => {
-  const gradients: Record<string, string> = {
-    'Open Source': '#8b5cf6, #6366f1',
-    'Portfolio': '#3b82f6, #06b6d4',
-    'Blog': '#10b981, #14b8a6',
-    'Tool': '#f59e0b, #f97316',
-    'Learning': '#ec4899, #8b5cf6',
-    'Video': '#ef4444, #dc2626',
-    'Design': '#a855f7, #ec4899',
-    'Other': '#6b7280, #4b5563'
+const getCategoryColor = (category: string): string => {
+  const colors: Record<string, string> = {
+    'Open Source': '#8b5cf6',
+    'Portfolio': '#3b82f6',
+    'Blog': '#10b981',
+    'Tool': '#f59e0b',
+    'Learning': '#ec4899',
+    'Video': '#ef4444',
+    'Design': '#a855f7',
+    'Other': '#6b7280'
   }
-  return gradients[category] || '#6b7280, #4b5563'
+  return colors[category] || '#6b7280'
 }
 </script>

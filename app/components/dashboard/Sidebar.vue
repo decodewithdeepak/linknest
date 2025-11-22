@@ -81,20 +81,28 @@
 
     <!-- Collections Scrollable Area -->
     <div class="flex-1 overflow-y-auto min-h-0 pr-1">
-      <!-- Add Category Input -->
-      <div v-if="isAddingCategory" class="px-3 mb-2">
+      <!-- Add/Edit Category Input -->
+      <div v-if="isAddingCategory || isEditingCategory" class="px-3 mb-2">
         <div class="space-y-2 p-2 bg-muted/50 rounded-lg border border-border">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-semibold text-muted-foreground">
+              {{ isEditingCategory ? 'Edit Category' : 'New Category' }}
+            </span>
+          </div>
           <div class="flex items-center gap-2">
             <input
               v-model="newCategoryName"
-              @keydown.enter="addCategory"
-              @keydown.esc="isAddingCategory = false"
+              @keydown.enter="isEditingCategory ? saveEditedCategory() : addCategory()"
+              @keydown.esc="isEditingCategory ? cancelEdit() : (isAddingCategory = false)"
               ref="categoryInput"
               type="text"
               placeholder="Category name..."
               class="w-full bg-background border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-primary/50"
             />
-            <button @click="isAddingCategory = false" class="text-muted-foreground hover:text-red-500 shrink-0">
+            <button 
+              @click="isEditingCategory ? cancelEdit() : (isAddingCategory = false)" 
+              class="text-muted-foreground hover:text-red-500 shrink-0"
+            >
               <Icon name="i-heroicons-x-mark" class="w-4 h-4" />
             </button>
           </div>
@@ -114,42 +122,67 @@
           </div>
 
           <button 
-            @click="addCategory"
+            @click="isEditingCategory ? saveEditedCategory() : addCategory()"
             :disabled="!newCategoryName.trim()"
             class="w-full py-1 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Add Category
+            {{ isEditingCategory ? 'Save Changes' : 'Add Category' }}
           </button>
         </div>
       </div>
 
       <!-- Category List -->
       <div class="space-y-2">
-        <button
+        <div
           v-for="category in categories"
           :key="category.name"
-          @click="$emit('select', category.name)"
-          :class="[
-            'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm group border',
-            selectedCategory === category.name
-              ? 'bg-primary text-black border-primary'
-              : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
-          ]"
+          class="relative group/item"
         >
-          <div class="flex items-center gap-2.5 min-w-0 flex-1">
-            <div 
-              class="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
-              :style="`background: linear-gradient(135deg, ${category.gradient})`"
-            >
-              <Icon 
-                :name="category.icon" 
-                class="w-3 h-3 text-white"
-              />
+          <button
+            @click="$emit('select', category.name)"
+            :class="[
+              'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm border',
+              selectedCategory === category.name
+                ? 'bg-primary text-black border-primary'
+                : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
+            ]"
+          >
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
+              <div 
+                class="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+                :style="`background-color: ${category.color}`"
+              >
+                <Icon 
+                  :name="category.icon" 
+                  class="w-3 h-3 text-white"
+                />
+              </div>
+              <span class="font-medium truncate">{{ category.name }}</span>
             </div>
-            <span class="font-medium truncate">{{ category.name }}</span>
-          </div>
-          <span class="text-xs opacity-70 shrink-0 ml-2">{{ category.count }}</span>
-        </button>
+            <div class="flex items-center gap-2 shrink-0 ml-2">
+              <!-- Edit & Delete Icons (shown on hover, only for custom categories) -->
+              <template v-if="category.isCustom">
+                <button
+                  @click.stop="handleEditCategory(category.name)"
+                  class="opacity-0 group-hover/item:opacity-100 p-1 hover:bg-primary/20 rounded transition-all"
+                  :class="selectedCategory === category.name ? 'hover:bg-black/10' : ''"
+                  title="Edit category"
+                >
+                  <Icon name="i-heroicons-pencil" class="w-3 h-3" />
+                </button>
+                <button
+                  @click.stop="handleDeleteCategory(category.name)"
+                  class="opacity-0 group-hover/item:opacity-100 p-1 hover:bg-red-500/20 rounded transition-all"
+                  title="Delete category"
+                >
+                  <Icon name="i-heroicons-trash" class="w-3 h-3 text-red-500" />
+                </button>
+              </template>
+              <!-- Count (always visible) -->
+              <span class="text-xs opacity-70">{{ category.count }}</span>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -194,7 +227,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   selectedCategory: string | null
   totalCount: number
   recentCount: number
@@ -203,16 +236,21 @@ defineProps<{
     name: string
     count: number
     icon: string
-    gradient: string
+    color: string
+    isCustom?: boolean
   }>
 }>()
 
 const emit = defineEmits<{
   select: [category: string | null]
   'create-category': [data: { name: string, color: string }]
+  'edit-category': [data: { oldName: string, newName: string, newColor: string }]
+  'delete-category': [categoryName: string]
 }>()
 
 const isAddingCategory = ref(false)
+const isEditingCategory = ref(false)
+const editingCategoryData = ref<{ name: string, color: string } | null>(null)
 const newCategoryName = ref('')
 const categoryInput = ref<HTMLInputElement | null>(null)
 const selectedColor = ref('#8b5cf6') // Default purple
@@ -231,10 +269,24 @@ const categoryColors = [
 
 watch(isAddingCategory, (newValue) => {
   if (newValue) {
+    isEditingCategory.value = false
+    editingCategoryData.value = null
     nextTick(() => {
       categoryInput.value?.focus()
     })
   } else {
+    newCategoryName.value = ''
+    selectedColor.value = '#8b5cf6'
+  }
+})
+
+watch(isEditingCategory, (newValue) => {
+  if (newValue) {
+    isAddingCategory.value = false
+    nextTick(() => {
+      categoryInput.value?.focus()
+    })
+  } else if (!isAddingCategory.value) {
     newCategoryName.value = ''
     selectedColor.value = '#8b5cf6'
   }
@@ -248,6 +300,49 @@ const addCategory = () => {
     })
     isAddingCategory.value = false
   }
+}
+
+const handleEditCategory = (categoryName: string) => {
+  const category = props.categories.find(c => c.name === categoryName)
+  if (category) {
+    const categoryColor = category.color || '#8b5cf6'
+    
+    editingCategoryData.value = { 
+      name: categoryName, 
+      color: categoryColor
+    }
+    newCategoryName.value = categoryName
+    selectedColor.value = categoryColor
+    isEditingCategory.value = true
+    isAddingCategory.value = false
+  }
+}
+
+const handleDeleteCategory = (categoryName: string) => {
+  if (confirm(`Are you sure you want to delete the category "${categoryName}"? Links in this category will be moved to "Other".`)) {
+    emit('delete-category', categoryName)
+  }
+}
+
+const saveEditedCategory = () => {
+  if (newCategoryName.value.trim() && editingCategoryData.value) {
+    emit('edit-category', {
+      oldName: editingCategoryData.value.name,
+      newName: newCategoryName.value.trim(),
+      newColor: selectedColor.value
+    })
+    isEditingCategory.value = false
+    editingCategoryData.value = null
+    newCategoryName.value = ''
+    selectedColor.value = '#8b5cf6'
+  }
+}
+
+const cancelEdit = () => {
+  isEditingCategory.value = false
+  editingCategoryData.value = null
+  newCategoryName.value = ''
+  selectedColor.value = '#8b5cf6'
 }
 
 const colorMode = useColorMode()

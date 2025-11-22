@@ -1,7 +1,7 @@
 <template>
   <div 
     @click="$emit('select', category)"
-    class="group relative bg-gradient-to-br from-card to-card/50 border border-border rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer hover:-translate-y-1 p-6"
+    class="group relative bg-linear-to-br from-card to-card/50 border border-border rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer hover:-translate-y-1 p-6"
   >
     <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-5">
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Hover Effect -->
-    <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <div class="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
   </div>
 </template>
 
