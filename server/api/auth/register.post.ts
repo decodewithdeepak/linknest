@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt-ts'
 import { query } from '../../utils/db'
-import { initDatabase } from '../../utils/init-db'
+import { initDatabase } from '../../utils/init-database'
 import { validateEmail, validatePassword } from '../../utils/validation'
 
 export default defineEventHandler(async (event) => {

@@ -231,23 +231,11 @@ const copyToClipboard = async (text: string) => {
   }
 }
 
-// Get category color (matches Sidebar colors)
+// Import category utility
+import { getCategoryColor as getColor } from '../../utils/categories'
+
+// Get category color
 const getCategoryColor = (category: string): string => {
-  const colors: Record<string, string> = {
-    'Open Source': '#10b981',
-    'Portfolio': '#3b82f6',
-    'Blog': '#8b5cf6',
-    'Tool': '#f59e0b',
-    'Learning': '#ec4899',
-    'Video': '#ef4444',
-    'Design': '#a855f7',
-    'Development': '#10b981',
-    'Productivity': '#3b82f6',
-    'Social': '#ec4899',
-    'Entertainment': '#ef4444',
-    'Tools': '#f59e0b',
-    'Other': '#6b7280'
-  }
-  return colors[category] || '#6b7280'
+  return getColor(category, props.categories)
 }
 </script>

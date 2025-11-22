@@ -136,7 +136,7 @@
                 v-for="link in filteredLinks" 
                 :key="link.id"
                 :link="link"
-                :categories="categories"
+                :categories="customCategories"
                 @delete="handleRemoveLink"
                 @toggle-favorite="handleToggleFavorite"
                 @change-category="handleChangeCategory"
@@ -174,6 +174,8 @@
 
 <script setup lang="ts">
 import { useLinkManager } from '../composables/useLinkManager'
+import { useCategoryManager } from '../composables/useCategoryManager'
+import { getCategoryIcon, getCategoryColor } from '../utils/categories'
 import LinkInput from '~/components/dashboard/LinkInput.vue'
 import LinkCard from '~/components/dashboard/LinkCard.vue'
 import Sidebar from '~/components/dashboard/Sidebar.vue'
@@ -188,8 +190,8 @@ useSeoMeta({
   description: 'Manage and categorize your links automatically',
 })
 
-const { links, customCategories, isLoading, error, addLink, removeLink, toggleFavorite, createCategory, updateCategory, deleteCategory, updateLinkCategory } = useLinkManager()
-// useToasts is in `composables/useToasts.ts` and auto-imported by Nuxt
+const { links, isLoading, error, addLink, removeLink, toggleFavorite, updateLinkCategory } = useLinkManager()
+const { categories: customCategories, createCategory, updateCategory, deleteCategory } = useCategoryManager()
 const { showToast } = useToasts()
 
 const selectedCategory = ref<string | null>(null)
@@ -201,33 +203,14 @@ watch(selectedCategory, () => {
   searchQuery.value = ''
 })
 
-// Derived state for unique categories
-const categories = computed(() => {
-  const cats = new Map<string, { name: string, color?: string }>()
-  
-  // Add custom categories first (they have colors)
-  customCategories.value.forEach(c => {
-    cats.set(c.name, c)
-  })
-  
-  // Add categories from links if they don't exist yet
-  links.value.forEach(l => {
-    if (!cats.has(l.category)) {
-      cats.set(l.category, { name: l.category })
-    }
-  })
-  
-  return Array.from(cats.values()).sort((a, b) => a.name.localeCompare(b.name))
-})
-
 // Categories with metadata for sidebar
 const categoriesWithMeta = computed(() => {
-  return categories.value.map(cat => ({
+  return customCategories.value.map(cat => ({
+    id: cat.id,
     name: cat.name,
     count: getCategoryCount(cat.name),
     icon: getCategoryIcon(cat.name),
-    color: cat.color || getCategoryColor(cat.name),
-    isCustom: !!cat.color // Only custom categories have a color property
+    color: cat.color
   }))
 })
 
@@ -307,8 +290,8 @@ const handleMobileCategorySelect = (category: string | null) => {
   mobileMenuOpen.value = false
 }
 
-const handleCreateCategory = (data: { name: string, color: string }) => {
-  const success = createCategory(data.name, data.color)
+const handleCreateCategory = async (data: { name: string, color: string }) => {
+  const success = await createCategory(data.name, data.color)
   if (success) {
     showToast({
       title: 'Category Created',
@@ -327,31 +310,31 @@ const handleCreateCategory = (data: { name: string, color: string }) => {
   }
 }
 
-const handleEditCategory = (data: { oldName: string, newName: string, newColor: string }) => {
-  updateCategory(data.oldName, data.newName, data.newColor)
+const handleEditCategory = async (data: { id: number, newName?: string, newColor?: string, oldName: string }) => {
+  await updateCategory(data.id, data.newName, data.newColor)
   showToast({
     title: 'Category Updated',
-    description: `"${data.oldName}" renamed to "${data.newName}"`,
+    description: data.newName ? `"${data.oldName}" renamed to "${data.newName}"` : 'Category color updated',
     color: 'success',
     icon: 'i-heroicons-pencil-square',
   })
-  if (selectedCategory.value === data.oldName) {
+  if (data.newName && selectedCategory.value === data.oldName) {
     selectedCategory.value = data.newName
   }
 }
 
-const handleDeleteCategory = (categoryName: string) => {
-  const affectedCount = links.value.filter(l => l.category === categoryName).length
-  deleteCategory(categoryName)
+const handleDeleteCategory = async (data: { id: number, name: string }) => {
+  const affectedCount = links.value.filter(l => l.category === data.name).length
+  await deleteCategory(data.id)
   showToast({
     title: 'Category Deleted',
     description: affectedCount > 0 
-      ? `"${categoryName}" removed. ${affectedCount} links moved to Other`
-      : `"${categoryName}" removed`,
+      ? `"${data.name}" removed. ${affectedCount} links moved to Other`
+      : `"${data.name}" removed`,
     color: 'error',
     icon: 'i-heroicons-trash',
   })
-  if (selectedCategory.value === categoryName) {
+  if (selectedCategory.value === data.name) {
     selectedCategory.value = null
   }
 }
@@ -395,39 +378,5 @@ const handleToggleFavorite = async (linkId: string) => {
       icon: !wasFavorite ? 'i-heroicons-heart-solid' : 'i-heroicons-heart',
     })
   }
-}
-
-// Category icons and gradients
-const getCategoryIcon = (category: string): string => {
-  const icons: Record<string, string> = {
-    'Open Source': 'i-heroicons-code-bracket',
-    'Portfolio': 'i-heroicons-user-circle',
-    'Blog': 'i-heroicons-document-text',
-    'Tool': 'i-heroicons-wrench-screwdriver',
-    'Learning': 'i-heroicons-academic-cap',
-    'Video': 'i-heroicons-play-circle',
-    'Design': 'i-heroicons-paint-brush',
-    'Other': 'i-heroicons-folder'
-  }
-  return icons[category] || 'i-heroicons-folder'
-}
-
-const getCategoryColor = (category: string): string => {
-  const colors: Record<string, string> = {
-    'Open Source': '#10b981',
-    'Portfolio': '#3b82f6',
-    'Blog': '#8b5cf6',
-    'Tool': '#f59e0b',
-    'Learning': '#ec4899',
-    'Video': '#ef4444',
-    'Design': '#a855f7',
-    'Development': '#10b981',
-    'Productivity': '#3b82f6',
-    'Social': '#ec4899',
-    'Entertainment': '#ef4444',
-    'Tools': '#f59e0b',
-    'Other': '#6b7280'
-  }
-  return colors[category] || '#6b7280'
 }
 </script>

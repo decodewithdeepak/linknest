@@ -82,54 +82,16 @@
 
     <!-- Collections Scrollable Area -->
     <div class="flex-1 overflow-y-auto min-h-0 pr-1">
-      <!-- Add/Edit Category Input -->
+      <!-- Add/Edit Category Form -->
       <div v-if="isAddingCategory || isEditingCategory" class="px-3 mb-2">
-        <div class="space-y-2 p-2 bg-muted/50 rounded-lg border border-border">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-semibold text-muted-foreground">
-              {{ isEditingCategory ? 'Edit Category' : 'New Category' }}
-            </span>
-          </div>
-          <div class="flex items-center gap-2">
-            <input
-              v-model="newCategoryName"
-              @keydown.enter="isEditingCategory ? saveEditedCategory() : addCategory()"
-              @keydown.esc="isEditingCategory ? cancelEdit() : (isAddingCategory = false)"
-              ref="categoryInput"
-              type="text"
-              placeholder="Category name..."
-              class="w-full bg-background border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-primary/50"
-            />
-            <button 
-              @click="isEditingCategory ? cancelEdit() : (isAddingCategory = false)" 
-              class="text-muted-foreground hover:text-red-500 shrink-0"
-            >
-              <Icon name="i-heroicons-x-mark" class="w-4 h-4" />
-            </button>
-          </div>
-          
-          <!-- Color Picker -->
-          <div class="flex flex-wrap gap-1.5">
-            <button
-              v-for="color in categoryColors"
-              :key="color"
-              @click="selectedColor = color"
-              class="w-5 h-5 rounded-full border transition-transform hover:scale-110"
-              :class="[
-                selectedColor === color ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-110' : 'border-transparent'
-              ]"
-              :style="{ backgroundColor: color }"
-            />
-          </div>
-
-          <button 
-            @click="isEditingCategory ? saveEditedCategory() : addCategory()"
-            :disabled="!newCategoryName.trim()"
-            class="w-full py-1 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {{ isEditingCategory ? 'Save Changes' : 'Add Category' }}
-          </button>
-        </div>
+        <CategoryForm
+          :initial-name="isEditingCategory ? editingCategoryData?.name : ''"
+          :initial-color="isEditingCategory ? editingCategoryData?.color : '#8b5cf6'"
+          :placeholder="isEditingCategory ? 'Edit category name...' : 'New category name...'"
+          :submit-label="isEditingCategory ? 'Save Changes' : 'Add Category'"
+          @submit="isEditingCategory ? handleSaveEdit($event) : handleAddCategory($event)"
+          @cancel="handleCancelForm"
+        />
       </div>
 
       <!-- Category List -->
@@ -161,27 +123,25 @@
               <span class="font-medium truncate">{{ category.name }}</span>
             </div>
             <div class="flex items-center gap-1 shrink-0 ml-2">
-              <!-- Edit & Delete Icons (shown on hover, only for custom categories) -->
-              <template v-if="category.isCustom">
-                <UButton
-                  icon="i-heroicons-pencil"
-                  color="warning"
-                  variant="ghost"
-                  size="xs"
-                  @click.stop="handleEditCategory(category.name)"
-                  class="opacity-0 group-hover/item:opacity-100"
-                  title="Edit category"
-                />
-                <UButton
-                  icon="i-heroicons-trash"
-                  color="error"
-                  variant="ghost"
-                  size="xs"
-                  @click.stop="handleDeleteCategory(category.name)"
-                  class="opacity-0 group-hover/item:opacity-100"
-                  title="Delete category"
-                />
-              </template>
+              <!-- Edit & Delete Icons (shown on hover for all categories) -->
+              <UButton
+                icon="i-heroicons-pencil"
+                color="warning"
+                variant="ghost"
+                size="xs"
+                @click.stop="handleEditCategory(category.name)"
+                class="opacity-0 group-hover/item:opacity-100"
+                title="Edit category"
+              />
+              <UButton
+                icon="i-heroicons-trash"
+                color="error"
+                variant="ghost"
+                size="xs"
+                @click.stop="handleDeleteCategory(category.name)"
+                class="opacity-0 group-hover/item:opacity-100"
+                title="Delete category"
+              />
               <!-- Count (always visible) -->
               <span class="text-xs opacity-70">{{ category.count }}</span>
             </div>
@@ -218,122 +178,83 @@
 </template>
 
 <script setup lang="ts">
+import CategoryForm from './CategoryForm.vue'
+
 const props = defineProps<{
   selectedCategory: string | null
   totalCount: number
   recentCount: number
   favoritesCount: number
   categories: Array<{
+    id?: number
     name: string
     count: number
     icon: string
     color: string
-    isCustom?: boolean
   }>
 }>()
 
 const emit = defineEmits<{
   select: [category: string | null]
   'create-category': [data: { name: string, color: string }]
-  'edit-category': [data: { oldName: string, newName: string, newColor: string }]
-  'delete-category': [categoryName: string]
+  'edit-category': [data: { id: number, newName?: string, newColor?: string, oldName: string }]
+  'delete-category': [data: { id: number, name: string }]
 }>()
 
 const isAddingCategory = ref(false)
 const isEditingCategory = ref(false)
-const editingCategoryData = ref<{ name: string, color: string } | null>(null)
-const newCategoryName = ref('')
-const categoryInput = ref<HTMLInputElement | null>(null)
-const selectedColor = ref('#8b5cf6') // Default purple
+const editingCategoryData = ref<{ id?: number, name: string, color: string } | null>(null)
 
-const categoryColors = [
-  '#ef4444', // Red
-  '#f97316', // Orange
-  '#eab308', // Yellow
-  '#22c55e', // Green
-  '#14b8a6', // Teal
-  '#3b82f6', // Blue
-  '#8b5cf6', // Purple
-  '#d946ef', // Pink
-  '#6b7280', // Gray
-]
-
-watch(isAddingCategory, (newValue) => {
-  if (newValue) {
-    isEditingCategory.value = false
-    editingCategoryData.value = null
-    nextTick(() => {
-      categoryInput.value?.focus()
-    })
-  } else {
-    newCategoryName.value = ''
-    selectedColor.value = '#8b5cf6'
-  }
-})
-
-watch(isEditingCategory, (newValue) => {
-  if (newValue) {
-    isAddingCategory.value = false
-    nextTick(() => {
-      categoryInput.value?.focus()
-    })
-  } else if (!isAddingCategory.value) {
-    newCategoryName.value = ''
-    selectedColor.value = '#8b5cf6'
-  }
-})
-
-const addCategory = () => {
-  if (newCategoryName.value.trim()) {
-    emit('create-category', { 
-      name: newCategoryName.value.trim(), 
-      color: selectedColor.value 
-    })
-    isAddingCategory.value = false
-  }
+// Handle add category
+const handleAddCategory = (data: { name: string, color: string }) => {
+  emit('create-category', data)
+  isAddingCategory.value = false
 }
 
+// Handle edit category
 const handleEditCategory = (categoryName: string) => {
   const category = props.categories.find(c => c.name === categoryName)
-  if (category) {
-    const categoryColor = category.color || '#8b5cf6'
-    
+  if (category && category.id) {
     editingCategoryData.value = { 
+      id: category.id,
       name: categoryName, 
-      color: categoryColor
+      color: category.color || '#8b5cf6'
     }
-    newCategoryName.value = categoryName
-    selectedColor.value = categoryColor
     isEditingCategory.value = true
     isAddingCategory.value = false
   }
 }
 
-const handleDeleteCategory = (categoryName: string) => {
-  if (confirm(`Are you sure you want to delete the category "${categoryName}"? Links in this category will be moved to "Other".`)) {
-    emit('delete-category', categoryName)
-  }
-}
-
-const saveEditedCategory = () => {
-  if (newCategoryName.value.trim() && editingCategoryData.value) {
+// Handle save edited category
+const handleSaveEdit = (data: { name: string, color: string }) => {
+  if (editingCategoryData.value && editingCategoryData.value.id) {
+    const nameChanged = data.name !== editingCategoryData.value.name
+    const colorChanged = data.color !== editingCategoryData.value.color
+    
     emit('edit-category', {
+      id: editingCategoryData.value.id,
       oldName: editingCategoryData.value.name,
-      newName: newCategoryName.value.trim(),
-      newColor: selectedColor.value
+      newName: nameChanged ? data.name : undefined,
+      newColor: colorChanged ? data.color : undefined
     })
     isEditingCategory.value = false
     editingCategoryData.value = null
-    newCategoryName.value = ''
-    selectedColor.value = '#8b5cf6'
   }
 }
 
-const cancelEdit = () => {
+// Handle delete category
+const handleDeleteCategory = (categoryName: string) => {
+  const category = props.categories.find(c => c.name === categoryName)
+  if (category && category.id && confirm(`Are you sure you want to delete the category "${categoryName}"? Links in this category will be moved to "Other".`)) {
+    emit('delete-category', { id: category.id, name: categoryName })
+  }
+}
+
+// Handle cancel form
+const handleCancelForm = () => {
+  isAddingCategory.value = false
   isEditingCategory.value = false
   editingCategoryData.value = null
-  newCategoryName.value = ''
-  selectedColor.value = '#8b5cf6'
 }
 
 // Auth composable

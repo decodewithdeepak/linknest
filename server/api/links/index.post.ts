@@ -1,13 +1,13 @@
 import { requireAuth } from '../../utils/auth'
 import { validateUrl } from '../../utils/validation'
 import { getDb } from '../../utils/db'
-import { initLinksTable } from '../../utils/init-links-table'
+import { initDatabase } from '../../utils/init-database'
 
 export default defineEventHandler(async (event) => {
   const user = await requireAuth(event)
   
   // Ensure links table exists
-  await initLinksTable()
+  await initDatabase()
 
   const body = await readBody(event)
   let { url, title, description, image, category } = body
