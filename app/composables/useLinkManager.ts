@@ -158,6 +158,32 @@ export const useLinkManager = () => {
     }
   }
 
+  const refreshLink = async (linkId: string) => {
+    const link = links.value.find((l) => l.id === linkId)
+    if (link) {
+      try {
+        const response: any = await $fetch(`/api/links/${linkId}/refresh`, {
+          method: 'PATCH'
+        })
+        
+        if (response.success && response.link) {
+          // Update the link with fresh metadata
+          link.title = response.link.title
+          link.description = response.link.description
+          link.image = response.link.image
+          console.log(`✅ Refreshed metadata for link: ${linkId}`)
+          return true
+        }
+        return false
+      } catch (err) {
+        console.error('Failed to refresh link:', err)
+        error.value = 'Failed to refresh link'
+        return false
+      }
+    }
+    return false
+  }
+
   return {
     links,
     isLoading,
@@ -166,6 +192,7 @@ export const useLinkManager = () => {
     addLink,
     removeLink,
     toggleFavorite,
-    updateLinkCategory
+    updateLinkCategory,
+    refreshLink
   }
 }

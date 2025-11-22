@@ -140,6 +140,7 @@
                 @delete="handleRemoveLink"
                 @toggle-favorite="handleToggleFavorite"
                 @change-category="handleChangeCategory"
+                @refresh="handleRefreshLink"
               />
             </div>
 
@@ -190,7 +191,7 @@ useSeoMeta({
   description: 'Manage and categorize your links automatically',
 })
 
-const { links, isLoading, error, addLink, removeLink, toggleFavorite, updateLinkCategory } = useLinkManager()
+const { links, isLoading, error, addLink, removeLink, toggleFavorite, updateLinkCategory, refreshLink } = useLinkManager()
 const { categories: customCategories, createCategory, updateCategory, deleteCategory } = useCategoryManager()
 const { showToast } = useToasts()
 
@@ -376,6 +377,26 @@ const handleToggleFavorite = async (linkId: string) => {
       description: `"${link.title}"`,
       color: !wasFavorite ? 'success' : 'neutral',
       icon: !wasFavorite ? 'i-heroicons-heart-solid' : 'i-heroicons-heart',
+    })
+  }
+}
+
+const handleRefreshLink = async (linkId: string) => {
+  const link = links.value.find(l => l.id === linkId)
+  const success = await refreshLink(linkId)
+  if (success && link) {
+    showToast({
+      title: 'Link Refreshed',
+      description: `Updated metadata for "${link.title}"`,
+      color: 'success',
+      icon: 'i-heroicons-arrow-path',
+    })
+  } else {
+    showToast({
+      title: 'Refresh Failed',
+      description: 'Could not refresh link metadata',
+      color: 'error',
+      icon: 'i-heroicons-exclamation-circle',
     })
   }
 }
