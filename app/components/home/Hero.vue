@@ -22,7 +22,7 @@
           to="/signup"
           size="lg"
           color="primary"
-          class="group gap-2 rounded-full w-full sm:w-auto justify-center text-sm sm:text-base"
+          class="group gap-2 w-full sm:w-auto justify-center text-sm sm:text-base"
         >
           <span class="">Start Organizing</span>
           <Icon name="i-heroicons-arrow-right" class="h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
@@ -32,7 +32,7 @@
           to="#features"
           size="lg"
           variant="ghost"
-          class="gap-2 border border-primary/20 rounded-full text-foreground hover:text-primary w-full sm:w-auto justify-center text-sm sm:text-base"
+          class="gap-2 border border-primary/20 text-foreground hover:text-primary w-full sm:w-auto justify-center text-sm sm:text-base"
         >
           <Icon name="i-heroicons-play-circle" class="h-4 w-4 sm:h-5 sm:w-5" />
           Watch Demo
@@ -40,7 +40,7 @@
       </div>
 
       <div class="relative max-w-4xl mx-auto group perspective-[1000px]">
-        <div class="relative rounded-lg sm:rounded-xl border border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-2xl overflow-hidden transition-transform duration-700 transform-3d group-hover:transform-[perspective(1000px)_rotateY(-2deg)_rotateX(2deg)]">
+        <div class="relative rounded-md border border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-2xl overflow-hidden transition-transform duration-700 transform-3d group-hover:transform-[perspective(1000px)_rotateY(-2deg)_rotateX(2deg)]">
           <div class="flex items-center gap-4 px-6 py-4 border-b border-white/10 bg-white/50 dark:bg-black/50">
             <div class="hidden sm:flex gap-2">
               <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
@@ -48,7 +48,7 @@
               <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
             </div>
             <div class="flex-1 flex justify-center">
-              <div class="flex items-center gap-2 px-4 py-1.5 rounded-md bg-white/40 dark:bg-white/5 border border-white/10 text-xs text-muted-foreground w-64 justify-center font-mono shadow-sm">
+              <div class="flex items-center gap-2 px-4 py-1.5 rounded-sm bg-white/40 dark:bg-white/5 border border-white/10 text-xs text-muted-foreground w-64 justify-center font-mono shadow-sm">
                 <Icon name="i-heroicons-lock-closed" class="w-3 h-3" />
                 linknest.app/dashboard
               </div>
@@ -58,10 +58,10 @@
 
           <div class="p-4 sm:p-8 bg-linear-to-br from-white/40 to-white/10 dark:from-black/40 dark:to-black/10 min-h-[300px] sm:min-h-[400px] text-left">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              <div class="group/card p-4 rounded-xl border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+              <div class="group/card p-4 rounded-lg border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
                 <div class="flex items-center justify-between mb-4">
                   <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <div class="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
                       <Icon name="i-simple-icons-dribbble" class="w-5 h-5 text-primary" />
                     </div>
                     <div class="min-w-0">
@@ -80,10 +80,10 @@
                 </div>
               </div>
 
-              <div class="group/card p-4 rounded-xl border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+              <div class="group/card p-4 rounded-lg border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
                 <div class="flex items-center justify-between mb-4">
                   <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <div class="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
                       <Icon name="i-simple-icons-supabase" class="w-5 h-5 text-primary" />
                     </div>
                     <div class="min-w-0">
@@ -102,10 +102,10 @@
                 </div>
               </div>
 
-              <div class="group/card p-4 rounded-xl border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+              <div class="group/card p-4 rounded-lg border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
                 <div class="flex items-center justify-between mb-4">
                   <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <div class="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
                       <Icon name="i-simple-icons-react" class="w-5 h-5 text-primary" />
                     </div>
                     <div class="min-w-0">

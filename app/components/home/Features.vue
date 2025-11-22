@@ -2,7 +2,7 @@
   <section id="features" class="py-12 sm:py-20 relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-6 sm:px-6 relative z-10">
       <div class="text-center mb-12 sm:mb-16 max-w-3xl mx-auto">
-        <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-4 sm:mb-6 hover:bg-primary/10 transition-colors">
+        <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-4 sm:mb-6 hover:bg-primary/10 transition-colors">
           <Icon name="i-heroicons-sparkles" class="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
           <span class="text-xs sm:text-sm font-medium">Features</span>
         </div>
@@ -19,12 +19,12 @@
         <div
           v-for="(feature, index) in features"
           :key="index"
-          class="group relative p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
+          class="group relative p-5 sm:p-6 rounded-sm border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
         >
-          <div class="absolute inset-0 rounded-xl sm:rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="absolute inset-0 rounded-sm bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
           <div class="relative z-10">
-            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl border border-border/50 bg-white dark:bg-white/10 flex items-center justify-center mb-3 sm:mb-4 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-sm border border-border/50 bg-white dark:bg-white/10 flex items-center justify-center mb-3 sm:mb-4 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
               <Icon :name="feature.icon" class="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
             </div>
             

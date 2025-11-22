@@ -1,15 +1,15 @@
 <template>
   <section class="py-12 sm:py-20 relative overflow-hidden">
     <div class="max-w-5xl mx-auto px-6 sm:px-6">
-      <div class="relative rounded-2xl sm:rounded-3xl p-1 bg-linear-to-br from-primary/20 via-teal-500/10 to-cyan-500/20">
-        <div class="relative rounded-xl sm:rounded-[calc(1.5rem-4px)] bg-background backdrop-blur-2xl p-8 sm:p-12 md:p-16 text-center border border-border/50">
-          <div class="absolute inset-0 overflow-hidden rounded-xl sm:rounded-[calc(1.5rem-4px)] pointer-events-none">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px] animate-pulse"></div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse"></div>
+      <div class="relative rounded-sm p-1 bg-linear-to-br from-primary/20 via-teal-500/10 to-cyan-500/20">
+        <div class="relative bg-background backdrop-blur-2xl p-8 sm:p-12 md:p-16 text-center rounded-sm border border-border/50">
+          <div class="absolute inset-0 overflow-hidden rounded-sm pointer-events-none">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 blur-[100px] animate-pulse"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-cyan-500/10 blur-[100px] animate-pulse"></div>
           </div>
 
           <div class="relative z-10 max-w-3xl mx-auto">
-            <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-linear-to-br from-primary/20 to-primary/5 border border-primary/20 mb-4 sm:mb-6 shadow-lg shadow-primary/10">
+            <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-sm bg-linear-to-br from-primary/20 to-primary/5 border border-primary/20 mb-4 sm:mb-6 shadow-lg shadow-primary/10">
               <Icon name="i-heroicons-rocket-launch" class="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
             </div>
 

@@ -3,7 +3,7 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <!-- Section Header -->
       <div class="text-center mb-16">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-6 hover:bg-primary/10 transition-colors">
+        <div class="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-6 hover:bg-primary/10 transition-colors">
           <Icon name="i-heroicons-question-mark-circle" class="h-4 w-4 text-primary" />
           <span class="text-sm font-medium">FAQ</span>
         </div>
