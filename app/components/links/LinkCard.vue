@@ -1,11 +1,6 @@
 <template>
   <div 
-    :draggable="!isMobile"
-    @dragstart="onDragStart"
-    :class="[
-      'group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full',
-      !isMobile && 'cursor-move active:cursor-grabbing active:scale-95'
-    ]"
+    class="group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full"
   >
     <!-- Image Section -->
     <div class="aspect-video w-full overflow-hidden relative p-2">
@@ -25,8 +20,21 @@
         </p>
       </div>
       
-      <!-- Category Badge -->
-      <div class="absolute top-0 left-0">
+      <!-- Category Badge with Dropdown -->
+      <div class="absolute top-0 left-0" v-if="categories && categories.length > 0">
+        <div ref="badgeRef">
+          <UBadge 
+            :color="getCategoryColor(link.category)" 
+            variant="soft" 
+            class="bg-background cursor-pointer hover:opacity-80 transition-opacity"
+            @click.stop="toggleDropdown"
+          >
+            {{ link.category }}
+            <Icon name="i-heroicons-chevron-down" class="w-3 h-3 ml-1" />
+          </UBadge>
+        </div>
+      </div>
+      <div class="absolute top-0 left-0" v-else>
         <UBadge :color="getCategoryColor(link.category)" variant="soft" class="bg-background">
           {{ link.category }}
         </UBadge>
@@ -104,6 +112,44 @@
       </div>
     </div>
   </div>
+
+  <!-- Teleport Dropdown Menu to body -->
+  <Teleport to="body">
+    <Transition
+      enter-active-class="transition ease-out duration-100"
+      enter-from-class="transform opacity-0 scale-95"
+      enter-to-class="transform opacity-100 scale-100"
+      leave-active-class="transition ease-in duration-75"
+      leave-from-class="transform opacity-100 scale-100"
+      leave-to-class="transform opacity-0 scale-95"
+    >
+      <div 
+        v-if="isDropdownOpen && dropdownPosition"
+        ref="dropdownRef"
+        :style="{
+          position: 'fixed',
+          top: dropdownPosition.top + 'px',
+          left: dropdownPosition.left + 'px',
+          zIndex: 9999
+        }"
+        class="w-48 max-h-64 overflow-y-auto rounded-lg border border-border bg-background shadow-xl py-1"
+      >
+        <button
+          v-for="cat in categories"
+          :key="cat.name"
+          @click.stop="handleCategoryChange(cat.name)"
+          class="w-full px-3 py-2 text-left text-sm hover:bg-muted transition-colors flex items-center justify-between"
+        >
+          <span>{{ cat.name }}</span>
+          <Icon 
+            v-if="cat.name === link.category" 
+            name="i-heroicons-check" 
+            class="w-4 h-4 text-primary"
+          />
+        </button>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -111,16 +157,55 @@ import type { Link } from '../../../types/link'
 
 const props = defineProps<{
   link: Link
+  categories?: Array<{ name: string, color?: string }>
 }>()
 
 const emit = defineEmits<{
   (e: 'delete', id: string): void
   (e: 'toggleFavorite', id: string): void
+  (e: 'changeCategory', id: string, category: string): void
 }>()
 
 const copied = ref(false)
 const imageError = ref(false)
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+const isDropdownOpen = ref(false)
+const dropdownRef = ref<HTMLElement | null>(null)
+const badgeRef = ref<HTMLElement | null>(null)
+const dropdownPosition = ref<{ top: number, left: number } | null>(null)
+
+// Toggle dropdown and calculate position
+const toggleDropdown = () => {
+  if (!isDropdownOpen.value && badgeRef.value) {
+    const rect = badgeRef.value.getBoundingClientRect()
+    dropdownPosition.value = {
+      top: rect.bottom + 4, // 4px margin
+      left: rect.left
+    }
+  }
+  isDropdownOpen.value = !isDropdownOpen.value
+}
+
+// Handle category change
+const handleCategoryChange = (categoryName: string) => {
+  if (categoryName !== props.link.category) {
+    emit('changeCategory', props.link.id, categoryName)
+  }
+  isDropdownOpen.value = false
+}
+
+// Close dropdown when clicking outside
+onMounted(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+      isDropdownOpen.value = false
+    }
+  }
+  document.addEventListener('click', handleClickOutside)
+  
+  onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutside)
+  })
+})
 
 const handleImageError = (e: Event) => {
   imageError.value = true
@@ -164,12 +249,5 @@ const getCategoryColor = (category: string): "primary" | "secondary" | "success"
     'Other': 'neutral'
   }
   return colors[category] || 'neutral'
-}
-
-const onDragStart = (event: DragEvent) => {
-  if (event.dataTransfer) {
-    event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('text/plain', props.link.id)
-  }
 }
 </script>

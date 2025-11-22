@@ -11,7 +11,6 @@
           :categories="categoriesWithMeta"
           @select="handleCategorySelect"
           @create-category="handleCreateCategory"
-          @move-link="handleMoveLink"
         />
       </div>
     </div>
@@ -63,7 +62,6 @@
               :categories="categoriesWithMeta"
               @select="handleMobileCategorySelect"
               @create-category="handleCreateCategory"
-              @move-link="handleMoveLink"
             />
           </div>
         </div>
@@ -133,9 +131,11 @@
               <LinkCard 
                 v-for="link in filteredLinks" 
                 :key="link.id"
-                :link="link" 
+                :link="link"
+                :categories="categories"
                 @delete="removeLink"
                 @toggle-favorite="toggleFavorite"
+                @change-category="handleChangeCategory"
               />
             </div>
 
@@ -282,11 +282,8 @@ const handleCreateCategory = (data: { name: string, color: string }) => {
   selectedCategory.value = data.name
 }
 
-const handleMoveLink = (event: DragEvent, category: string) => {
-  const linkId = event.dataTransfer?.getData('text/plain')
-  if (linkId) {
-    updateLinkCategory(linkId, category)
-  }
+const handleChangeCategory = (linkId: string, category: string) => {
+  updateLinkCategory(linkId, category)
 }
 
 // Category icons and gradients

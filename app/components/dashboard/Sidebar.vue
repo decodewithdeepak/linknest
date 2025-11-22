@@ -129,15 +129,10 @@
           v-for="category in categories"
           :key="category.name"
           @click="$emit('select', category.name)"
-          @dragover.prevent="dragOverCategory = category.name"
-          @dragleave="dragOverCategory = null"
-          @drop="handleDrop($event, category.name)"
           :class="[
             'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm group border',
             selectedCategory === category.name
               ? 'bg-primary text-black border-primary'
-              : dragOverCategory === category.name
-              ? 'bg-primary/10 border-primary border-dashed'
               : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
           ]"
         >
@@ -215,13 +210,11 @@ defineProps<{
 const emit = defineEmits<{
   select: [category: string | null]
   'create-category': [data: { name: string, color: string }]
-  'move-link': [event: DragEvent, category: string]
 }>()
 
 const isAddingCategory = ref(false)
 const newCategoryName = ref('')
 const categoryInput = ref<HTMLInputElement | null>(null)
-const dragOverCategory = ref<string | null>(null)
 const selectedColor = ref('#8b5cf6') // Default purple
 
 const categoryColors = [
@@ -246,11 +239,6 @@ watch(isAddingCategory, (newValue) => {
     selectedColor.value = '#8b5cf6'
   }
 })
-
-const handleDrop = (event: DragEvent, category: string) => {
-  dragOverCategory.value = null
-  emit('move-link', event, category)
-}
 
 const addCategory = () => {
   if (newCategoryName.value.trim()) {
