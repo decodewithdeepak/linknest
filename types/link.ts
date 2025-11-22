@@ -10,4 +10,3 @@ export interface Link {
   dateAdded: string
   isFavorite: boolean
 }
-

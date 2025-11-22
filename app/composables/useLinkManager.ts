@@ -1,4 +1,4 @@
-import type { Link } from "../types/link";
+import type { Link } from "../../types/link";
 
 export interface CustomCategory {
   name: string;
@@ -18,7 +18,7 @@ export const useLinkManager = () => {
   onMounted(async () => {
     try {
       // Fetch links from the database
-      const response = await $fetch('/api/links')
+      const response: any = await $fetch('/api/links')
       if (response.success && response.links) {
         // Transform database links to match the Link interface
         links.value = response.links.map((dbLink: any) => ({
@@ -185,7 +185,7 @@ export const useLinkManager = () => {
       const category = categorizeLink(metadata);
 
       // Save to database
-      const response = await $fetch('/api/links', {
+      const response: any = await $fetch('/api/links', {
         method: 'POST',
         body: {
           url: metadata.url || url,

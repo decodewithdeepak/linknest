@@ -173,11 +173,11 @@
 </template>
 
 <script setup lang="ts">
-import { useLinkManager } from '../../composables/useLinkManager'
+import { useLinkManager } from '../composables/useLinkManager'
 import LinkInput from '~/components/dashboard/LinkInput.vue'
 import LinkCard from '~/components/dashboard/LinkCard.vue'
 import Sidebar from '~/components/dashboard/Sidebar.vue'
-import { useToasts } from '../../composables/useToasts'
+import { useToasts } from '../composables/useToasts'
 
 definePageMeta({
   layout: 'default'

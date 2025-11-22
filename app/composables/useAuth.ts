@@ -6,7 +6,7 @@ export const useAuth = () => {
   const getSession = async () => {
     try {
       loading.value = true
-      const data = await $fetch('/api/auth/session')
+      const data: any = await $fetch('/api/auth/session')
       user.value = data.user
       return data.user
     } catch (error) {
@@ -20,10 +20,10 @@ export const useAuth = () => {
   // Login
   const login = async (email: string, password: string) => {
     try {
-      const data = await $fetch('/api/auth/login', {
-        method: 'POST',
+      const data: any = await $fetch('/api/auth/login', {
+          method: 'POST',
         body: { email, password }
-      })
+        })
       user.value = data.user
       return { success: true, error: null }
     } catch (error: any) {
@@ -34,7 +34,7 @@ export const useAuth = () => {
   // Register
   const register = async (email: string, password: string, firstName: string, lastName: string) => {
     try {
-      const data = await $fetch('/api/auth/register', {
+      const data: any = await $fetch('/api/auth/register', {
         method: 'POST',
         body: { email, password, firstName, lastName }
       })
@@ -83,3 +83,4 @@ export const useAuth = () => {
     getSession
   }
 }
+
