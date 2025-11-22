@@ -14,19 +14,42 @@ export const useLinkManager = () => {
   const isLoading = useState<boolean>("links-loading", () => false);
   const error = useState<string | null>("links-error", () => null);
 
-  // Load from local storage on mount
-  onMounted(() => {
-    const savedLinks = localStorage.getItem("link-nest-links");
-    const savedCategories = localStorage.getItem("link-nest-categories");
-
-    if (savedLinks) {
-      try {
-        links.value = JSON.parse(savedLinks);
-      } catch (e) {
-        console.error("Failed to parse saved links", e);
+  // Load links from database on mount
+  onMounted(async () => {
+    try {
+      // Fetch links from the database
+      const response = await $fetch('/api/links')
+      if (response.success && response.links) {
+        // Transform database links to match the Link interface
+        links.value = response.links.map((dbLink: any) => ({
+          id: dbLink.id.toString(),
+          url: dbLink.url,
+          title: dbLink.title || dbLink.url,
+          description: dbLink.description || '',
+          image: dbLink.image || null,
+          favicon: `https://www.google.com/s2/favicons?domain=${new URL(dbLink.url).hostname}&sz=128`,
+          siteName: new URL(dbLink.url).hostname,
+          category: dbLink.category || 'Other',
+          dateAdded: dbLink.created_at,
+          isFavorite: dbLink.is_favorite || false,
+        }))
+        console.log(`✅ Loaded ${links.value.length} links from database`)
+      }
+    } catch (e) {
+      console.error("Failed to load links from database:", e)
+      // Fallback to localStorage if database fetch fails
+      const savedLinks = localStorage.getItem("link-nest-links");
+      if (savedLinks) {
+        try {
+          links.value = JSON.parse(savedLinks);
+        } catch (e) {
+          console.error("Failed to parse saved links", e);
+        }
       }
     }
 
+    // Load custom categories from localStorage (these are UI-only)
+    const savedCategories = localStorage.getItem("link-nest-categories");
     if (savedCategories) {
       try {
         customCategories.value = JSON.parse(savedCategories);
@@ -174,40 +197,72 @@ export const useLinkManager = () => {
       const metadata = await fetchMetadata(url);
       const category = categorizeLink(metadata);
 
-      // Get favicon from Google's service as a reliable fallback
-      const favicon = `https://www.google.com/s2/favicons?domain=${parsedUrl.hostname}&sz=128`;
+      // Save to database
+      const response = await $fetch('/api/links', {
+        method: 'POST',
+        body: {
+          url: metadata.url || url,
+          title: metadata.title || url,
+          description: metadata.description || '',
+          image: metadata.image || null,
+          category,
+        }
+      })
 
-      const newLink: Link = {
-        id: crypto.randomUUID(),
-        url: metadata.url || url,
-        title: metadata.title || url,
-        description: metadata.description || "",
-        image: metadata.image || null,
-        favicon: favicon,
-        siteName: metadata.siteName || parsedUrl.hostname,
-        category,
-        dateAdded: new Date().toISOString(),
-        isFavorite: false,
-      };
+      if (response.success && response.link) {
+        // Get favicon from Google's service as a reliable fallback
+        const favicon = `https://www.google.com/s2/favicons?domain=${parsedUrl.hostname}&sz=128`;
 
-      links.value.unshift(newLink);
-      error.value = null; // Clear any previous errors
-    } catch (err) {
+        const newLink: Link = {
+          id: response.link.id.toString(),
+          url: response.link.url,
+          title: response.link.title || response.link.url,
+          description: response.link.description || "",
+          image: response.link.image || null,
+          favicon: favicon,
+          siteName: metadata.siteName || parsedUrl.hostname,
+          category: response.link.category,
+          dateAdded: response.link.created_at,
+          isFavorite: response.link.is_favorite || false,
+        };
+
+        links.value.unshift(newLink);
+        error.value = null; // Clear any previous errors
+      }
+    } catch (err: any) {
       console.error(err);
-      error.value = "Failed to fetch link details. Please check the URL.";
+      error.value = err.data?.message || "Failed to add link. Please try again.";
     } finally {
       isLoading.value = false;
     }
   };
 
-  const removeLink = (id: string) => {
-    links.value = links.value.filter((l) => l.id !== id);
+  const removeLink = async (id: string) => {
+    try {
+      await $fetch(`/api/links/${id}`, {
+        method: 'DELETE'
+      })
+      links.value = links.value.filter((l) => l.id !== id);
+    } catch (err) {
+      console.error('Failed to delete link:', err)
+      error.value = 'Failed to delete link'
+    }
   };
 
-  const toggleFavorite = (id: string) => {
+  const toggleFavorite = async (id: string) => {
     const link = links.value.find((l) => l.id === id);
     if (link) {
-      link.isFavorite = !link.isFavorite;
+      const newFavoriteState = !link.isFavorite;
+      try {
+        await $fetch(`/api/links/${id}/favorite`, {
+          method: 'PATCH',
+          body: { isFavorite: newFavoriteState }
+        })
+        link.isFavorite = newFavoriteState;
+      } catch (err) {
+        console.error('Failed to toggle favorite:', err)
+        error.value = 'Failed to update favorite status'
+      }
     }
   };
 
@@ -261,10 +316,19 @@ export const useLinkManager = () => {
     );
   };
 
-  const updateLinkCategory = (linkId: string, newCategory: string) => {
+  const updateLinkCategory = async (linkId: string, newCategory: string) => {
     const link = links.value.find((l) => l.id === linkId);
     if (link) {
-      link.category = newCategory;
+      try {
+        await $fetch(`/api/links/${linkId}/category`, {
+          method: 'PATCH',
+          body: { category: newCategory }
+        })
+        link.category = newCategory;
+      } catch (err) {
+        console.error('Failed to update category:', err)
+        error.value = 'Failed to update category'
+      }
     }
   };
 
