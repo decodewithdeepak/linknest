@@ -1,7 +1,6 @@
 import { getDb } from '../../utils/db'
 import jwt from 'jsonwebtoken'
 import { getCookie } from 'h3'
-import { useRuntimeConfig } from '#app'
 
 export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'auth-token')
@@ -9,15 +8,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, message: 'Not authenticated' })
   }
 
-  const runtimeConfig = useRuntimeConfig()
-  const secret = runtimeConfig.authSecret || process.env.AUTH_SECRET
+  const secret = process.env.AUTH_SECRET
   if (!secret) {
-    throw createError({ statusCode: 500, message: 'AUTH_SECRET is not set' })
+    throw createError({ statusCode: 500, message: 'AUTH_SECRET is not configured' })
   }
 
-  let decoded: { userId: number }
+  let decoded: { id: number; email: string; name: string }
   try {
-    decoded = jwt.verify(token, secret) as { userId: number }
+    decoded = jwt.verify(token, secret) as { id: number; email: string; name: string }
   } catch (error) {
     throw createError({ statusCode: 401, message: 'Invalid or expired token' })
   }
@@ -36,7 +34,7 @@ export default defineEventHandler(async (event) => {
     // Check if link already exists for this user
     const existingLink = await client.query(
       'SELECT id FROM links WHERE user_id = $1 AND url = $2',
-      [decoded.userId, url]
+      [decoded.id, url]
     )
 
     if (existingLink.rows.length > 0) {
@@ -46,7 +44,7 @@ export default defineEventHandler(async (event) => {
     // Insert new link
     const result = await client.query(
       'INSERT INTO links (user_id, url, title, description, image, category) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [decoded.userId, url, title || url, description || '', image, category || 'Other']
+      [decoded.id, url, title || url, description || '', image, category || 'Other']
     )
 
     return { success: true, link: result.rows[0] }

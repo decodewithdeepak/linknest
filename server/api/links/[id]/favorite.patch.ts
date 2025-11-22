@@ -1,7 +1,6 @@
 import { getDb } from '../../../utils/db'
 import jwt from 'jsonwebtoken'
 import { getCookie } from 'h3'
-import { useRuntimeConfig } from '#app'
 
 export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'auth-token')
@@ -9,15 +8,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, message: 'Not authenticated' })
   }
 
-  const runtimeConfig = useRuntimeConfig()
-  const secret = runtimeConfig.authSecret || process.env.AUTH_SECRET
+  const secret = process.env.AUTH_SECRET
   if (!secret) {
-    throw createError({ statusCode: 500, message: 'AUTH_SECRET is not set' })
+    throw createError({ statusCode: 500, message: 'AUTH_SECRET is not configured' })
   }
 
-  let decoded: { userId: number }
+  let decoded: { id: number; email: string; name: string }
   try {
-    decoded = jwt.verify(token, secret) as { userId: number }
+    decoded = jwt.verify(token, secret) as { id: number; email: string; name: string }
   } catch (error) {
     throw createError({ statusCode: 401, message: 'Invalid or expired token' })
   }
@@ -37,7 +35,7 @@ export default defineEventHandler(async (event) => {
     // Update favorite status (only if it belongs to the user)
     const result = await client.query(
       'UPDATE links SET is_favorite = $1 WHERE id = $2 AND user_id = $3 RETURNING *',
-      [isFavorite, linkId, decoded.userId]
+      [isFavorite, linkId, decoded.id]
     )
 
     if (result.rows.length === 0) {

@@ -11,8 +11,15 @@ export default defineEventHandler(async (event) => {
     }
 
     // Verify token
-    const secret = process.env.AUTH_SECRET || 'change-this-secret-key'
-    const decoded = jwt.verify(token, secret) as any
+    const secret = process.env.AUTH_SECRET
+    if (!secret) {
+      throw createError({
+        statusCode: 500,
+        message: 'AUTH_SECRET is not configured'
+      })
+    }
+    
+    const decoded = jwt.verify(token, secret) as { id: number; email: string; name: string }
 
     // Get fresh user data
     const result = await query(

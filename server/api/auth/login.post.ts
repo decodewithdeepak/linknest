@@ -45,7 +45,14 @@ export default defineEventHandler(async (event) => {
     console.log('✅ Login successful:', user.email)
 
     // Create JWT token
-    const secret = process.env.AUTH_SECRET || 'change-this-secret-key'
+    const secret = process.env.AUTH_SECRET
+    if (!secret) {
+      throw createError({
+        statusCode: 500,
+        message: 'AUTH_SECRET is not configured'
+      })
+    }
+    
     const token = jwt.sign(
       {
         id: user.id,

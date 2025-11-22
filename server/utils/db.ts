@@ -3,10 +3,16 @@ import { Pool } from 'pg'
 // Create a single pool instance
 let pool: Pool | null = null
 
-export function getDB() {
+export function getDb() {
   if (!pool) {
+    const connectionString = process.env.DATABASE_URL
+    
+    if (!connectionString) {
+      throw new Error('DATABASE_URL environment variable is not set')
+    }
+    
     pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString,
       ssl: {
         rejectUnauthorized: false
       }
@@ -18,7 +24,7 @@ export function getDB() {
 
 // Helper function to run queries
 export async function query(text: string, params?: any[]) {
-  const db = getDB()
+  const db = getDb()
   try {
     const result = await db.query(text, params)
     return result

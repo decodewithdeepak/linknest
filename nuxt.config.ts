@@ -5,6 +5,17 @@ export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
   css: ['~/assets/css/main.css'],
   
+  runtimeConfig: {
+    // Private keys (only available server-side)
+    authSecret: process.env.AUTH_SECRET,
+    databaseUrl: process.env.DATABASE_URL,
+    
+    // Public keys (exposed to client)
+    public: {
+      appName: 'LinkNest'
+    }
+  },
+  
   components: [
     {
       path: '~/components',

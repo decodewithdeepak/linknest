@@ -22,12 +22,30 @@ export async function initLinksTable() {
       )
     `)
     
-    // Create index on user_id for faster queries
+    // Create indexes for faster queries
     await query(`
       CREATE INDEX IF NOT EXISTS idx_links_user_id ON links(user_id)
     `)
     
-    console.log('✅ Links table ready')
+    await query(`
+      CREATE INDEX IF NOT EXISTS idx_links_category ON links(category)
+    `)
+    
+    await query(`
+      CREATE INDEX IF NOT EXISTS idx_links_is_favorite ON links(is_favorite)
+    `)
+    
+    // Composite index for common queries (user + category)
+    await query(`
+      CREATE INDEX IF NOT EXISTS idx_links_user_category ON links(user_id, category)
+    `)
+    
+    // Composite index for user + favorite queries
+    await query(`
+      CREATE INDEX IF NOT EXISTS idx_links_user_favorite ON links(user_id, is_favorite)
+    `)
+    
+    console.log('✅ Links table and indexes ready')
     isLinksTableInitialized = true
   } catch (error) {
     console.error('❌ Links table initialization error:', error)

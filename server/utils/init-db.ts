@@ -16,7 +16,13 @@ export async function initDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `)
-    console.log('✅ Users table ready')
+    
+    // Create index on email for faster lookups
+    await query(`
+      CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)
+    `)
+    
+    console.log('✅ Users table and indexes ready')
     isInitialized = true
   } catch (error) {
     console.error('❌ Database initialization error:', error)
