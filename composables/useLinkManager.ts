@@ -59,20 +59,7 @@ export const useLinkManager = () => {
     }
   });
 
-  // Watch for changes and save to local storage
-  watch(
-    links,
-    (newLinks) => {
-      try {
-        localStorage.setItem("link-nest-links", JSON.stringify(newLinks));
-      } catch (e) {
-        console.error("Failed to save links to localStorage:", e);
-        error.value = "Failed to save changes. Storage may be full.";
-      }
-    },
-    { deep: true }
-  );
-
+  // Watch for changes and save custom categories to local storage (UI-only data)
   watch(
     customCategories,
     (newCategories) => {

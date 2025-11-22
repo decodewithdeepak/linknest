@@ -356,10 +356,10 @@ const handleDeleteCategory = (categoryName: string) => {
   }
 }
 
-const handleChangeCategory = (linkId: string, category: string) => {
+const handleChangeCategory = async (linkId: string, category: string) => {
   const link = links.value.find(l => l.id === linkId)
   const oldCategory = link?.category
-  updateLinkCategory(linkId, category)
+  await updateLinkCategory(linkId, category)
   if (link) {
     showToast({
       title: 'Category Changed',
@@ -370,9 +370,9 @@ const handleChangeCategory = (linkId: string, category: string) => {
   }
 }
 
-const handleRemoveLink = (linkId: string) => {
+const handleRemoveLink = async (linkId: string) => {
   const link = links.value.find(l => l.id === linkId)
-  removeLink(linkId)
+  await removeLink(linkId)
   if (link) {
     showToast({
       title: 'Link Deleted',
@@ -383,10 +383,10 @@ const handleRemoveLink = (linkId: string) => {
   }
 }
 
-const handleToggleFavorite = (linkId: string) => {
+const handleToggleFavorite = async (linkId: string) => {
   const link = links.value.find(l => l.id === linkId)
   const wasFavorite = link?.isFavorite
-  toggleFavorite(linkId)
+  await toggleFavorite(linkId)
   if (link) {
     showToast({
       title: !wasFavorite ? 'Added to Favorites' : 'Removed from Favorites',
