@@ -76,6 +76,16 @@
             @click.prevent="$emit('toggleFavorite', link.id)"
             :title="link.isFavorite ? 'Remove from favorites' : 'Add to favorites'"
           />
+          <!-- Refresh Button -->
+          <UButton 
+            icon="i-heroicons-arrow-path" 
+            color="primary" 
+            variant="ghost"
+            size="xs"
+            @click.prevent="handleRefresh"
+            :title="isRefreshing ? 'Refreshing...' : 'Refresh metadata'"
+            :class="{ 'animate-spin': isRefreshing }"
+          />
           <!-- Delete Button -->
           <UButton 
             icon="i-heroicons-trash" 
@@ -159,10 +169,12 @@ const emit = defineEmits<{
   (e: 'delete', id: string): void
   (e: 'toggleFavorite', id: string): void
   (e: 'changeCategory', id: string, category: string): void
+  (e: 'refresh', id: string): void
 }>()
 
 const copied = ref(false)
 const imageError = ref(false)
+const isRefreshing = ref(false)
 const isDropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 const badgeRef = ref<HTMLElement | null>(null)
@@ -217,6 +229,15 @@ const handleDelete = () => {
   if (confirm(`Are you sure you want to delete "${props.link.title}"?`)) {
     emit('delete', props.link.id)
   }
+}
+
+const handleRefresh = async () => {
+  isRefreshing.value = true
+  imageError.value = false // Reset image error state
+  emit('refresh', props.link.id)
+  setTimeout(() => {
+    isRefreshing.value = false
+  }, 1000)
 }
 
 const copyToClipboard = async (text: string) => {
