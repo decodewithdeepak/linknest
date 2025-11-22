@@ -414,13 +414,18 @@ const getCategoryIcon = (category: string): string => {
 
 const getCategoryColor = (category: string): string => {
   const colors: Record<string, string> = {
-    'Open Source': '#8b5cf6',
+    'Open Source': '#10b981',
     'Portfolio': '#3b82f6',
-    'Blog': '#10b981',
+    'Blog': '#8b5cf6',
     'Tool': '#f59e0b',
     'Learning': '#ec4899',
     'Video': '#ef4444',
     'Design': '#a855f7',
+    'Development': '#10b981',
+    'Productivity': '#3b82f6',
+    'Social': '#ec4899',
+    'Entertainment': '#ef4444',
+    'Tools': '#f59e0b',
     'Other': '#6b7280'
   }
   return colors[category] || '#6b7280'

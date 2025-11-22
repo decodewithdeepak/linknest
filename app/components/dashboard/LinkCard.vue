@@ -20,24 +20,19 @@
         </p>
       </div>
       
-      <!-- Category Badge with Dropdown -->
-      <div class="absolute top-0 left-0" v-if="categories && categories.length > 0">
+      <!-- Category Badge -->
+      <div class="absolute -top-1 left-0">
         <div ref="badgeRef">
-          <UBadge 
-            :color="getCategoryColor(link.category)" 
-            variant="soft" 
-            class="bg-background cursor-pointer hover:opacity-80 transition-opacity"
-            @click.stop="toggleDropdown"
+          <span 
+            class="inline-flex items-center gap-1 px-2 py-1 rounded-br-xl text-xs font-medium text-white transition-opacity"
+            :class="{ 'cursor-pointer hover:opacity-80': categories && categories.length > 0 }"
+            :style="{ backgroundColor: getCategoryColor(link.category) }"
+            @click.stop="categories && categories.length > 0 ? toggleDropdown() : null"
           >
             {{ link.category }}
-            <Icon name="i-heroicons-chevron-down" class="w-3 h-3 ml-1" />
-          </UBadge>
+            <Icon v-if="categories && categories.length > 0" name="i-heroicons-chevron-down" class="w-3 h-3" />
+          </span>
         </div>
-      </div>
-      <div class="absolute top-0 left-0" v-else>
-        <UBadge :color="getCategoryColor(link.category)" variant="soft" class="bg-background">
-          {{ link.category }}
-        </UBadge>
       </div>
       
     </div>
@@ -236,18 +231,23 @@ const copyToClipboard = async (text: string) => {
   }
 }
 
-// Map categories to supported badge colors: "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral"
-const getCategoryColor = (category: string): "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral" => {
-  const colors: Record<string, "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral"> = {
-    'Open Source': 'success',
-    'Portfolio': 'primary',
-    'Blog': 'info',
-    'Tool': 'warning',
-    'Learning': 'success',
-    'Video': 'error',
-    'Design': 'primary',
-    'Other': 'neutral'
+// Get category color (matches Sidebar colors)
+const getCategoryColor = (category: string): string => {
+  const colors: Record<string, string> = {
+    'Open Source': '#10b981',
+    'Portfolio': '#3b82f6',
+    'Blog': '#8b5cf6',
+    'Tool': '#f59e0b',
+    'Learning': '#ec4899',
+    'Video': '#ef4444',
+    'Design': '#a855f7',
+    'Development': '#10b981',
+    'Productivity': '#3b82f6',
+    'Social': '#ec4899',
+    'Entertainment': '#ef4444',
+    'Tools': '#f59e0b',
+    'Other': '#6b7280'
   }
-  return colors[category] || 'neutral'
+  return colors[category] || '#6b7280'
 }
 </script>
