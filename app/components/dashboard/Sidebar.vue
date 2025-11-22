@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <!-- Logo/Brand -->
-    <div class="mb-6 pb-6 border-b border-border">
+    <div class="mb-6 pb-6 border-b border-border shrink-0">
       <NuxtLink to="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
         <Logo size="lg" />
         <span class="font-bold text-2xl">LinkNest</span>
@@ -9,7 +9,7 @@
     </div>
 
     <!-- Navigation -->
-    <div class="space-y-2">
+    <div class="space-y-2 shrink-0">
       <!-- All Links -->
       <button
         @click="$emit('select', null)"
@@ -77,86 +77,89 @@
         <Icon name="i-heroicons-plus" class="w-4 h-4" />
       </button>
     </div>
+    </div>
 
-    <!-- Add Category Input -->
-    <div v-if="isAddingCategory" class="px-3 mb-2">
-      <div class="space-y-2 p-2 bg-muted/50 rounded-lg border border-border">
-        <div class="flex items-center gap-2">
-          <input
-            v-model="newCategoryName"
-            @keydown.enter="addCategory"
-            @keydown.esc="isAddingCategory = false"
-            ref="categoryInput"
-            type="text"
-            placeholder="Category name..."
-            class="w-full bg-background border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-primary/50"
-          />
-          <button @click="isAddingCategory = false" class="text-muted-foreground hover:text-red-500 shrink-0">
-            <Icon name="i-heroicons-x-mark" class="w-4 h-4" />
+    <!-- Collections Scrollable Area -->
+    <div class="flex-1 overflow-y-auto min-h-0 pr-1">
+      <!-- Add Category Input -->
+      <div v-if="isAddingCategory" class="px-3 mb-2">
+        <div class="space-y-2 p-2 bg-muted/50 rounded-lg border border-border">
+          <div class="flex items-center gap-2">
+            <input
+              v-model="newCategoryName"
+              @keydown.enter="addCategory"
+              @keydown.esc="isAddingCategory = false"
+              ref="categoryInput"
+              type="text"
+              placeholder="Category name..."
+              class="w-full bg-background border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-primary/50"
+            />
+            <button @click="isAddingCategory = false" class="text-muted-foreground hover:text-red-500 shrink-0">
+              <Icon name="i-heroicons-x-mark" class="w-4 h-4" />
+            </button>
+          </div>
+          
+          <!-- Color Picker -->
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              v-for="color in categoryColors"
+              :key="color"
+              @click="selectedColor = color"
+              class="w-5 h-5 rounded-full border transition-transform hover:scale-110"
+              :class="[
+                selectedColor === color ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-110' : 'border-transparent'
+              ]"
+              :style="{ backgroundColor: color }"
+            />
+          </div>
+
+          <button 
+            @click="addCategory"
+            :disabled="!newCategoryName.trim()"
+            class="w-full py-1 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Add Category
           </button>
         </div>
-        
-        <!-- Color Picker -->
-        <div class="flex flex-wrap gap-1.5">
-          <button
-            v-for="color in categoryColors"
-            :key="color"
-            @click="selectedColor = color"
-            class="w-5 h-5 rounded-full border transition-transform hover:scale-110"
-            :class="[
-              selectedColor === color ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-110' : 'border-transparent'
-            ]"
-            :style="{ backgroundColor: color }"
-          />
-        </div>
+      </div>
 
-        <button 
-          @click="addCategory"
-          :disabled="!newCategoryName.trim()"
-          class="w-full py-1 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+      <!-- Category List -->
+      <div class="space-y-2">
+        <button
+          v-for="category in categories"
+          :key="category.name"
+          @click="$emit('select', category.name)"
+          @dragover.prevent="dragOverCategory = category.name"
+          @dragleave="dragOverCategory = null"
+          @drop="handleDrop($event, category.name)"
+          :class="[
+            'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm group border',
+            selectedCategory === category.name
+              ? 'bg-primary text-black border-primary'
+              : dragOverCategory === category.name
+              ? 'bg-primary/10 border-primary border-dashed'
+              : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
+          ]"
         >
-          Add Category
+          <div class="flex items-center gap-2.5 min-w-0 flex-1">
+            <div 
+              class="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+              :style="`background: linear-gradient(135deg, ${category.gradient})`"
+            >
+              <Icon 
+                :name="category.icon" 
+                class="w-3 h-3 text-white"
+              />
+            </div>
+            <span class="font-medium truncate">{{ category.name }}</span>
+          </div>
+          <span class="text-xs opacity-70 shrink-0 ml-2">{{ category.count }}</span>
         </button>
       </div>
     </div>
 
-    <!-- Category List -->
-    <div class="space-y-2">
-      <button
-        v-for="category in categories"
-        :key="category.name"
-        @click="$emit('select', category.name)"
-        @dragover.prevent="dragOverCategory = category.name"
-        @dragleave="dragOverCategory = null"
-        @drop="handleDrop($event, category.name)"
-        :class="[
-          'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm group border',
-          selectedCategory === category.name
-            ? 'bg-primary text-black border-primary'
-            : dragOverCategory === category.name
-            ? 'bg-primary/10 border-primary border-dashed'
-            : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
-        ]"
-      >
-        <div class="flex items-center gap-2.5 min-w-0 flex-1">
-          <div 
-            class="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
-            :style="`background: linear-gradient(135deg, ${category.gradient})`"
-          >
-            <Icon 
-              :name="category.icon" 
-              class="w-3 h-3 text-white"
-            />
-          </div>
-          <span class="font-medium truncate">{{ category.name }}</span>
-        </div>
-        <span class="text-xs opacity-70 shrink-0 ml-2">{{ category.count }}</span>
-      </button>
-    </div>
-    </div>
-
     <!-- User Profile Section - Bottom -->
-    <div class="mt-auto pt-4 border-t border-border">
+    <div class="mt-auto pt-4 border-t border-border shrink-0">
       <div class="flex items-center gap-3 mb-3">
         <img 
           src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" 
