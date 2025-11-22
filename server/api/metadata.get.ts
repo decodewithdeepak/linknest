@@ -18,7 +18,8 @@ export default defineEventHandler(async (event) => {
     const html = await $fetch<string>(targetUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; LinkNest/1.0; +http://localhost:3000)'
-      }
+      },
+      timeout: 5000 // 5 second timeout
     })
 
     // 2. Load HTML into Cheerio

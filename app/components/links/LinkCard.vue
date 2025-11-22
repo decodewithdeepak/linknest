@@ -1,5 +1,12 @@
 <template>
-  <div class="group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full">
+  <div 
+    :draggable="!isMobile"
+    @dragstart="onDragStart"
+    :class="[
+      'group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full',
+      !isMobile && 'cursor-move active:cursor-grabbing active:scale-95'
+    ]"
+  >
     <!-- Image Section -->
     <div class="aspect-video w-full overflow-hidden relative p-2">
       <img 
@@ -113,6 +120,7 @@ const emit = defineEmits<{
 
 const copied = ref(false)
 const imageError = ref(false)
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
 const handleImageError = (e: Event) => {
   imageError.value = true
@@ -156,5 +164,12 @@ const getCategoryColor = (category: string): "primary" | "secondary" | "success"
     'Other': 'neutral'
   }
   return colors[category] || 'neutral'
+}
+
+const onDragStart = (event: DragEvent) => {
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', props.link.id)
+  }
 }
 </script>

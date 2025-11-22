@@ -65,10 +65,59 @@
     <div class="h-px bg-border my-3"></div>
 
     <!-- Collections Header -->
-    <div class="px-3 py-2">
+    <div class="px-3 py-2 flex items-center justify-between group">
       <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
         Collections
       </p>
+      <button 
+        @click="isAddingCategory = true"
+        class="text-muted-foreground hover:text-primary transition-colors"
+        title="Add Collection"
+      >
+        <Icon name="i-heroicons-plus" class="w-4 h-4" />
+      </button>
+    </div>
+
+    <!-- Add Category Input -->
+    <div v-if="isAddingCategory" class="px-3 mb-2">
+      <div class="space-y-2 p-2 bg-muted/50 rounded-lg border border-border">
+        <div class="flex items-center gap-2">
+          <input
+            v-model="newCategoryName"
+            @keydown.enter="addCategory"
+            @keydown.esc="isAddingCategory = false"
+            ref="categoryInput"
+            type="text"
+            placeholder="Category name..."
+            class="w-full bg-background border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-primary/50"
+          />
+          <button @click="isAddingCategory = false" class="text-muted-foreground hover:text-red-500 shrink-0">
+            <Icon name="i-heroicons-x-mark" class="w-4 h-4" />
+          </button>
+        </div>
+        
+        <!-- Color Picker -->
+        <div class="flex flex-wrap gap-1.5">
+          <button
+            v-for="color in categoryColors"
+            :key="color"
+            @click="selectedColor = color"
+            class="w-5 h-5 rounded-full border transition-transform hover:scale-110"
+            :class="[
+              selectedColor === color ? 'ring-2 ring-primary ring-offset-1 ring-offset-background scale-110' : 'border-transparent'
+            ]"
+            :style="{ backgroundColor: color }"
+          />
+        </div>
+
+        <button 
+          @click="addCategory"
+          :disabled="!newCategoryName.trim()"
+          class="w-full py-1 text-xs font-medium bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Add Category
+        </button>
+      </div>
     </div>
 
     <!-- Category List -->
@@ -77,10 +126,15 @@
         v-for="category in categories"
         :key="category.name"
         @click="$emit('select', category.name)"
+        @dragover.prevent="dragOverCategory = category.name"
+        @dragleave="dragOverCategory = null"
+        @drop="handleDrop($event, category.name)"
         :class="[
           'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm group border',
           selectedCategory === category.name
             ? 'bg-primary text-black border-primary'
+            : dragOverCategory === category.name
+            ? 'bg-primary/10 border-primary border-dashed'
             : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
         ]"
       >
@@ -155,9 +209,55 @@ defineProps<{
   }>
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   select: [category: string | null]
+  'create-category': [data: { name: string, color: string }]
+  'move-link': [event: DragEvent, category: string]
 }>()
+
+const isAddingCategory = ref(false)
+const newCategoryName = ref('')
+const categoryInput = ref<HTMLInputElement | null>(null)
+const dragOverCategory = ref<string | null>(null)
+const selectedColor = ref('#8b5cf6') // Default purple
+
+const categoryColors = [
+  '#ef4444', // Red
+  '#f97316', // Orange
+  '#eab308', // Yellow
+  '#22c55e', // Green
+  '#14b8a6', // Teal
+  '#3b82f6', // Blue
+  '#8b5cf6', // Purple
+  '#d946ef', // Pink
+  '#6b7280', // Gray
+]
+
+watch(isAddingCategory, (newValue) => {
+  if (newValue) {
+    nextTick(() => {
+      categoryInput.value?.focus()
+    })
+  } else {
+    newCategoryName.value = ''
+    selectedColor.value = '#8b5cf6'
+  }
+})
+
+const handleDrop = (event: DragEvent, category: string) => {
+  dragOverCategory.value = null
+  emit('move-link', event, category)
+}
+
+const addCategory = () => {
+  if (newCategoryName.value.trim()) {
+    emit('create-category', { 
+      name: newCategoryName.value.trim(), 
+      color: selectedColor.value 
+    })
+    isAddingCategory.value = false
+  }
+}
 
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')

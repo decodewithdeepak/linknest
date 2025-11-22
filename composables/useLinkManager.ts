@@ -1,13 +1,21 @@
 import type { Link } from '../types/link'
 
+export interface CustomCategory {
+  name: string
+  color: string
+}
+
 export const useLinkManager = () => {
   const links = useState<Link[]>('links', () => [])
+  const customCategories = useState<CustomCategory[]>('custom-categories', () => [])
   const isLoading = useState<boolean>('links-loading', () => false)
   const error = useState<string | null>('links-error', () => null)
 
   // Load from local storage on mount
   onMounted(() => {
     const savedLinks = localStorage.getItem('link-nest-links')
+    const savedCategories = localStorage.getItem('link-nest-categories')
+    
     if (savedLinks) {
       try {
         links.value = JSON.parse(savedLinks)
@@ -15,11 +23,33 @@ export const useLinkManager = () => {
         console.error('Failed to parse saved links', e)
       }
     }
+    
+    if (savedCategories) {
+      try {
+        customCategories.value = JSON.parse(savedCategories)
+      } catch (e) {
+        console.error('Failed to parse saved categories', e)
+      }
+    }
   })
 
   // Watch for changes and save to local storage
   watch(links, (newLinks) => {
-    localStorage.setItem('link-nest-links', JSON.stringify(newLinks))
+    try {
+      localStorage.setItem('link-nest-links', JSON.stringify(newLinks))
+    } catch (e) {
+      console.error('Failed to save links to localStorage:', e)
+      error.value = 'Failed to save changes. Storage may be full.'
+    }
+  }, { deep: true })
+
+  watch(customCategories, (newCategories) => {
+    try {
+      localStorage.setItem('link-nest-categories', JSON.stringify(newCategories))
+    } catch (e) {
+      console.error('Failed to save categories to localStorage:', e)
+      error.value = 'Failed to save categories. Storage may be full.'
+    }
   }, { deep: true })
 
   const fetchMetadata = async (url: string) => {
@@ -78,11 +108,21 @@ export const useLinkManager = () => {
     error.value = null
 
     try {
+      // Validate URL first
+      let parsedUrl: URL
+      try {
+        parsedUrl = new URL(url)
+      } catch {
+        error.value = 'Invalid URL. Please enter a valid URL.'
+        isLoading.value = false
+        return
+      }
+
       const metadata = await fetchMetadata(url)
       const category = categorizeLink(metadata)
 
       // Get favicon from Google's service as a reliable fallback
-      const favicon = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`
+      const favicon = `https://www.google.com/s2/favicons?domain=${parsedUrl.hostname}&sz=128`
 
       const newLink: Link = {
         id: crypto.randomUUID(),
@@ -91,13 +131,14 @@ export const useLinkManager = () => {
         description: metadata.description || '',
         image: metadata.image || null,
         favicon: favicon,
-        siteName: metadata.siteName || new URL(url).hostname,
+        siteName: metadata.siteName || parsedUrl.hostname,
         category,
         dateAdded: new Date().toISOString(),
         isFavorite: false
       }
 
       links.value.unshift(newLink)
+      error.value = null // Clear any previous errors
     } catch (err) {
       console.error(err)
       error.value = 'Failed to fetch link details. Please check the URL.'
@@ -117,12 +158,28 @@ export const useLinkManager = () => {
     }
   }
 
+  const createCategory = (name: string, color: string = '#6b7280') => {
+    if (name && !customCategories.value.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+      customCategories.value.push({ name, color })
+    }
+  }
+
+  const updateLinkCategory = (linkId: string, newCategory: string) => {
+    const link = links.value.find(l => l.id === linkId)
+    if (link) {
+      link.category = newCategory
+    }
+  }
+
   return {
     links,
+    customCategories,
     isLoading,
     error,
     addLink,
     removeLink,
-    toggleFavorite
+    toggleFavorite,
+    createCategory,
+    updateLinkCategory
   }
 }

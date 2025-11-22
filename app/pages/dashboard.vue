@@ -10,6 +10,8 @@
           :favorites-count="favoriteLinks.length"
           :categories="categoriesWithMeta"
           @select="handleCategorySelect"
+          @create-category="handleCreateCategory"
+          @move-link="handleMoveLink"
         />
       </div>
     </div>
@@ -60,6 +62,8 @@
               :favorites-count="favoriteLinks.length"
               :categories="categoriesWithMeta"
               @select="handleMobileCategorySelect"
+              @create-category="handleCreateCategory"
+              @move-link="handleMoveLink"
             />
           </div>
         </div>
@@ -175,25 +179,43 @@ useSeoMeta({
   description: 'Manage and categorize your links automatically',
 })
 
-const { links, isLoading, error, addLink, removeLink, toggleFavorite } = useLinkManager()
+const { links, customCategories, isLoading, error, addLink, removeLink, toggleFavorite, createCategory, updateLinkCategory } = useLinkManager()
 
 const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
 const mobileMenuOpen = ref(false)
 
+// Clear search when category changes
+watch(selectedCategory, () => {
+  searchQuery.value = ''
+})
+
 // Derived state for unique categories
 const categories = computed(() => {
-  const cats = new Set(links.value.map(l => l.category))
-  return Array.from(cats).sort()
+  const cats = new Map<string, { name: string, color?: string }>()
+  
+  // Add custom categories first (they have colors)
+  customCategories.value.forEach(c => {
+    cats.set(c.name, c)
+  })
+  
+  // Add categories from links if they don't exist yet
+  links.value.forEach(l => {
+    if (!cats.has(l.category)) {
+      cats.set(l.category, { name: l.category })
+    }
+  })
+  
+  return Array.from(cats.values()).sort((a, b) => a.name.localeCompare(b.name))
 })
 
 // Categories with metadata for sidebar
 const categoriesWithMeta = computed(() => {
   return categories.value.map(cat => ({
-    name: cat,
-    count: getCategoryCount(cat),
-    icon: getCategoryIcon(cat),
-    gradient: getCategoryGradient(cat)
+    name: cat.name,
+    count: getCategoryCount(cat.name),
+    icon: getCategoryIcon(cat.name),
+    gradient: cat.color ? `${cat.color}, ${cat.color}` : getCategoryGradient(cat.name)
   }))
 })
 
@@ -252,6 +274,19 @@ const handleCategorySelect = (category: string | null) => {
 const handleMobileCategorySelect = (category: string | null) => {
   selectedCategory.value = category
   mobileMenuOpen.value = false
+}
+
+const handleCreateCategory = (data: { name: string, color: string }) => {
+  createCategory(data.name, data.color)
+  // Auto-select the new category
+  selectedCategory.value = data.name
+}
+
+const handleMoveLink = (event: DragEvent, category: string) => {
+  const linkId = event.dataTransfer?.getData('text/plain')
+  if (linkId) {
+    updateLinkCategory(linkId, category)
+  }
 }
 
 // Category icons and gradients
