@@ -24,14 +24,11 @@ export const useLinkManager = () => {
 
   const fetchMetadata = async (url: string) => {
     try {
-      const response = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`)
-      const data = await response.json()
-      
-      if (data.status === 'success') {
-        return data.data
-      } else {
-        throw new Error('Failed to fetch metadata')
-      }
+      // Call our internal server API
+      const data = await $fetch('/api/metadata', {
+        params: { url }
+      })
+      return data
     } catch (err) {
       console.error('Metadata fetch error:', err)
       throw err
@@ -39,8 +36,8 @@ export const useLinkManager = () => {
   }
 
   const categorizeLink = (metadata: any): string => {
-    const { title, description, publisher, url } = metadata
-    const text = `${title} ${description} ${publisher} ${url}`.toLowerCase()
+    const { title, description, siteName, url } = metadata
+    const text = `${title} ${description} ${siteName} ${url}`.toLowerCase()
     
     // Simple keyword-based categorization (simulating AI)
     if (text.includes('github') || text.includes('gitlab') || text.includes('repo') || text.includes('open source')) {
@@ -49,19 +46,19 @@ export const useLinkManager = () => {
     if (text.includes('portfolio') || text.includes('resume') || text.includes('cv') || text.includes('personal website')) {
       return 'Portfolio'
     }
-    if (text.includes('blog') || text.includes('article') || text.includes('medium') || text.includes('dev.to')) {
+    if (text.includes('blog') || text.includes('article') || text.includes('medium') || text.includes('dev.to') || text.includes('news')) {
       return 'Blog'
     }
-    if (text.includes('tool') || text.includes('utility') || text.includes('generator') || text.includes('converter')) {
+    if (text.includes('tool') || text.includes('utility') || text.includes('generator') || text.includes('converter') || text.includes('app')) {
       return 'Tool'
     }
-    if (text.includes('learn') || text.includes('course') || text.includes('tutorial') || text.includes('docs')) {
+    if (text.includes('learn') || text.includes('course') || text.includes('tutorial') || text.includes('docs') || text.includes('guide')) {
       return 'Learning'
     }
-    if (text.includes('youtube') || text.includes('video') || text.includes('stream')) {
+    if (text.includes('youtube') || text.includes('video') || text.includes('stream') || text.includes('movie')) {
       return 'Video'
     }
-    if (text.includes('design') || text.includes('ui') || text.includes('ux') || text.includes('figma')) {
+    if (text.includes('design') || text.includes('ui') || text.includes('ux') || text.includes('figma') || text.includes('dribbble')) {
       return 'Design'
     }
     
@@ -84,14 +81,17 @@ export const useLinkManager = () => {
       const metadata = await fetchMetadata(url)
       const category = categorizeLink(metadata)
 
+      // Get favicon from Google's service as a reliable fallback
+      const favicon = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`
+
       const newLink: Link = {
         id: crypto.randomUUID(),
         url: metadata.url || url,
         title: metadata.title || url,
         description: metadata.description || '',
-        image: metadata.image?.url || null,
-        favicon: metadata.logo?.url || null,
-        siteName: metadata.publisher || new URL(url).hostname,
+        image: metadata.image || null,
+        favicon: favicon,
+        siteName: metadata.siteName || new URL(url).hostname,
         category,
         dateAdded: new Date().toISOString(),
         isFavorite: false
@@ -99,7 +99,8 @@ export const useLinkManager = () => {
 
       links.value.unshift(newLink)
     } catch (err) {
-      error.value = 'Failed to fetch link details. Please try again.'
+      console.error(err)
+      error.value = 'Failed to fetch link details. Please check the URL.'
     } finally {
       isLoading.value = false
     }
