@@ -1,6 +1,7 @@
 import { hash } from 'bcrypt-ts'
 import { query } from '../../utils/db'
 import { initDatabase } from '../../utils/init-db'
+import { validateEmail, validatePassword } from '../../utils/validation'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -21,8 +22,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
+    if (!validateEmail(email)) {
       throw createError({
         statusCode: 400,
         message: 'Invalid email format'
@@ -30,10 +30,11 @@ export default defineEventHandler(async (event) => {
     }
 
     // Validate password
-    if (password.length < 8) {
+    const passwordValidation = validatePassword(password)
+    if (!passwordValidation.valid) {
       throw createError({
         statusCode: 400,
-        message: 'Password must be at least 8 characters'
+        message: passwordValidation.message || 'Invalid password'
       })
     }
 

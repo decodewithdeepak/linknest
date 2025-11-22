@@ -55,7 +55,7 @@ export default defineEventHandler(async (event) => {
     
     const token = jwt.sign(
       {
-        id: user.id,
+        userId: user.id,
         email: user.email,
         name: user.name
       },

@@ -1,28 +1,9 @@
-import jwt from 'jsonwebtoken'
+import { requireAuth } from '../../utils/auth'
 import { query } from '../../utils/db'
 
 export default defineEventHandler(async (event) => {
   try {
-    // Get token from cookie
-    const token = getCookie(event, 'auth-token')
-
-    if (!token) {
-      throw createError({
-        statusCode: 401,
-        message: 'Not authenticated'
-      })
-    }
-
-    // Verify token
-    const secret = process.env.AUTH_SECRET
-    if (!secret) {
-      throw createError({
-        statusCode: 500,
-        message: 'AUTH_SECRET is not configured'
-      })
-    }
-    
-    const decoded = jwt.verify(token, secret) as { id: number; email: string; name: string }
+    const user = await requireAuth(event)
 
     // Get user's links
     const result = await query(
@@ -30,7 +11,7 @@ export default defineEventHandler(async (event) => {
        FROM links 
        WHERE user_id = $1 
        ORDER BY created_at DESC`,
-      [decoded.id]
+      [user.userId]
     )
 
     return {
