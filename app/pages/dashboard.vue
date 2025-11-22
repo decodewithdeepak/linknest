@@ -108,7 +108,7 @@
                 @add="handleAddLink"
               />
               <p v-if="error" class="mt-2 text-sm text-red-500 flex items-center gap-1">
-                <Icon name="i-heroicons-exclamation-circle" />
+                <Icon name="i-heroicons-exclamation-circle" />  
                 {{ error }}
               </p>
             </div>
@@ -137,8 +137,8 @@
                 :key="link.id"
                 :link="link"
                 :categories="categories"
-                @delete="removeLink"
-                @toggle-favorite="toggleFavorite"
+                @delete="handleRemoveLink"
+                @toggle-favorite="handleToggleFavorite"
                 @change-category="handleChangeCategory"
               />
             </div>
@@ -177,6 +177,7 @@ import { useLinkManager } from '../../composables/useLinkManager'
 import LinkInput from '~/components/dashboard/LinkInput.vue'
 import LinkCard from '~/components/dashboard/LinkCard.vue'
 import Sidebar from '~/components/dashboard/Sidebar.vue'
+import { useToasts } from '../../composables/useToasts'
 
 useSeoMeta({
   title: 'Smart Link Organizer - LinkNest',
@@ -184,6 +185,8 @@ useSeoMeta({
 })
 
 const { links, customCategories, isLoading, error, addLink, removeLink, toggleFavorite, createCategory, updateCategory, deleteCategory, updateLinkCategory } = useLinkManager()
+// useToasts is in `composables/useToasts.ts` and auto-imported by Nuxt
+const { showToast } = useToasts()
 
 const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
@@ -267,9 +270,28 @@ const getCategoryCount = (category: string) => {
 }
 
 const handleAddLink = async (url: string) => {
+  const linksBefore = links.value.length
   await addLink(url)
-  // Optionally switch to "All Links" view to see the new link
-  selectedCategory.value = null
+  
+  if (error.value) {
+    showToast({
+      title: 'Failed to Add Link',
+      description: error.value,
+      color: 'error',
+      icon: 'i-heroicons-exclamation-circle'
+    })
+  } else if (links.value.length > linksBefore) {
+    const newLink = links.value[0]
+    if (newLink) {
+      showToast({
+        title: 'Link Added',
+        description: `"${newLink.title}"`,
+          color: 'success',
+          icon: 'i-heroicons-check-circle'
+      })
+    }
+    selectedCategory.value = null
+  }
 }
 
 const handleCategorySelect = (category: string | null) => {
@@ -282,29 +304,93 @@ const handleMobileCategorySelect = (category: string | null) => {
 }
 
 const handleCreateCategory = (data: { name: string, color: string }) => {
-  createCategory(data.name, data.color)
-  // Auto-select the new category
-  selectedCategory.value = data.name
+  const success = createCategory(data.name, data.color)
+  if (success) {
+    showToast({
+      title: 'Category Created',
+      description: `"${data.name}" has been created`,
+      color: 'success',
+      icon: 'i-heroicons-folder-plus',
+    })
+    selectedCategory.value = data.name
+  } else {
+    showToast({
+      title: 'Category Exists',
+      description: `A category named "${data.name}" already exists`,
+      color: 'warning',
+      icon: 'i-heroicons-information-circle',
+    })
+  }
 }
 
 const handleEditCategory = (data: { oldName: string, newName: string, newColor: string }) => {
   updateCategory(data.oldName, data.newName, data.newColor)
-  // Update selected category if it was the one being edited
+  showToast({
+    title: 'Category Updated',
+    description: `"${data.oldName}" renamed to "${data.newName}"`,
+    color: 'success',
+    icon: 'i-heroicons-pencil-square',
+  })
   if (selectedCategory.value === data.oldName) {
     selectedCategory.value = data.newName
   }
 }
 
 const handleDeleteCategory = (categoryName: string) => {
+  const affectedCount = links.value.filter(l => l.category === categoryName).length
   deleteCategory(categoryName)
-  // Clear selection if the deleted category was selected
+  showToast({
+    title: 'Category Deleted',
+    description: affectedCount > 0 
+      ? `"${categoryName}" removed. ${affectedCount} links moved to Other`
+      : `"${categoryName}" removed`,
+    color: 'error',
+    icon: 'i-heroicons-trash',
+  })
   if (selectedCategory.value === categoryName) {
     selectedCategory.value = null
   }
 }
 
 const handleChangeCategory = (linkId: string, category: string) => {
+  const link = links.value.find(l => l.id === linkId)
+  const oldCategory = link?.category
   updateLinkCategory(linkId, category)
+  if (link) {
+    showToast({
+      title: 'Category Changed',
+      description: `Moved "${link.title}" to ${category}`,
+      color: 'info',
+      icon: 'i-heroicons-arrow-right-circle',
+    })
+  }
+}
+
+const handleRemoveLink = (linkId: string) => {
+  const link = links.value.find(l => l.id === linkId)
+  removeLink(linkId)
+  if (link) {
+    showToast({
+      title: 'Link Deleted',
+      description: `"${link.title}" has been removed`,
+      color: 'error',
+      icon: 'i-heroicons-trash',
+    })
+  }
+}
+
+const handleToggleFavorite = (linkId: string) => {
+  const link = links.value.find(l => l.id === linkId)
+  const wasFavorite = link?.isFavorite
+  toggleFavorite(linkId)
+  if (link) {
+    showToast({
+      title: !wasFavorite ? 'Added to Favorites' : 'Removed from Favorites',
+      description: `"${link.title}"`,
+      color: !wasFavorite ? 'success' : 'neutral',
+      icon: !wasFavorite ? 'i-heroicons-heart-solid' : 'i-heroicons-heart',
+    })
+  }
 }
 
 // Category icons and gradients

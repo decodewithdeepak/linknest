@@ -219,7 +219,9 @@ export const useLinkManager = () => {
       )
     ) {
       customCategories.value.push({ name, color });
+      return true;
     }
+    return false;
   };
 
   const updateCategory = (
