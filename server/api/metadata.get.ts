@@ -1,5 +1,23 @@
 import { defineEventHandler, getQuery, createError } from 'h3'
-import * as cheerio from 'cheerio'
+// Note: cheerio is installed but not used here. We use Microlink.io API instead
+// because it handles JavaScript-rendered sites (like Dribbble, Behance) that 
+// cheerio cannot scrape properly. Cheerio only parses static HTML.
+
+interface MicrolinkResponse {
+  status: string
+  data?: {
+    title?: string
+    description?: string
+    image?: {
+      url?: string
+    }
+    logo?: {
+      url?: string
+    }
+    publisher?: string
+    url?: string
+  }
+}
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -13,54 +31,37 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // 1. Fetch the HTML content
-    // We need a User-Agent so some sites don't block us (thinking we are a bot)
-    const html = await $fetch<string>(targetUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; LinkNest/1.0; +http://localhost:3000)'
-      },
-      timeout: 5000 // 5 second timeout
+    // Use Microlink.io API - it handles JS-rendered sites perfectly
+    const response = await $fetch<MicrolinkResponse>(`https://api.microlink.io/?url=${encodeURIComponent(targetUrl)}`, {
+      timeout: 10000
     })
 
-    // 2. Load HTML into Cheerio
-    const $ = cheerio.load(html)
-
-    // 3. Extract Metadata
-    // We look for Open Graph tags first, then fallback to standard tags
-    
-    const title = 
-      $('meta[property="og:title"]').attr('content') || 
-      $('title').text() || 
-      ''
-
-    const description = 
-      $('meta[property="og:description"]').attr('content') || 
-      $('meta[name="description"]').attr('content') || 
-      ''
-
-    const image = 
-      $('meta[property="og:image"]').attr('content') || 
-      $('meta[name="twitter:image"]').attr('content') || 
-      ''
-
-    const siteName = 
-      $('meta[property="og:site_name"]').attr('content') || 
-      new URL(targetUrl).hostname.replace('www.', '')
-
-    return {
-      title: title.trim(),
-      description: description.trim(),
-      image,
-      siteName: siteName.trim(),
-      url: targetUrl
+    if (response.status === 'success' && response.data) {
+      const data = response.data
+      
+      return {
+        title: data.title || new URL(targetUrl).hostname,
+        description: data.description || '',
+        image: data.image?.url || data.logo?.url || '',
+        siteName: data.publisher || new URL(targetUrl).hostname.replace('www.', ''),
+        url: data.url || targetUrl
+      }
+    } else {
+      throw new Error('Microlink API returned unsuccessful status')
     }
 
   } catch (error) {
     console.error('Metadata fetch error:', error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch metadata for this URL',
-    })
+    
+    // Fallback: return basic info from URL
+    const urlObj = new URL(targetUrl)
+    return {
+      title: urlObj.hostname.replace('www.', ''),
+      description: 'No description available',
+      image: '',
+      siteName: urlObj.hostname.replace('www.', ''),
+      url: targetUrl
+    }
   }
 })
 
