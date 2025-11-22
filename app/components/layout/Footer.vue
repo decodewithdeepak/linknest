@@ -19,13 +19,13 @@
           <h3 class="font-semibold mb-4">Quick Links</h3>
           <ul class="space-y-2 text-sm text-muted-foreground">
             <li>
-              <NuxtLink to="/dashboard" class="hover:text-foreground transition-colors">
-                Dashboard
+              <NuxtLink to="/login" class="hover:text-foreground transition-colors">
+                Login
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/favorites" class="hover:text-foreground transition-colors">
-                Favorites
+              <NuxtLink to="/signup" class="hover:text-foreground transition-colors">
+                Sign Up
               </NuxtLink>
             </li>
           </ul>

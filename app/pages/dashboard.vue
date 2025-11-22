@@ -179,6 +179,10 @@ import LinkCard from '~/components/dashboard/LinkCard.vue'
 import Sidebar from '~/components/dashboard/Sidebar.vue'
 import { useToasts } from '../../composables/useToasts'
 
+definePageMeta({
+  layout: 'default'
+})
+
 useSeoMeta({
   title: 'Smart Link Organizer - LinkNest',
   description: 'Manage and categorize your links automatically',

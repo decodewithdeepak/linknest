@@ -35,4 +35,3 @@ export default defineNuxtConfig({
     classSuffix: ''
   }
 })
-// Config updated to force reload

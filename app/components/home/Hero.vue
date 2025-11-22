@@ -19,7 +19,7 @@
 
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-8 sm:mb-16 max-w-md sm:max-w-none mx-auto">
         <UButton
-          to="/dashboard"
+          to="/signup"
           size="lg"
           color="primary"
           class="group gap-2 rounded-full w-full sm:w-auto justify-center text-sm sm:text-base"

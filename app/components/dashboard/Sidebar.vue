@@ -193,14 +193,15 @@
     <!-- User Profile Section - Bottom -->
     <div class="mt-auto pt-4 border-t border-border shrink-0">
       <div class="flex items-center gap-3">
-        <img 
-          src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" 
-          alt="User Avatar"
-          class="w-10 h-10 rounded-full border-2 border-primary/20"
-        />
+        <!-- User Avatar with Initials -->
+        <div 
+          :class="[avatarColor, 'w-10 h-10 rounded-full border-2 border-primary/20 flex items-center justify-center text-white font-semibold text-sm']"
+        >
+          {{ userInitials }}
+        </div>
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold truncate">Deepak Modi</p>
-          <p class="text-xs text-muted-foreground truncate">deepak@example.com</p>
+          <p class="text-sm font-semibold truncate">{{ userName }}</p>
+          <p class="text-xs text-muted-foreground truncate">{{ userEmail }}</p>
         </div>
         <!-- Logout Icon Button -->
         <UButton
@@ -335,12 +336,58 @@ const cancelEdit = () => {
   selectedColor.value = '#8b5cf6'
 }
 
+// Auth composable
+const { user, logout } = useAuth()
+
 const handleLogout = () => {
-  // Add logout logic here
-  console.log('Logout clicked')
-  // For now, just show an alert
-  alert('Logout functionality - to be implemented')
+  logout()
 }
+
+// Update user info
+const userEmail = computed(() => user.value?.email || 'user@example.com')
+const userName = computed(() => user.value?.name || 'User')
+
+// Generate user initials from name or email
+const userInitials = computed(() => {
+  const name = user.value?.name
+  const email = user.value?.email
+  
+  if (name) {
+    // Get first letter of first and last name
+    const nameParts = name.trim().split(' ')
+    if (nameParts.length >= 2) {
+      return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
+    }
+    return name.substring(0, 2).toUpperCase()
+  }
+  
+  if (email) {
+    // Get first two letters of email
+    return email.substring(0, 2).toUpperCase()
+  }
+  
+  return 'U'
+})
+
+// Generate a consistent color based on the user's name or email
+const avatarColor = computed(() => {
+  const str = user.value?.email || user.value?.name || 'default'
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  const colors = [
+    'bg-purple-500',
+    'bg-blue-500',
+    'bg-green-500',
+    'bg-yellow-500',
+    'bg-red-500',
+    'bg-pink-500',
+    'bg-indigo-500',
+    'bg-teal-500'
+  ]
+  return colors[Math.abs(hash) % colors.length]
+})
 </script>
 
 

@@ -68,37 +68,47 @@
           <p class="text-sm text-muted-foreground mt-2">Join thousands of users organizing their digital life</p>
         </div>
 
+        <!-- OAuth Buttons (UI only) -->
         <div class="grid grid-cols-2 gap-4">
-          <button class="flex items-center justify-center gap-2 px-4 py-2.5 border border-border rounded-xl hover:bg-primary/5 hover:border-primary/30 transition-all group bg-background">
-            <Icon name="i-simple-icons-github" class="w-5 h-5 group-hover:text-primary transition-colors" />
-            <span class="text-sm font-medium group-hover:text-primary transition-colors">GitHub</span>
+          <button
+            type="button"
+            disabled
+            class="flex items-center justify-center gap-2 px-4 py-2.5 border border-border rounded-xl hover:bg-primary/5 hover:border-primary/30 transition-all group bg-background opacity-60 cursor-not-allowed"
+          >
+            <Icon name="i-simple-icons-github" class="w-5 h-5" />
+            <span class="text-sm font-medium">GitHub</span>
           </button>
-          <button class="flex items-center justify-center gap-2 px-4 py-2.5 border border-border rounded-xl hover:bg-primary/5 hover:border-primary/30 transition-all group bg-background">
-            <Icon name="i-simple-icons-google" class="w-5 h-5 group-hover:text-primary transition-colors" />
-            <span class="text-sm font-medium group-hover:text-primary transition-colors">Google</span>
+          <button
+            type="button"
+            disabled
+            class="flex items-center justify-center gap-2 px-4 py-2.5 border border-border rounded-xl hover:bg-primary/5 hover:border-primary/30 transition-all group bg-background opacity-60 cursor-not-allowed"
+          >
+            <Icon name="i-simple-icons-google" class="w-5 h-5" />
+            <span class="text-sm font-medium">Google</span>
           </button>
         </div>
 
-        <div class="relative">
-          <span class="absolute inset-x-0 top-1/2 border-t border-border"></span>
-          <div class="relative flex justify-center text-xs uppercase bg-background px-2 text-muted-foreground">Or continue with email</div>
-        </div>
+        <USeparator label="OR CONTINUE WITH EMAIL" />
 
         <form class="space-y-4" @submit.prevent="handleSignup">
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
               <label class="text-sm font-medium leading-none" for="firstName">First Name</label>
               <input
+                v-model="firstName"
                 type="text"
                 id="firstName"
+                required
                 class="flex h-10 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all"
               />
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium leading-none" for="lastName">Last Name</label>
               <input
+                v-model="lastName"
                 type="text"
                 id="lastName"
+                required
                 class="flex h-10 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all"
               />
             </div>
@@ -107,9 +117,11 @@
           <div class="space-y-2">
             <label class="text-sm font-medium leading-none" for="email">Email</label>
             <input
+              v-model="email"
               type="email"
               id="email"
               placeholder="name@example.com"
+              required
               class="flex h-10 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all"
             />
           </div>
@@ -118,8 +130,11 @@
             <label class="text-sm font-medium leading-none" for="password">Password</label>
             <div class="relative">
               <input
+                v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 id="password"
+                required
+                minlength="8"
                 class="flex h-10 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all pr-10"
               />
               <button
@@ -136,9 +151,14 @@
 
           <button
             type="submit"
-            class="w-full flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            :disabled="isLoading"
+            class="w-full flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Create Account
+            <span v-if="isLoading" class="flex items-center gap-2">
+              <Icon name="i-heroicons-arrow-path" class="w-4 h-4 animate-spin" />
+              Creating Account...
+            </span>
+            <span v-else>Create Account</span>
           </button>
         </form>
 
@@ -163,10 +183,68 @@ import { ref } from 'vue'
 
 definePageMeta({ layout: false })
 
-const showPassword = ref(false)
+const { register, login } = useAuth()
+const toast = useToast()
 
-const handleSignup = () => {
-  console.log('Signup attempt')
-  navigateTo('/dashboard')
+const showPassword = ref(false)
+const firstName = ref('')
+const lastName = ref('')
+const email = ref('')
+const password = ref('')
+const isLoading = ref(false)
+
+const handleSignup = async () => {
+  if (!firstName.value || !lastName.value || !email.value || !password.value) {
+    toast.add({
+      title: 'Error',
+      description: 'Please fill in all fields',
+      color: 'red'
+    })
+    return
+  }
+
+  if (password.value.length < 8) {
+    toast.add({
+      title: 'Error',
+      description: 'Password must be at least 8 characters long',
+      color: 'red'
+    })
+    return
+  }
+
+  isLoading.value = true
+  
+  // Register
+  const registerResult = await register(email.value, password.value, firstName.value, lastName.value)
+
+  if (registerResult.success) {
+    toast.add({
+      title: 'Success',
+      description: 'Account created! Logging you in...',
+      color: 'green'
+    })
+
+    // Auto login
+    const loginResult = await login(email.value, password.value)
+
+    if (loginResult.success) {
+      await navigateTo('/dashboard')
+    } else {
+      toast.add({
+        title: 'Please login',
+        description: 'Account created, please login manually',
+        color: 'orange'
+      })
+      await navigateTo('/login')
+    }
+  } else {
+    toast.add({
+      title: 'Registration Failed',
+      description: registerResult.error || 'An error occurred',
+      color: 'red'
+    })
+  }
+
+  isLoading.value = false
 }
 </script>

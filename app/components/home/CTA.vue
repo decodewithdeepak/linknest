@@ -24,7 +24,7 @@
 
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-6 sm:mb-8 max-w-md sm:max-w-none mx-auto">
               <UButton
-                to="/dashboard"
+                to="/signup"
                 size="lg"
                 color="primary"
                 class="group gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto justify-center text-sm sm:text-base"
