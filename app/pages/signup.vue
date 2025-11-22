@@ -198,7 +198,7 @@ const handleSignup = async () => {
     toast.add({
       title: 'Error',
       description: 'Please fill in all fields',
-      color: 'red'
+      color: 'error'
     })
     return
   }
@@ -207,7 +207,7 @@ const handleSignup = async () => {
     toast.add({
       title: 'Error',
       description: 'Password must be at least 8 characters long',
-      color: 'red'
+      color: 'error'
     })
     return
   }
@@ -221,7 +221,7 @@ const handleSignup = async () => {
     toast.add({
       title: 'Success',
       description: 'Account created! Logging you in...',
-      color: 'green'
+      color: 'success'
     })
 
     // Auto login
@@ -233,7 +233,7 @@ const handleSignup = async () => {
       toast.add({
         title: 'Please login',
         description: 'Account created, please login manually',
-        color: 'orange'
+        color: 'warning'
       })
       await navigateTo('/login')
     }
@@ -241,7 +241,7 @@ const handleSignup = async () => {
     toast.add({
       title: 'Registration Failed',
       description: registerResult.error || 'An error occurred',
-      color: 'red'
+      color: 'error'
     })
   }
 

@@ -153,7 +153,7 @@ const handleLogin = async () => {
     toast.add({
       title: 'Error',
       description: 'Please fill in all fields',
-      color: 'red'
+      color: 'error'
     })
     return
   }
@@ -166,14 +166,14 @@ const handleLogin = async () => {
     toast.add({
       title: 'Success',
       description: 'Logged in successfully!',
-      color: 'green'
+      color: 'success'
     })
     await navigateTo('/dashboard')
   } else {
     toast.add({
       title: 'Login Failed',
       description: result.error || 'Invalid credentials',
-      color: 'red'
+      color: 'error'
     })
   }
 
