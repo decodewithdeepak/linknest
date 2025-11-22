@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen">
+  <div class="flex min-h-screen overflow-x-hidden">
     <!-- Desktop Sidebar -->
     <div class="hidden lg:block w-64 fixed left-0 top-0 h-screen border-r border-border bg-background z-40">
       <div class="h-full overflow-y-auto px-4 py-6">
@@ -67,7 +67,7 @@
     </Transition>
 
     <!-- Main Content Area -->
-    <main class="flex-1 min-h-screen lg:ml-64">
+    <main class="flex-1 min-h-screen lg:ml-64 min-w-0">
         <div class="max-w-7xl mx-auto w-full py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
           <!-- Mobile Menu Button -->
           <div class="lg:hidden mb-4">
@@ -125,7 +125,7 @@
             </div>
 
             <!-- Links Grid -->
-            <div v-if="filteredLinks.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 px-4">
+            <div v-if="filteredLinks.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               <LinkCard 
                 v-for="link in filteredLinks" 
                 :key="link.id"
