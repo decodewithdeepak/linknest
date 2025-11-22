@@ -50,7 +50,7 @@
                   v-model="searchQuery" 
                   type="text" 
                   placeholder="Search in this category..." 
-                  class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-background focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
                 />
               </div>
             </div>

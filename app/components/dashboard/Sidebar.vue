@@ -14,10 +14,10 @@
       <button
         @click="$emit('select', null)"
         :class="[
-          'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm',
+          'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm border',
           selectedCategory === null
-            ? 'bg-primary text-black'
-            : 'text-foreground hover:bg-muted'
+            ? 'bg-primary text-black border-primary'
+            : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
         ]"
       >
         <div class="flex items-center gap-2.5">
@@ -31,10 +31,10 @@
     <button
       @click="$emit('select', 'recent')"
       :class="[
-        'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm',
+        'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm border',
         selectedCategory === 'recent'
-          ? 'bg-primary text-black'
-          : 'text-foreground hover:bg-muted'
+          ? 'bg-primary text-black border-primary'
+          : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
       ]"
     >
       <div class="flex items-center gap-2.5">
@@ -48,10 +48,10 @@
     <button
       @click="$emit('select', 'favorites')"
       :class="[
-        'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm',
+        'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm border',
         selectedCategory === 'favorites'
-          ? 'bg-primary text-black'
-          : 'text-foreground hover:bg-muted'
+          ? 'bg-primary text-black border-primary'
+          : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
       ]"
     >
       <div class="flex items-center gap-2.5">
@@ -78,10 +78,10 @@
         :key="category.name"
         @click="$emit('select', category.name)"
         :class="[
-          'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm group',
+          'w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left text-sm group border',
           selectedCategory === category.name
-            ? 'bg-primary text-black'
-            : 'text-foreground hover:bg-muted'
+            ? 'bg-primary text-black border-primary'
+            : 'text-foreground hover:bg-primary/10 hover:border-primary/20 border-transparent'
         ]"
       >
         <div class="flex items-center gap-2.5 min-w-0 flex-1">
@@ -120,7 +120,7 @@
         <!-- Theme Toggle -->
         <button
           @click="toggleTheme"
-          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-colors text-sm"
+          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-primary/10 hover:border-primary/20 border border-transparent hover:text-primary transition-all text-sm"
           title="Toggle theme"
         >
           <Icon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'" class="w-4 h-4" />
@@ -130,7 +130,7 @@
         <!-- Logout Button -->
         <button
           @click="handleLogout"
-          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors text-sm"
+          class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-500/15 hover:border-red-500/30 border border-transparent hover:text-red-600 transition-all text-sm"
           title="Logout"
         >
           <Icon name="i-heroicons-arrow-right-on-rectangle" class="w-4 h-4" />
