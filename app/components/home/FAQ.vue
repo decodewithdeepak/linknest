@@ -1,8 +1,10 @@
 <template>
-  <section id="faq" class="py-20 border-b border-border">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <!-- Section Header -->
-      <div class="text-center mb-16">
+  <section id="faq" class="py-12 sm:py-20 border-b border-border">
+    <div class="max-w-6xl mx-auto px-6 sm:px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <!-- Left Column - Section Header (Sticky) -->
+        <div class="lg:col-span-4">
+          <div class="lg:sticky lg:top-24">
         <div class="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-6 hover:bg-primary/10 transition-colors">
           <Icon name="i-heroicons-question-mark-circle" class="h-4 w-4 text-primary" />
           <span class="text-sm font-medium">FAQ</span>
@@ -14,14 +16,18 @@
         <p class="text-base text-muted-foreground">
           Everything you need to know about LinkNest
         </p>
+          </div>
       </div>
 
-      <!-- FAQ Accordion -->
+        <!-- Right Column - FAQ Accordion -->
+        <div class="lg:col-span-8">
       <UAccordion :items="faqs" class="flex flex-col">
         <template #item="{ item }">
           <p class="text-sm text-muted-foreground mb-4 leading-relaxed">{{ item.answer }}</p>
         </template>
       </UAccordion>
+        </div>
+      </div>
     </div>
   </section>
 </template>
