@@ -29,10 +29,10 @@
         </UButton>
         
         <UButton
-          to="#features"
           size="lg"
           variant="ghost"
           class="gap-2 border border-primary/20 text-foreground hover:text-primary w-full sm:w-auto justify-center text-sm sm:text-base"
+          @click="isVideoModalOpen = true"
         >
           <Icon name="i-heroicons-play-circle" class="h-4 w-4 sm:h-5 sm:w-5" />
           Watch Demo
@@ -138,8 +138,39 @@
         </div>
       </div>
     </div>
+
+    <UModal
+      v-model:open="isVideoModalOpen"
+      :overlay="true"
+      :close="{
+      variant: 'link',
+      class: 'bg-transparent hover:bg-transparent border-2 border-primary/30 text-foreground hover:text-primary',
+      }"
+      :ui="{ 
+        overlay: 'backdrop-blur-sm bg-black/10',
+        content: 'max-w-4xl rounded-xl shadow-2xl border-2 border-primary/30 overflow-visible bg-black',
+        header: 'absolute -top-16 -right-4 z-10 border-0',
+        body: 'p-0 sm:p-0 rounded-xl'
+      }"
+    >
+      <template #body>   
+        <div class="aspect-video w-full">
+          <iframe
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/MPyPqlYACA0"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            class="w-full h-full"
+          ></iframe>
+        </div>
+      </template>
+    </UModal>
   </section>
 </template>
 
 <script setup lang="ts">
+const isVideoModalOpen = ref(false)
 </script>
