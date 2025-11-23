@@ -5,33 +5,33 @@
   /* Modern Light Theme - Crisp & Fresh */
   --background: 180 20% 99%; /* Very subtle cool tint */
   --foreground: 180 10% 10%;
-  
+
   --muted: 180 12% 90%;
   --muted-foreground: 180 5% 45%;
-  
+
   --popover: 0 0% 100%;
   --popover-foreground: 180 10% 10%;
-  
+
   --card: 0 0% 100%;
   --card-foreground: 180 10% 10%;
-  
+
   --border: 180 10% 92%;
   --input: 180 10% 92%;
-  
+
   /* Modern Teal - Fresh & Productive */
   /* Using Tailwind Teal-600/500 range */
-  --primary: 173 80% 40%; 
+  --primary: 173 80% 40%;
   --primary-foreground: 0 0% 100%;
-  
+
   --secondary: 180 10% 96%;
   --secondary-foreground: 173 80% 30%;
-  
+
   --accent: 180 10% 96%;
   --accent-foreground: 173 80% 30%;
-  
+
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
-  
+
   --ring: 173 80% 40%;
   --radius: 0.75rem;
 }
@@ -40,32 +40,32 @@
   /* Modern Dark Theme - Deep Ocean */
   --background: 180 10% 4%;
   --foreground: 180 5% 98%;
-  
+
   --muted: 180 10% 15%;
   --muted-foreground: 180 5% 65%;
-  
+
   --popover: 180 10% 4%;
   --popover-foreground: 180 5% 98%;
-  
+
   --card: 180 10% 4%;
   --card-foreground: 180 5% 98%;
-  
+
   --border: 180 10% 15%;
   --input: 180 10% 15%;
-  
+
   /* Neon Teal for Dark Mode */
-  --primary: 173 70% 50%; 
+  --primary: 173 70% 50%;
   --primary-foreground: 180 10% 4%;
-  
+
   --secondary: 180 10% 15%;
   --secondary-foreground: 180 5% 98%;
-  
+
   --accent: 180 10% 15%;
   --accent-foreground: 180 5% 98%;
-  
+
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
-  
+
   --ring: 173 70% 50%;
 }
 
@@ -123,6 +123,34 @@ body {
 
 .dark .bg-grain::before {
   opacity: 0.06;
+}
+
+.bg-dashed {
+  background-image: linear-gradient(
+    45deg,
+    hsl(var(--border)) 12.5%,
+    transparent 12.5%,
+    transparent 50%,
+    hsl(var(--border)) 50%,
+    hsl(var(--border)) 62.5%,
+    transparent 62.5%,
+    transparent 100%
+  );
+  background-size: 0.25rem 0.25rem;
+  border-top: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.bg-striped {
+  background-image: repeating-linear-gradient(
+    90deg,
+    hsl(var(--border)) 0,
+    hsl(var(--border)) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  border-top: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 /* Custom Scrollbar */

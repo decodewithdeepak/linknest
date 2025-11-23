@@ -1,5 +1,5 @@
 <template>
-  <section id="faq" class="py-12 sm:py-20 border-b border-border">
+  <section id="faq" class="py-12 sm:py-20">
     <div class="max-w-6xl mx-auto px-6 sm:px-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <!-- Left Column - Section Header (Sticky) -->
@@ -13,7 +13,7 @@
           Frequently Asked
           <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">Questions</span>        
         </h2>
-        <p class="text-base text-muted-foreground">
+        <p class="text-sm sm:text-base text-muted-foreground">
           Everything you need to know about LinkNest
         </p>
           </div>

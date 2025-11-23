@@ -2,15 +2,15 @@
   <section id="features" class="py-12 sm:py-20 relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-6 sm:px-6 relative z-10">
       <div class="text-center mb-12 sm:mb-16 max-w-3xl mx-auto">
-        <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-4 sm:mb-6 hover:bg-primary/10 transition-colors">
-          <Icon name="i-heroicons-sparkles" class="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
-          <span class="text-xs sm:text-sm font-medium">Features</span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-6 hover:bg-primary/10 transition-colors">
+          <Icon name="i-heroicons-sparkles" class="h-4 w-4 text-primary" />
+          <span class="text-sm font-medium">Features</span>
         </div>
-        <h2 class="text-xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4 px-4">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4">
           Everything you need to <br />
           <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">organize effortlessly</span>
         </h2>
-        <p class="text-sm sm:text-base max-w-xl mx-auto text-muted-foreground px-4">
+        <p class="max-w-lg mx-auto text-sm sm:text-base text-muted-foreground">
           LinkNest combines powerful automation with beautiful design, doing the heavy lifting so you can focus on what matters.
         </p>
       </div>

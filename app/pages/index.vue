@@ -5,13 +5,13 @@
       <div class="max-w-full flex flex-col min-h-full">
         <div class="flex-1 border border-border">
           <Hero />
-          <div class="h-8 bg-dashed"></div>
+          <div class="h-8 bg-striped"></div>
           <Features />
           <div class="h-8 bg-dashed"></div>
           <FAQ />
           <div class="h-8 bg-dashed"></div>
           <CTA />
-          <div class="h-8 bg-dashed"></div>
+          <div class="h-8 bg-striped"></div>
         </div>
       </div>
     </main>
