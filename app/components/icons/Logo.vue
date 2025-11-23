@@ -2,94 +2,32 @@
   <svg
     xmlns="http://www.w3.org/2000/svg"
     :class="[sizeClasses[props.size || 'md'], variantClasses[props.variant || 'auto'], props.class]"
-    viewBox="0 0 24 24"
+    viewBox="0 0 32 32"
     fill="none"
   >
-    <!-- Center Hub Circle -->
-    <circle
-      cx="12"
-      cy="12"
-      r="3"
-      fill="currentColor"
-      opacity="0.9"
-    />
+    <!-- Outer Circle -->
+    <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1.5" opacity="0.25" fill="none"/>
     
-    <!-- Connection Lines -->
-    <path
-      d="M12 9V4M12 20v-5M15 12h5M4 12h5"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      opacity="0.4"
-    />
+    <!-- Inner Circle -->
+    <circle cx="16" cy="16" r="9" stroke="currentColor" stroke-width="1.5" opacity="0.4" fill="none"/>
     
-    <path
-      d="M14.5 9.5l3.5-3.5M6 6l3.5 3.5M14.5 14.5l3.5 3.5M6 18l3.5-3.5"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      opacity="0.4"
-    />
-
-    <!-- Outer Nodes (Link Symbols) -->
-    <!-- Top -->
-    <g transform="translate(12, 3)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+    <!-- Outer Nodes (drawn before center icon so lines stay behind) -->
+    <circle cx="16" cy="3" r="2.5" fill="currentColor" opacity="0.5"/>
+    <circle cx="29" cy="16" r="2.5" fill="currentColor" opacity="0.5"/>
+    <circle cx="16" cy="29" r="2.5" fill="currentColor" opacity="0.5"/>
+    <circle cx="3" cy="16" r="2.5" fill="currentColor" opacity="0.5"/>
+    
+    <!-- Center Link Icon (drawn last = on top) -->
+    <g transform="translate(16, 16)">
+      <!-- Left link -->
+      <path d="M-5 -1.5 L-2.5 -1.5 C-1.5 -1.5, -1 -1, -1 0 C-1 1, -1.5 1.5, -2.5 1.5 L-5 1.5" 
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <!-- Right link -->
+      <path d="M5 1.5 L2.5 1.5 C1.5 1.5, 1 1, 1 0 C1 -1, 1.5 -1.5, 2.5 -1.5 L5 -1.5" 
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <!-- Connection bar -->
+      <line x1="-1" y1="0" x2="1" y2="0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
     </g>
-    
-    <!-- Right -->
-    <g transform="translate(21, 12)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </g>
-    
-    <!-- Bottom -->
-    <g transform="translate(12, 21)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </g>
-    
-    <!-- Left -->
-    <g transform="translate(3, 12)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </g>
-    
-    <!-- Top Right -->
-    <g transform="translate(18.5, 5.5)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </g>
-    
-    <!-- Top Left -->
-    <g transform="translate(5.5, 5.5)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </g>
-    
-    <!-- Bottom Right -->
-    <g transform="translate(18.5, 18.5)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </g>
-    
-    <!-- Bottom Left -->
-    <g transform="translate(5.5, 18.5)">
-      <circle cx="0" cy="0" r="1.5" fill="currentColor" opacity="0.8"/>
-      <path d="M-0.8 0.8L0.8 -0.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
-    </g>
-
-    <!-- Outer Ring -->
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="currentColor"
-      stroke-width="1"
-      fill="none"
-      opacity="0.15"
-    />
   </svg>
 </template>
 
