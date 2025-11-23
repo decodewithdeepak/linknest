@@ -22,7 +22,7 @@
           to="/signup"
           size="lg"
           color="primary"
-          class="group gap-2 w-full sm:w-auto justify-center text-sm sm:text-base shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
+          class="group gap-2 w-full sm:w-auto justify-center text-sm sm:text-base"
         >
           <span class="">Get Started Free</span>
           <Icon name="i-heroicons-arrow-right" class="h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
