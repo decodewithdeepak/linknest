@@ -18,7 +18,7 @@ export const PREDEFINED_CATEGORIES = [
 export const getCategoryIcon = (category: string): string => {
   const icons: Record<string, string> = {
     'Open Source': 'i-heroicons-code-bracket',
-    'Portfolio': 'i-heroicons-briefcase',
+    'Portfolio': 'i-heroicons-user-circle',
     'Blog': 'i-heroicons-document-text',
     'Tool': 'i-heroicons-wrench-screwdriver',
     'Learning': 'i-heroicons-academic-cap',
