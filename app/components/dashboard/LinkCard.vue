@@ -1,7 +1,60 @@
 <template>
   <div 
-    class="group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col h-full"
+    class="group relative bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
   >
+    <!-- Category Badge - Top Left Corner -->
+    <div class="absolute -top-1 left-0 z-10">
+        <div ref="badgeRef">
+          <span 
+          class="inline-flex items-center gap-1 px-2 py-1 rounded-br-lg text-[10px] font-medium text-white transition-all shadow-md"
+          :class="{ 'cursor-pointer hover:opacity-90': categories && categories.length > 0 }"
+            :style="{ backgroundColor: getCategoryColor(link.category) }"
+            @click.stop="categories && categories.length > 0 ? toggleDropdown() : null"
+          >
+          <Icon :name="getCategoryIcon(link.category)" class="w-3 h-3" />
+            {{ link.category }}
+          <Icon v-if="categories && categories.length > 0" name="i-heroicons-chevron-down" class="w-2.5 h-2.5" />
+          </span>
+        </div>
+      </div>
+      
+    <!-- Header with Favicon and Site Info -->
+    <div class="flex items-center justify-between p-3 pb-2 pt-6">
+      <div class="flex items-center gap-2 min-w-0 flex-1">
+        <div class="w-8 h-8 rounded-md bg-muted flex items-center justify-center shrink-0">
+          <img 
+            v-if="link.favicon" 
+            :src="link.favicon" 
+            class="w-5 h-5"
+            alt=""
+          />
+          <Icon v-else name="i-heroicons-link" class="w-4 h-4 text-muted-foreground" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <h3 class="font-semibold text-xs truncate">{{ link.siteName }}</h3>
+          <p class="text-[10px] text-muted-foreground truncate">{{ formatDate(link.dateAdded) }}</p>
+        </div>
+      </div>
+      <div class="flex gap-1">
+        <UButton 
+          :icon="link.isFavorite ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'" 
+          :color="link.isFavorite ? 'error' : 'error'" 
+          variant="ghost"
+          size="xs"
+          @click.prevent="$emit('toggleFavorite', link.id)"
+          :title="link.isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+        />
+        <UButton 
+          :icon="copied ? 'i-heroicons-check' : 'i-heroicons-clipboard'"
+          :color="copied ? 'success' : 'success'"
+          variant="ghost"
+          size="xs"
+          @click="copyToClipboard(link.url)"
+          :title="copied ? 'Copied!' : 'Copy URL'"
+        />
+      </div>
+    </div>
+
     <!-- Image Section -->
     <div class="aspect-video w-full overflow-hidden relative p-2">
       <img 
@@ -19,64 +72,34 @@
           {{ link.siteName }}
         </p>
       </div>
-      
-      <!-- Category Badge -->
-      <div class="absolute -top-1 left-0">
-        <div ref="badgeRef">
-          <span 
-            class="inline-flex items-center gap-1 px-2 py-1 rounded-br-xl text-xs font-medium text-white transition-opacity"
-            :class="{ 'cursor-pointer hover:opacity-80': categories && categories.length > 0 }"
-            :style="{ backgroundColor: getCategoryColor(link.category) }"
-            @click.stop="categories && categories.length > 0 ? toggleDropdown() : null"
-          >
-            {{ link.category }}
-            <Icon v-if="categories && categories.length > 0" name="i-heroicons-chevron-down" class="w-3 h-3" />
-          </span>
-        </div>
-      </div>
-      
     </div>
 
     <!-- Content Section -->
-    <div class="p-4 flex flex-col flex-1">
-      <div class="flex items-center gap-2 mb-2">
-        <img 
-          v-if="link.favicon" 
-          :src="link.favicon" 
-          class="w-4 h-4 rounded-full"
-          alt=""
-        />
-        <span class="text-xs text-muted-foreground font-medium truncate">
-          {{ link.siteName }}
-        </span>
-        <span class="text-xs text-muted-foreground/50">•</span>
-        <span class="text-xs text-muted-foreground/50">
-          {{ formatDate(link.dateAdded) }}
-        </span>
-      </div>
-
+    <div class="p-3 pt-2 flex flex-col flex-1">
       <a :href="link.url" target="_blank" rel="noopener noreferrer" class="block group-hover:text-primary transition-colors mb-2">
-        <h3 class="font-semibold leading-tight line-clamp-2" :title="link.title">
+        <h3 class="font-semibold text-sm leading-tight line-clamp-2" :title="link.title">
           {{ link.title }}
         </h3>
       </a>
 
-      <p class="text-sm text-muted-foreground line-clamp-2 mb-4 flex-1" :title="link.description">
+      <p class="text-[10px] text-muted-foreground line-clamp-2 mb-2 flex-1" :title="link.description">
         {{ link.description || 'No description available' }}
       </p>
+
+      <!-- Original URL -->
+      <a 
+        :href="link.url" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="text-[10px] text-primary/70 hover:text-primary truncate block mb-3 font-mono"
+        :title="link.url"
+      >
+        {{ link.url }}
+      </a>
       
-      <div class="pt-3 border-t border-border flex items-center justify-between mt-auto">
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-between gap-2 pt-3 border-t border-border mt-auto">
         <div class="flex gap-1">
-          <!-- Favorite Button -->
-          <UButton 
-            :icon="link.isFavorite ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'" 
-            :color="link.isFavorite ? 'error' : 'error'" 
-            variant="ghost"
-            size="xs"
-            @click.prevent="$emit('toggleFavorite', link.id)"
-            :title="link.isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-          />
-          <!-- Refresh Button -->
           <UButton 
             icon="i-heroicons-arrow-path" 
             color="primary" 
@@ -86,7 +109,6 @@
             :title="isRefreshing ? 'Refreshing...' : 'Refresh metadata'"
             :class="{ 'animate-spin': isRefreshing }"
           />
-          <!-- Delete Button -->
           <UButton 
             icon="i-heroicons-trash" 
             color="warning" 
@@ -94,15 +116,6 @@
             size="xs"
             @click.prevent="handleDelete"
             title="Delete link"
-          />
-          <!-- Copy Button -->
-          <UButton 
-            :icon="copied ? 'i-heroicons-check' : 'i-heroicons-clipboard'"
-            :color="copied ? 'success' : 'success'"
-            variant="ghost"
-            size="xs"
-            @click="copyToClipboard(link.url)"
-            :title="copied ? 'Copied!' : 'Copy URL'"
           />
         </div>
         <UButton 
@@ -252,11 +265,16 @@ const copyToClipboard = async (text: string) => {
   }
 }
 
-// Import category utility
-import { getCategoryColor as getColor } from '../../utils/categories'
+// Import category utilities
+import { getCategoryColor as getColor, getCategoryIcon as getIcon } from '../../utils/categories'
 
 // Get category color
 const getCategoryColor = (category: string): string => {
   return getColor(category, props.categories)
+}
+
+// Get category icon
+const getCategoryIcon = (category: string): string => {
+  return getIcon(category)
 }
 </script>
