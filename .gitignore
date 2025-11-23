@@ -23,4 +23,7 @@ logs
 .env.*
 !.env.example
 
+# Test files
+cookies*.txt
+
 /app/generated/prisma

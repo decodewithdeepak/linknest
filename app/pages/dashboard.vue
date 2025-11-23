@@ -186,6 +186,11 @@ definePageMeta({
   layout: 'default'
 })
 
+// Authentication check - the global middleware handles the redirect
+// This just ensures we have the user data loaded
+const { user, getSession } = useAuth()
+await getSession()
+
 useSeoMeta({
   title: 'Smart Link Organizer - LinkNest',
   description: 'Manage and categorize your links automatically',
