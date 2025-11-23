@@ -7,15 +7,15 @@
           <Hero />
           <div class="h-8 bg-striped"></div>
           <Features />
-          <div class="h-8 bg-dashed"></div>
+          <div class="h-8 bg-striped"></div>
           <FAQ />
-          <div class="h-8 bg-dashed"></div>
+          <div class="h-8 bg-striped"></div>
           <CTA />
           <div class="h-8 bg-striped"></div>
+          <Footer />
         </div>
       </div>
     </main>
-    <Footer />
   </div>
 </template>
 
