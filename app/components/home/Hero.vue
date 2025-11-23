@@ -7,8 +7,8 @@
           <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">
             Watch the Magic
           </span>
-          <svg class="absolute w-full h-3 -bottom-2 left-0 text-primary/30" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.00025 6.99997C25.8086 6.99995 42.7596 2.99996 71.0002 2.99996C99.2409 2.99997 119.519 7.00002 146 7.00004C172.481 7.00006 184.687 3.00005 198.001 3.00005" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <svg class="absolute w-full h-4 -bottom-2 left-0 text-primary/40" viewBox="0 0 200 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 6 Q 10 2, 20 6 T 40 6 T 60 6 T 80 6 T 100 6 T 120 6 T 140 6 T 160 6 T 180 6 T 200 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
           </svg>
         </span>
       </h1>
