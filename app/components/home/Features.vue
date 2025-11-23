@@ -15,11 +15,53 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-4 sm:gap-6">
+        <!-- Large Cards (2 columns each) -->
         <div
-          v-for="(feature, index) in features"
-          :key="index"
-          class="group relative p-5 sm:p-6 rounded-sm border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
+          v-for="(feature, index) in largeFeatures"
+          :key="'large-' + index"
+          class="md:col-span-3 lg:col-span-6 group relative p-5 sm:p-6 rounded-sm border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
+        >
+          <div class="absolute inset-0 rounded-sm bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          <div class="relative z-10">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-sm border border-border/50 bg-white dark:bg-white/10 flex items-center justify-center mb-3 sm:mb-4 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+              <Icon :name="feature.icon" class="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            </div>
+            
+            <h3 class="text-base sm:text-lg font-semibold mb-1.5 sm:mb-2">{{ feature.title }}</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              {{ feature.description }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Medium Cards (1.5 columns each) -->
+        <div
+          v-for="(feature, index) in mediumFeatures"
+          :key="'medium-' + index"
+          class="md:col-span-3 lg:col-span-4 group relative p-5 sm:p-6 rounded-sm border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
+        >
+          <div class="absolute inset-0 rounded-sm bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          <div class="relative z-10">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-sm border border-border/50 bg-white dark:bg-white/10 flex items-center justify-center mb-3 sm:mb-4 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+              <Icon :name="feature.icon" class="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            </div>
+            
+            <h3 class="text-base sm:text-lg font-semibold mb-1.5 sm:mb-2">{{ feature.title }}</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              {{ feature.description }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Small Cards (1 column each) -->
+        <div
+          v-for="(feature, index) in smallFeatures"
+          :key="'small-' + index"
+          class="md:col-span-3 lg:col-span-3 group relative p-5 sm:p-6 rounded-sm border border-border/50 bg-white/50 dark:bg-white/5 backdrop-blur-xl hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1"
         >
           <div class="absolute inset-0 rounded-sm bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
@@ -40,7 +82,8 @@
 </template>
 
 <script setup lang="ts">
-const features = [
+// Large feature cards (6 columns each)
+const largeFeatures = [
   {
     icon: 'i-heroicons-document-magnifying-glass',
     title: 'Auto Metadata Fetch',
@@ -50,26 +93,34 @@ const features = [
     icon: 'i-heroicons-squares-2x2',
     title: 'Smart Categorization',
     description: 'AI-powered categorization automatically sorts your links into relevant categories based on content patterns.'
-  },
+  }
+]
+
+// Medium-sized feature cards (4 columns each)
+const mediumFeatures = [
   {
     icon: 'i-heroicons-cursor-arrow-rays',
     title: 'Drag & Drop',
     description: 'Simply drag and drop links from your browser or paste them directly. No forms, no hassle.'
   },
   {
-    icon: 'i-heroicons-rectangle-stack',
-    title: 'Beautiful Display',
-    description: 'Links are displayed in elegant cards with thumbnails, making your collection visually appealing.'
+    icon: 'i-heroicons-heart',
+    title: 'Favorites & Tags',
+    description: 'Mark important links as favorites and add custom tags for even better organization.'
   },
   {
     icon: 'i-heroicons-magnifying-glass',
     title: 'Instant Search',
     description: 'Powerful search functionality lets you find any link instantly by title, description, or category.'
-  },
+  }
+]
+
+// Small feature cards (3 columns each)
+const smallFeatures = [
   {
-    icon: 'i-heroicons-heart',
-    title: 'Favorites & Tags',
-    description: 'Mark important links as favorites and add custom tags for even better organization.'
+    icon: 'i-heroicons-rectangle-stack',
+    title: 'Beautiful Display',
+    description: 'Links are displayed in elegant cards with thumbnails, making your collection visually appealing.'
   },
   {
     icon: 'i-heroicons-moon',
