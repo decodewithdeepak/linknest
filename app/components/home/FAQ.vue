@@ -5,27 +5,31 @@
         <!-- Left Column - Section Header (Sticky) -->
         <div class="lg:col-span-4">
           <div class="lg:sticky lg:top-24">
-        <div class="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-6 hover:bg-primary/10 transition-colors">
-          <Icon name="i-heroicons-question-mark-circle" class="h-4 w-4 text-primary" />
-          <span class="text-sm font-medium">FAQ</span>
-        </div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Frequently Asked
-          <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">Questions</span>        
-        </h2>
-        <p class="text-sm sm:text-base text-muted-foreground">
-          Everything you need to know about LinkNest
-        </p>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 text-primary text-xs font-semibold tracking-wide uppercase mb-6 hover:bg-primary/10 transition-colors">
+              <Icon name="i-heroicons-question-mark-circle" class="h-4 w-4 text-primary" />
+              <span class="text-sm font-medium">FAQ</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4">
+              Frequently Asked
+              <span
+                class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">Questions</span>
+            </h2>
+            <p class="text-sm sm:text-base text-muted-foreground">
+              Everything you need to know about LinkNest
+            </p>
           </div>
-      </div>
+        </div>
 
         <!-- Right Column - FAQ Accordion -->
         <div class="lg:col-span-8">
-      <UAccordion :items="faqs" class="flex flex-col">
-        <template #item="{ item }">
-          <p class="text-sm text-muted-foreground mb-4 leading-relaxed">{{ item.answer }}</p>
-        </template>
-      </UAccordion>
+          <UAccordion :items="faqs" class="flex flex-col" :ui="{
+            trigger: 'hover:bg-primary/5 transition-colors duration-200 px-4'
+          }">
+            <template #item="{ item }">
+              <p class="text-sm text-muted-foreground mb-4 leading-relaxed px-4">{{ item.answer }}</p>
+            </template>
+          </UAccordion>
         </div>
       </div>
     </div>

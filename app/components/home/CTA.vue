@@ -14,7 +14,7 @@
             </div>
 
             <h2 class="text-xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4 px-2">
-              Ready to <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">Organize</span>?
+              Ready to <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">Organize</span> ?
             </h2>
             
             <p class="text-sm sm:text-base max-w-xl mx-auto text-muted-foreground mb-6 sm:mb-8 px-4">
