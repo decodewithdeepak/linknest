@@ -1,7 +1,7 @@
 <template>
   <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-12 sm:py-20">
     <div class="max-w-7xl mx-auto px-6 sm:px-6 text-center w-full">
-      <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 leading-tight">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-6 leading-tight">
         Your Digital <br />
         <span class="relative inline-block">
           <span class="bg-linear-to-r from-primary via-teal-500 to-cyan-500 bg-clip-text text-transparent">
