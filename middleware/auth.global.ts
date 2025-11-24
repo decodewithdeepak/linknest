@@ -1,5 +1,6 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  // This middleware runs on BOTH server and client for complete protection
+  // Client-side route middleware for smooth navigation
+  // Note: Server-side protection is handled by server/middleware/01.auth.ts
   
   // Protected routes
   const protectedRoutes = ['/dashboard']
@@ -16,16 +17,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   const { user, getSession } = useAuth()
 
-  // Always check session on server-side for protected routes
-  if (process.server && isProtected) {
-    await getSession()
-    
-    if (!user.value) {
-      return navigateTo('/login')
-    }
-  }
-
-  // Client-side checks
+  // Client-side only - for smooth navigation without page reload
   if (process.client) {
     // Refresh session if not loaded
     if (user.value === null) {
