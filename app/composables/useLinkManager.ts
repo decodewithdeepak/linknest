@@ -3,16 +3,15 @@ import { categorizeLink } from "../utils/categories"
 
 export const useLinkManager = () => {
   const links = useState<Link[]>("links", () => [])
-  const isLoading = useState<boolean>("links-loading", () => false)
+  const isLoading = useState<boolean>("links-loading", () => true) // Start as true
+  const isAddingLink = useState<boolean>("links-adding", () => false)
   const error = useState<string | null>("links-error", () => null)
-
-  // Load links from database on mount
-  onMounted(async () => {
-    await fetchLinks()
-  })
+  const addError = useState<string | null>("links-add-error", () => null)
+  const isInitialized = useState<boolean>("links-initialized", () => false)
 
   const fetchLinks = async () => {
     try {
+      isLoading.value = true
       const response: any = await $fetch('/api/links')
       if (response.success && response.links) {
         // Transform database links to match the Link interface
@@ -30,9 +29,14 @@ export const useLinkManager = () => {
         }))
         console.log(`✅ Loaded ${links.value.length} links from database`)
       }
-    } catch (e) {
+      isInitialized.value = true
+      error.value = null // Clear any previous errors
+    } catch (e: any) {
       console.error("Failed to load links from database:", e)
-      error.value = "Failed to load links"
+      error.value = e.message || "Failed to load links"
+      isInitialized.value = true
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -55,12 +59,12 @@ export const useLinkManager = () => {
     customCategory?: string
   ) => {
     if (!url) {
-      error.value = "URL is required"
+      addError.value = "URL is required"
       return
     }
 
-    isLoading.value = true
-    error.value = null
+    isAddingLink.value = true
+    addError.value = null
 
     try {
       // Fetch metadata
@@ -103,10 +107,10 @@ export const useLinkManager = () => {
       }
     } catch (err: any) {
       console.error("Failed to add link:", err)
-      error.value = err.message || "Failed to add link"
+      addError.value = err.message || "Failed to add link"
       throw err
     } finally {
-      isLoading.value = false
+      isAddingLink.value = false
     }
   }
 
@@ -165,7 +169,7 @@ export const useLinkManager = () => {
         const response: any = await $fetch(`/api/links/${linkId}/refresh`, {
           method: 'PATCH'
         })
-        
+
         if (response.success && response.link) {
           // Update the link with fresh metadata
           link.title = response.link.title
@@ -187,7 +191,10 @@ export const useLinkManager = () => {
   return {
     links,
     isLoading,
+    isAddingLink,
+    isInitialized,
     error,
+    addError,
     fetchLinks,
     addLink,
     removeLink,

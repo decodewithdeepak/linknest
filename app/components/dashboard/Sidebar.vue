@@ -152,7 +152,18 @@
 
     <!-- User Profile Section - Bottom -->
     <div class="mt-auto pt-4 border-t border-border shrink-0">
-      <div class="flex items-center gap-3">
+      <!-- Loading Skeleton -->
+      <div v-if="loading || !user" class="flex items-center gap-3 animate-pulse">
+        <div class="w-10 h-10 rounded-full bg-muted"></div>
+        <div class="flex-1 min-w-0 space-y-2">
+          <div class="h-4 bg-muted rounded w-24"></div>
+          <div class="h-3 bg-muted rounded w-32"></div>
+        </div>
+        <div class="w-8 h-8 bg-muted rounded"></div>
+      </div>
+      
+      <!-- User Profile -->
+      <div v-else-if="user" class="flex items-center gap-3">
         <!-- User Avatar with Initials -->
         <div 
           :class="[avatarColor, 'w-10 h-10 rounded-full border-2 border-primary/20 flex items-center justify-center text-white font-semibold text-sm']"
@@ -258,18 +269,20 @@ const handleCancelForm = () => {
 }
 
 // Auth composable
-const { user, logout } = useAuth()
+const { user, loading, logout } = useAuth()
 
 const handleLogout = () => {
   logout()
 }
 
 // Update user info
-const userEmail = computed(() => user.value?.email || 'user@example.com')
-const userName = computed(() => user.value?.name || 'User')
+const userEmail = computed(() => user.value?.email || '')
+const userName = computed(() => user.value?.name || '')
 
 // Generate user initials from name or email
 const userInitials = computed(() => {
+  if (!user.value) return ''
+  
   const name = user.value?.name
   const email = user.value?.email
   
@@ -287,7 +300,7 @@ const userInitials = computed(() => {
     return email.substring(0, 2).toUpperCase()
   }
   
-  return 'U'
+  return ''
 })
 
 // Generate a consistent color based on the user's name or email

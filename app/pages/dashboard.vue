@@ -104,18 +104,30 @@
             <!-- Add Link Section -->
             <div class="w-full">
               <LinkInput 
-                :loading="isLoading" 
+                :loading="isAddingLink" 
                 @add="handleAddLink"
               />
-              <p v-if="error" class="mt-2 text-sm text-red-500 flex items-center gap-1">
+              <p v-if="addError" class="mt-2 text-sm text-red-500 flex items-center gap-1">
                 <Icon name="i-heroicons-exclamation-circle" />  
-                {{ error }}
+                {{ addError }}
               </p>
             </div>
           </div>
 
+          <!-- Loading State -->
+          <div v-if="!isInitialized" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            <div v-for="i in 8" :key="i" class="animate-pulse">
+              <div class="border border-border rounded-lg p-4 space-y-3">
+                <div class="h-4 bg-muted rounded w-3/4"></div>
+                <div class="h-3 bg-muted rounded w-full"></div>
+                <div class="h-3 bg-muted rounded w-5/6"></div>
+                <div class="h-8 bg-muted rounded w-1/3 mt-4"></div>
+              </div>
+            </div>
+          </div>
+
           <!-- Content Area -->
-          <div v-if="links.length > 0">
+          <div v-else-if="links.length > 0">
 
             <!-- Search Bar -->
             <div class="mb-6">
@@ -158,6 +170,23 @@
             </div>
           </div>
 
+          <!-- Error State -->
+          <div v-else-if="error && isInitialized" class="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-red-500/20 rounded-xl bg-red-500/5">
+            <div class="w-20 h-20 mb-6 rounded-full bg-red-500/10 flex items-center justify-center">
+              <Icon name="i-heroicons-exclamation-circle" class="h-10 w-10 text-red-500" />
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Failed to load links</h3>
+            <p class="text-muted-foreground max-w-md mx-auto mb-6">
+              {{ error }}
+            </p>
+            <button
+              @click="fetchLinks()"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+
           <!-- Empty State (No links at all) -->
           <div v-else class="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border rounded-xl bg-muted/10">
             <div class="w-20 h-20 mb-6 rounded-full bg-muted flex items-center justify-center">
@@ -196,13 +225,20 @@ useSeoMeta({
   description: 'Manage and categorize your links automatically',
 })
 
-const { links, isLoading, error, addLink, removeLink, toggleFavorite, updateLinkCategory, refreshLink } = useLinkManager()
+const { links, isLoading, isAddingLink, isInitialized, error, addError, fetchLinks, addLink, removeLink, toggleFavorite, updateLinkCategory, refreshLink } = useLinkManager()
 const { categories: customCategories, createCategory, updateCategory, deleteCategory } = useCategoryManager()
 const { showToast } = useToasts()
 
 const selectedCategory = ref<string | null>(null)
 const searchQuery = ref('')
 const mobileMenuOpen = ref(false)
+
+// Load links on client side only
+onMounted(async () => {
+  if (!isInitialized.value) {
+    await fetchLinks()
+  }
+})
 
 // Clear search when category changes
 watch(selectedCategory, () => {
@@ -266,10 +302,10 @@ const handleAddLink = async (url: string) => {
   const linksBefore = links.value.length
   await addLink(url)
   
-  if (error.value) {
+  if (addError.value) {
     showToast({
       title: 'Failed to Add Link',
-      description: error.value,
+      description: addError.value,
       color: 'error',
       icon: 'i-heroicons-exclamation-circle'
     })
