@@ -1,16 +1,16 @@
 <template>
   <div class="relative max-w-4xl mx-auto">
     <!-- Browser Window -->
-    <div class="relative rounded-md border border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-2xl overflow-hidden">
+    <div class="relative rounded-md border border-black/20 dark:border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-xl overflow-hidden">
       <!-- Browser Header -->
-      <div class="flex items-center gap-4 px-6 py-4 border-b border-white/10 bg-white/50 dark:bg-black/50">
+      <div class="flex items-center gap-4 px-6 py-4 border-b border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/50">
         <div class="hidden sm:flex gap-2">
           <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
           <div class="w-3 h-3 rounded-full bg-amber-500/20 border border-amber-500/50"></div>
           <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
         </div>
         <div class="flex-1 flex justify-center">
-          <div class="flex items-center gap-2 px-4 py-1.5 rounded-sm bg-white/40 dark:bg-white/5 border border-white/10 text-xs text-muted-foreground w-64 justify-center font-mono shadow-sm">
+          <div class="flex items-center gap-2 px-4 py-1.5 rounded-sm bg-white/40 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-muted-foreground w-64 justify-center font-mono shadow-sm">
             <Icon name="i-heroicons-lock-closed" class="w-3 h-3" />
             linknest.app/dashboard
           </div>
@@ -35,7 +35,7 @@
               placeholder="https://deepakmodi.tech"
               @keyup.enter="handleAddLink"
               :disabled="isLoading"
-              class="w-full px-4 py-3 pr-24 rounded-lg border border-white/30 bg-white/60 dark:bg-white/10 backdrop-blur-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/50 disabled:opacity-50"
+              class="w-full px-4 py-3 pr-24 rounded-lg border border-black/10 dark:border-white/30 bg-white/60 dark:bg-white/10 backdrop-blur-sm text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/50 disabled:opacity-50"
             />
             <UButton
               @click="handleAddLink"
@@ -99,7 +99,7 @@
               v-for="(link, index) in demoLinks"
               :key="link.url"
               :style="{ transitionDelay: `${index * 100}ms` }"
-              class="group/card p-4 rounded-lg border border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              class="group/card p-4 rounded-lg border border-black/10 dark:border-white/20 bg-white/60 dark:bg-gray-900/60 hover:bg-white/80 dark:hover:bg-gray-900/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <!-- Card Header -->
               <div class="flex items-center justify-between mb-3">
@@ -121,8 +121,8 @@
                 <UButton
                   @click="removeLink(index)"
                   icon="i-heroicons-x-mark"
-                  size="2xs"
-                  color="gray"
+                  size="xs"
+                  color="neutral"
                   variant="ghost"
                   class="opacity-0 group-hover/card:opacity-100 transition-opacity"
                 />
@@ -235,12 +235,12 @@ const handleAddLink = async () => {
 
   isLoading.value = true
   let messageIndex = 0
-  loadingMessage.value = loadingMessages[0]
+  loadingMessage.value = loadingMessages[0] || 'Loading...'
 
   // Rotate loading messages
   messageInterval = setInterval(() => {
     messageIndex = (messageIndex + 1) % loadingMessages.length
-    loadingMessage.value = loadingMessages[messageIndex]
+    loadingMessage.value = loadingMessages[messageIndex] || 'Loading...'
   }, 800)
 
   try {
